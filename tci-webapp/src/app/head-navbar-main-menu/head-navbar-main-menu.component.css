@@ -1,0 +1,109 @@
+.navbar-default .navbar-brand {
+  width: auto;
+}
+#head-nav {
+  padding: 0;
+}
+#head-nav .navbar-nav {
+  padding: 0 10px;
+}
+.navbar {
+  padding-right: 10px;
+}
+.navbar-fixed-top {
+  position: relative;
+  margin: 0;
+}
+/*HEADER*/
+/*navigation*/
+.navbar {
+  border: 0;
+  background-color: #2494F2;
+  color: #FFF;
+  padding-left: 10px;
+  padding-right: 25px;
+}
+.navbar-default .navbar-brand {
+  padding-left: 35px;
+  text-align: left;
+  width: 206px;
+  color: #FFF;
+  /*background: url(../images/logo.png) no-repeat 0 11px;*/
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+  font-weight: 300;
+  font-size: 19px;
+  line-height: 18px;
+  height: auto;
+}
+navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #FFF;
+}
+.navbar-default .navbar-brand:hover {
+  color: #FFF;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-nav > .active > a:focus {
+  background-color: #36a3ff;
+  color: #fff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #fff;
+}
+.navbar-default .navbar-nav > li.button {
+  padding: 10px 6px;
+  float: left;
+}
+.navbar-default .navbar-nav > li.button > a {
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  padding: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  width: 30px;
+  box-shadow: 1px 1px 0 rgba(255, 255, 255, 0.2) inset;
+  text-align: center;
+}
+.navbar-default .navbar-nav > li.button > a:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+.navbar-default .navbar-nav > li.button > a:active {
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.07) inset;
+}
+.navbar-default .navbar-nav > li.button > a > i {
+  font-size: 14px;
+}
+.navbar-default .navbar-nav > li.button .bubble {
+  position: absolute;
+  top: -6px;
+  left: 20px;
+  background-color: #e44c34;
+  color: #fff;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-color: #E23923 #D83722 #C0311E;
+  border-left: 1px solid #D83722;
+  border-width: 1px;
+  box-shadow: -1px 1px 0 rgba(0, 0, 0, 0.25);
+  padding: 1px 3px 1px 2px;
+  font: bold 9px Tahoma;
+}
+.navbar-default .navbar-nav > li.button.open:after {
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  display: inline-block;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid white;
+  border-left: 6px solid transparent;
+  content: '';
+  left: 50%;
+  margin-left: -6px;
+}
+.navbar-default .navbar-nav > li > a:focus {
+  color: #FFF;
+}
+/*Navbar Inverse*/
+.navbar.navbar-inverse {
+  background-color: #272930;
+}
