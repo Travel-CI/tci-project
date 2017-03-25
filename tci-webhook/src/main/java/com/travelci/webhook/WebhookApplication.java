@@ -1,14 +1,12 @@
-package com.travelci;
+package com.travelci.webhook;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WebhookapplicationApplication {
+public class WebhookApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WebhookapplicationApplication.class, args);
-
-
+		SpringApplication.run(WebhookApplication.class, args);
 	}
 }

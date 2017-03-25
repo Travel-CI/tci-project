@@ -7,7 +7,7 @@ include 'tci-eureka'
 // Microservices
 
 // Entrypoints
-//include 'tci-webhook'
+include 'tci-webhook'
 //include 'tci-scheduler'
 
 // Engine
