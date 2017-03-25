@@ -51,5 +51,6 @@ subprojects {
 
 		testCompile "junit:junit:${junitVersion}"
 		testCompile "com.jayway.restassured:rest-assured:${restAssuredVersion}"
+		testCompile 'org.springframework.boot:spring-boot-starter-test'
 	}
 }
