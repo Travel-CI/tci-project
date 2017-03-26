@@ -1,4 +1,4 @@
-package com.travelci.projects.controllers;
+package com.travelci.commands.controllers;
 
 import com.jayway.restassured.RestAssured;
 import org.junit.Before;
@@ -10,12 +10,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ProjectsControllerIT {
+public class CommandsControllerIT {
 
     @LocalServerPort
     private int serverPort;
 
-    private final String PROJECTS_ENDPOINT = "/projects";
+    private final String COMMANDS_ENDPOINT = "/commands";
 
     @Before
     public void init() {
@@ -23,7 +23,7 @@ public class ProjectsControllerIT {
     }
 
     @Test
-    public void shouldGetProjectsList() {
+    public void shouldGetCommandsList() {
 
     }
 }

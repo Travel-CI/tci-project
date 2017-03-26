@@ -12,7 +12,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Builder
 @Data
-@Table(name="project")
+@Table(name = "project")
 public class ProjectEntity {
 
     @Id

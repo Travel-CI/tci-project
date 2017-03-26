@@ -1,4 +1,4 @@
-package com.travelci.projects.services;
+package com.travelci.commands.services;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -7,10 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProjectsServiceTest {
+public class CommandsServiceTest {
 
     @InjectMocks
-    private ProjectsServiceImpl sut;
+    private CommandsServiceImpl sut;
 
     @Before
     public void setUp() {

@@ -16,8 +16,8 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Override
     @Transactional
-    public void create(final ProjectDto projectDto) {
-
+    public ProjectDto create(final ProjectDto projectDto) {
+        return null;
     }
 
     @Override

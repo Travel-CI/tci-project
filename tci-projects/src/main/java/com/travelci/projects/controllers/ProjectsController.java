@@ -27,12 +27,12 @@ public class ProjectsController {
     }
 
     @PostMapping
-    public void createNewProject(@Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult) {
+    public ProjectDto createNewProject(@Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidProjectException();
 
-        projectsService.create(projectDto);
+        return projectsService.create(projectDto);
     }
 
     @PutMapping

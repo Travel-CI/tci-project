@@ -8,7 +8,7 @@ public interface ProjectsService {
 
     List<ProjectDto> getProjectsList();
 
-    void create(final ProjectDto projectDto);
+    ProjectDto create(final ProjectDto projectDto);
 
     ProjectDto update(final ProjectDto projectDto);
 
