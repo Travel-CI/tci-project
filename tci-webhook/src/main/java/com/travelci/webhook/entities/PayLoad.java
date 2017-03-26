@@ -1,9 +1,11 @@
 package com.travelci.webhook.entities;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 
+@Builder
 @Data
 public class PayLoad {
 

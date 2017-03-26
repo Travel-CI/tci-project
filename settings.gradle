@@ -11,9 +11,9 @@ include 'tci-webhook'
 //include 'tci-scheduler'
 
 // Engine
-//include 'tci-projects'
-//include 'tci-commands'
-//include 'tci-docker-runner'
+include 'tci-projects'
+include 'tci-commands'
+include 'tci-docker-runner'
 
 // Notifiers
 //include 'tci-logger'

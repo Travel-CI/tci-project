@@ -1,0 +1,4 @@
+dependencies {
+    // https://github.com/spotify/docker-client
+    compile "com.spotify:docker-client:${dockerClientVersion}"
+}
