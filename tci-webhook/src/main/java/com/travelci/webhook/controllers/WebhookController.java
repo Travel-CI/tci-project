@@ -17,7 +17,7 @@ public class WebhookController {
     }
 
     @PostMapping
-    public void getWebhookPayLoad(@RequestBody PayLoad payLoad) {
+    public void getWebhookPayLoad(@RequestBody String payLoad) {
         System.out.println(payLoad);
     }
 }

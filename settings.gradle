@@ -13,7 +13,7 @@ include 'tci-webhook'
 // Engine
 include 'tci-projects'
 include 'tci-commands'
-//include 'tci-docker-runner'
+include 'tci-docker-runner'
 
 // Notifiers
 //include 'tci-logger'
