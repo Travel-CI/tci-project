@@ -2,7 +2,7 @@ rootProject.name = 'Travel CI'
 
 // Spring Cloud
 include 'tci-eureka'
-//include 'tci-zuul'
+include 'tci-zuul'
 
 // Microservices
 
