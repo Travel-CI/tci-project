@@ -1,6 +1,6 @@
 spring:
   application:
-     name: tci-projects
+     name: tci-docker-runner
   cloud:
     config:
       uri: http://localhost:8888
