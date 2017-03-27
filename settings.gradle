@@ -2,18 +2,18 @@ rootProject.name = 'Travel CI'
 
 // Spring Cloud
 include 'tci-eureka'
-//include 'tci-zuul'
+include 'tci-zuul'
 
 // Microservices
 
 // Entrypoints
-//include 'tci-webhook'
+include 'tci-webhook'
 //include 'tci-scheduler'
 
 // Engine
-//include 'tci-projects'
-//include 'tci-commands'
-//include 'tci-docker-runner'
+include 'tci-projects'
+include 'tci-commands'
+include 'tci-docker-runner'
 
 // Notifiers
 //include 'tci-logger'

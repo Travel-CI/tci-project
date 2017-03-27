@@ -7,6 +7,9 @@ buildscript {
 		springBootVersion 	= '1.5.2.RELEASE'
 		springCloudVersion 	= 'Dalston.BUILD-SNAPSHOT'
 
+		jgitVersion			= '4.6.1.201703071140-r'
+		dockerClientVersion = '8.2.1'
+
 		junitVersion 		= '4.12'
 		restAssuredVersion 	= '2.9.0'
 	}
@@ -51,5 +54,6 @@ subprojects {
 
 		testCompile "junit:junit:${junitVersion}"
 		testCompile "com.jayway.restassured:rest-assured:${restAssuredVersion}"
+		testCompile 'org.springframework.boot:spring-boot-starter-test'
 	}
 }

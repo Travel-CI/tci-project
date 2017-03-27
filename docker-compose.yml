@@ -86,6 +86,8 @@ services:
     restart: always
     networks:
       - engine-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "${TCI-DOCKER-RUNNER-PORT}:8080"
 
