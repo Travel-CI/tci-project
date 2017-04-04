@@ -1,3 +1,30 @@
+.navbar-header {
+  padding: 0 10px;
+}
+navbar-brand {
+  width: auto;
+}
+.navbar-brand {
+  padding-left: 35px;
+  text-align: left;
+  width: 206px;
+  color: #FFF;
+  background: url(/assets/img/logo.png) no-repeat 0 11px;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+  font-weight: 300;
+  font-size: 19px;
+  line-height: 18px;
+  height: auto;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #FFFFFF;
+}
+.navbar-brand:hover .navbar-brand:focus {
+  color: #FFF;
+}
+.navbar-brand:hover {
+  color: #FFF;
+}
 .navbar-toggle {
   outline: none;
   border: 1px solid rgba(0, 0, 0, 0.15);
