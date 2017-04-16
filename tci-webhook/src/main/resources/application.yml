@@ -10,7 +10,7 @@ bitbucket:
     message: /push/changes/0/commits/0/message
     date: /push/changes/0/commits/0/date
 
-webhook:
-  sender:
+info:
+  services:
     projects: http://localhost:8081
     logger: http://localhost:8082
