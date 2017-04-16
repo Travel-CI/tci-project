@@ -1,3 +1,6 @@
 spring:
   application:
      name: tci-zuul
+  cloud:
+    config:
+      uri: http://localhost:8888
