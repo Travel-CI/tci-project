@@ -3,7 +3,6 @@ package com.travelci.projects.controllers;
 import com.travelci.projects.entities.ProjectDto;
 import com.travelci.projects.exceptions.InvalidProjectException;
 import com.travelci.projects.services.ProjectsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,7 @@ public class ProjectsController {
 
     private ProjectsService projectsService;
 
-    @Autowired
-    public ProjectsController(ProjectsService projectsService) {
+    public ProjectsController(final ProjectsService projectsService) {
         this.projectsService = projectsService;
     }
 
@@ -27,7 +25,8 @@ public class ProjectsController {
     }
 
     @PostMapping
-    public ProjectDto createNewProject(@Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult) {
+    public ProjectDto createNewProject(@Valid @RequestBody final ProjectDto projectDto,
+                                       final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidProjectException();
@@ -36,7 +35,8 @@ public class ProjectsController {
     }
 
     @PutMapping
-    public ProjectDto updateProject(@Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult) {
+    public ProjectDto updateProject(@Valid @RequestBody final ProjectDto projectDto,
+                                    final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidProjectException();
@@ -45,7 +45,8 @@ public class ProjectsController {
     }
 
     @DeleteMapping
-    public void deleteProject(@Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult) {
+    public void deleteProject(@Valid @RequestBody final ProjectDto projectDto,
+                              final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidProjectException();
@@ -53,8 +54,8 @@ public class ProjectsController {
         projectsService.delete(projectDto);
     }
 
-    @GetMapping("project_id")
-    public ProjectDto getProjectDetails(@RequestParam("project_id") Integer projectId) {
+    @GetMapping("{projectId}")
+    public ProjectDto getProjectDetails(@PathVariable final Integer projectId) {
         return projectsService.getProjectDetails(projectId);
     }
 

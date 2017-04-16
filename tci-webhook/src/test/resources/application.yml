@@ -1,0 +1,11 @@
+bitbucket:
+  identifiers: "\"self\":{\"href\": \"https://api.bitbucket.org/,\"diff\": {\"href\": \"https://api.bitbucket.org/"
+  repository:
+    url: /repository/links/html/href
+  branch:
+    name: /push/changes/0/new/name
+  commit:
+    author: /push/changes/0/commits/0/author/raw
+    hash: /push/changes/0/commits/0/hash
+    message: /push/changes/0/commits/0/message
+    date: /push/changes/0/commits/0/date

@@ -2,38 +2,39 @@ package com.travelci.projects.services;
 
 import com.travelci.projects.entities.ProjectDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProjectsServiceImpl implements ProjectsService {
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProjectDto> getProjectsList() {
         return null;
     }
 
     @Override
-    @Transactional
+
     public ProjectDto create(final ProjectDto projectDto) {
         return null;
     }
 
     @Override
-    @Transactional
     public ProjectDto update(final ProjectDto projectDto) {
         return null;
     }
 
     @Override
-    @Transactional
     public void delete(final ProjectDto projectDto) {
 
     }
 
     @Override
-    public ProjectDto getProjectDetails(Integer projectId) {
+    @Transactional(readOnly = true)
+    public ProjectDto getProjectDetails(final Integer projectId) {
         return null;
     }
 }

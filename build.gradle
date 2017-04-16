@@ -5,7 +5,7 @@ buildscript {
 		projectVersion 		= '0.1-SNAPSHOT'
 
 		springBootVersion 	= '1.5.2.RELEASE'
-		springCloudVersion 	= 'Dalston.BUILD-SNAPSHOT'
+		springCloudVersion 	= 'Dalston.RELEASE'
 
 		jgitVersion			= '4.6.1.201703071140-r'
 		dockerClientVersion = '8.2.1'
