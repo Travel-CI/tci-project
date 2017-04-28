@@ -10,6 +10,18 @@ bitbucket:
     message: /push/changes/0/commits/0/message
     date: /push/changes/0/commits/0/date
 
+github:
+  identifiers: "\"url\":\"https://api.github.com,\"keys_url\":\"https://api.github.com"
+  repository:
+    url: /repository/html_url
+  branch:
+    name: /repository/default_branch
+  commit:
+    author: /commits/0/committer/username
+    hash: /commits/0/id
+    message: /commits/0/message
+    date: /commits/0/timestamp
+
 info:
   services:
     projects: http://localhost:8081
