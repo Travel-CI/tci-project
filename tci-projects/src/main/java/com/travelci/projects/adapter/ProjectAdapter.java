@@ -32,8 +32,8 @@ public class ProjectAdapter {
                 .branches(projectDto.getBranches())
                 .dockerFileLocation(projectDto.getDockerFileLocation())
                 .lastStart(projectDto.getLastStart())
-                .created(new Timestamp(System.currentTimeMillis()))
-                .updated(null)
+                .created(projectDto.getCreated())
+                .updated(projectDto.getUpdated())
                 .build();
     }
 }

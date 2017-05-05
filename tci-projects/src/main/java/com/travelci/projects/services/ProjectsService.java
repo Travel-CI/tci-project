@@ -14,5 +14,5 @@ public interface ProjectsService {
 
     void delete(final ProjectDto projectDto);
 
-    ProjectDto getProjectDetails(final Integer projectId);
+    ProjectDto getProjectDetails(final Long projectId);
 }

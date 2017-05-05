@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,22 +35,25 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Override
     public ProjectDto create(final ProjectDto projectDto) {
+        projectDto.setCreated(new Timestamp(System.currentTimeMillis()));
+        projectDto.setUpdated(projectDto.getCreated());
         return projectAdapter.toProjectDto(projectRepository.save(projectAdapter.toProjectEntity(projectDto)));
     }
 
     @Override
     public ProjectDto update(final ProjectDto projectDto) {
-        return null;
+        projectDto.setUpdated(new Timestamp(System.currentTimeMillis()));
+        return projectAdapter.toProjectDto(projectRepository.save(projectAdapter.toProjectEntity(projectDto)));
     }
 
     @Override
     public void delete(final ProjectDto projectDto) {
-
+        projectRepository.delete(projectAdapter.toProjectEntity(projectDto));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ProjectDto getProjectDetails(final Integer projectId) {
-        return null;
+    public ProjectDto getProjectDetails(final Long projectId) {
+        return projectAdapter.toProjectDto(projectRepository.getOne(projectId));
     }
 }
