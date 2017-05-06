@@ -18,7 +18,7 @@ public class CommandDto {
     private String command;
 
     @NotNull
-    private Integer projectId;
+    private Long projectId;
 
     @NotNull
     private Integer order;

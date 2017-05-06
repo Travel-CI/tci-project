@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface CommandRepository extends JpaRepository<CommandEntity, Long> {
 
-    List<CommandEntity> findCommandEntitiesByProjectId(Integer projectId);
+    List<CommandEntity> findByProjectId(Long projectId);
 }

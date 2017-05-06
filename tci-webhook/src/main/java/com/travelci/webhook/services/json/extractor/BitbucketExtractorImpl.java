@@ -19,9 +19,9 @@ public class BitbucketExtractorImpl extends Extractor {
                                   @Value("${bitbucket.commit.date}") final String commitDateJsonTree,
                                   final Validator validator){
 
-        super(identifiers,repositoryUrlJsonTree,
-                branchNameJsonTree,commitAuthorJsonTree,
-                commitHashJsonTree,commitMessageJsonTree,
-                commitDateJsonTree,validator);
+        super(identifiers, repositoryUrlJsonTree,
+            branchNameJsonTree, commitAuthorJsonTree,
+            commitHashJsonTree, commitMessageJsonTree,
+            commitDateJsonTree, validator);
     }
 }

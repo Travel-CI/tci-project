@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 @RestController
 @RequestMapping("/projects")
 public class ProjectsController {
 
-    private ProjectsService projectsService;
+    private final ProjectsService projectsService;
 
     public ProjectsController(final ProjectsService projectsService) {
         this.projectsService = projectsService;
@@ -25,6 +27,7 @@ public class ProjectsController {
     }
 
     @PostMapping
+    @ResponseStatus(CREATED)
     public ProjectDto createNewProject(@Valid @RequestBody final ProjectDto projectDto,
                                        final BindingResult bindingResult) {
 
@@ -55,7 +58,7 @@ public class ProjectsController {
     }
 
     @GetMapping("{projectId}")
-    public ProjectDto getProjectDetails(@PathVariable final Integer projectId) {
+    public ProjectDto getProjectDetails(@PathVariable final Long projectId) {
         return projectsService.getProjectDetails(projectId);
     }
 

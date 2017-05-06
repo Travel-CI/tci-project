@@ -2,11 +2,14 @@ package com.travelci.commands.adapter;
 
 import com.travelci.commands.entities.CommandDto;
 import com.travelci.commands.entities.CommandEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CommandAdapter {
 
-    public CommandDto toCommandDto(CommandEntity command) {
-        return CommandDto.builder()
+    public CommandDto toCommandDto(final CommandEntity command) {
+        return command != null ?
+            CommandDto.builder()
                 .id(command.getId())
                 .name(command.getName())
                 .command(command.getCommand())
@@ -14,11 +17,13 @@ public class CommandAdapter {
                 .order(command.getOrder())
                 .enabled(command.getEnabled())
                 .enableLogs(command.getEnableLogs())
-                .build();
+                .build()
+            : null;
     }
 
-    public CommandEntity toCommandEntity(CommandDto commandDto) {
-        return CommandEntity.builder()
+    public CommandEntity toCommandEntity(final CommandDto commandDto) {
+        return commandDto != null ?
+            CommandEntity.builder()
                 .id(commandDto.getId())
                 .name(commandDto.getName())
                 .command(commandDto.getCommand())
@@ -26,6 +31,7 @@ public class CommandAdapter {
                 .order(commandDto.getOrder())
                 .enabled(commandDto.getEnabled())
                 .enableLogs(commandDto.getEnableLogs())
-                .build();
+                .build()
+            : null;
     }
 }

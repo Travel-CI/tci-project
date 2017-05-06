@@ -4,13 +4,12 @@ import com.travelci.projects.entities.ProjectDto;
 import com.travelci.projects.entities.ProjectEntity;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-
 @Component
 public class ProjectAdapter {
 
-    public ProjectDto toProjectDto(ProjectEntity project) {
-        return ProjectDto.builder()
+    public ProjectDto toProjectDto(final ProjectEntity project) {
+        return project != null ?
+            ProjectDto.builder()
                 .id(project.getId())
                 .name(project.getName())
                 .description(project.getDescription())
@@ -19,11 +18,13 @@ public class ProjectAdapter {
                 .branches(project.getBranches())
                 .dockerFileLocation(project.getDockerFileLocation())
                 .lastStart(project.getLastStart())
-                .build();
+                .build()
+            : null;
     }
 
-    public ProjectEntity toProjectEntity(ProjectDto projectDto) {
-        return ProjectEntity.builder()
+    public ProjectEntity toProjectEntity(final ProjectDto projectDto) {
+        return projectDto != null ?
+            ProjectEntity.builder()
                 .id(projectDto.getId())
                 .name(projectDto.getName())
                 .description(projectDto.getDescription())
@@ -34,6 +35,7 @@ public class ProjectAdapter {
                 .lastStart(projectDto.getLastStart())
                 .created(projectDto.getCreated())
                 .updated(projectDto.getUpdated())
-                .build();
+                .build()
+            : null;
     }
 }

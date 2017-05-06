@@ -13,14 +13,14 @@ import java.util.List;
 @RequestMapping("/commands")
 public class CommandsController {
 
-    private CommandsService commandsService;
+    private final CommandsService commandsService;
 
-    public CommandsController(CommandsService commandsService) {
+    public CommandsController(final CommandsService commandsService) {
         this.commandsService = commandsService;
     }
 
     @GetMapping("{projectId}")
-    public List<CommandDto> getCommandsByProject(@PathVariable final Integer projectId) {
+    public List<CommandDto> getCommandsByProject(@PathVariable final Long projectId) {
 
         if (projectId == null)
             throw new InvalidCommandException();

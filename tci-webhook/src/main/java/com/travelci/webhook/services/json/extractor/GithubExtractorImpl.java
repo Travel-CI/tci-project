@@ -20,10 +20,9 @@ public class GithubExtractorImpl extends Extractor {
                                @Value("${github.commit.date}") final String commitDateJsonTree,
                                final Validator validator){
 
-        super(identifiers,repositoryUrlJsonTree,
-                branchNameJsonTree,commitAuthorJsonTree,
-                commitHashJsonTree,commitMessageJsonTree,
-                commitDateJsonTree,validator);
+        super(identifiers, repositoryUrlJsonTree,
+            branchNameJsonTree, commitAuthorJsonTree,
+            commitHashJsonTree, commitMessageJsonTree,
+            commitDateJsonTree, validator);
     }
-
 }

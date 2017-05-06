@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface CommandsService {
 
-    List<CommandDto> getCommandsByProject(final Integer projectId);
+    List<CommandDto> getCommandsByProject(Long projectId);
 
-    CommandDto create(final CommandDto commandDto);
+    CommandDto create(CommandDto commandDto);
 
-    CommandDto update(final CommandDto commandDto);
+    CommandDto update(CommandDto commandDto);
 
-    void delete(final CommandDto commandDto);
+    void delete(CommandDto commandDto);
 
-    void executeCommand(final CommandDto command);
+    void executeCommand(CommandDto command);
 }

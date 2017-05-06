@@ -24,7 +24,7 @@ public class CommandEntity {
     private String command;
 
     @Column
-    private Integer projectId;
+    private Long projectId;
 
     @Column
     private Integer order;
