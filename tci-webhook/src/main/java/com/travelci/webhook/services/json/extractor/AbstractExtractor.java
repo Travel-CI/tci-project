@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-public abstract class Extractor {
+public abstract class AbstractExtractor {
 
     private final List<String> identifiers;
     private final String repositoryUrlJsonTree;
@@ -24,14 +24,14 @@ public abstract class Extractor {
 
     private final Validator validator;
 
-    public Extractor(final List<String> identifiers,
-                     final String repositoryUrlJsonTree,
-                     final String branchNameJsonTree,
-                     final String commitAuthorJsonTree,
-                     final String commitHashJsonTree,
-                     final String commitMessageJsonTree,
-                     final String commitDateJsonTree,
-                     final Validator validator) {
+    public AbstractExtractor(final List<String> identifiers,
+                             final String repositoryUrlJsonTree,
+                             final String branchNameJsonTree,
+                             final String commitAuthorJsonTree,
+                             final String commitHashJsonTree,
+                             final String commitMessageJsonTree,
+                             final String commitDateJsonTree,
+                             final Validator validator) {
 
         this.identifiers = identifiers;
         this.repositoryUrlJsonTree = repositoryUrlJsonTree;

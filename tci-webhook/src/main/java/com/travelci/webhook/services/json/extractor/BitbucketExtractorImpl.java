@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service("bitbucketExtractor")
 @RefreshScope
-public class BitbucketExtractorImpl extends Extractor {
+public class BitbucketExtractorImpl extends AbstractExtractor {
 
     public BitbucketExtractorImpl(@Value("#{'${bitbucket.identifiers}'.split(',')}") final List<String> identifiers,
                                   @Value("${bitbucket.repository.url}") final String repositoryUrlJsonTree,

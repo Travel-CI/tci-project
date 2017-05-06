@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service("githubExtractor")
 @RefreshScope
-public class GithubExtractorImpl extends Extractor {
+public class GithubExtractorImpl extends AbstractExtractor {
 
     public GithubExtractorImpl(@Value("#{'${github.identifiers}'.split(',')}") final List<String> identifiers,
                                @Value("${github.repository.url}") final String repositoryUrlJsonTree,

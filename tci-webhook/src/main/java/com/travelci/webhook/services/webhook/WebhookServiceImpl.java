@@ -4,7 +4,7 @@ import com.travelci.webhook.entities.PayLoad;
 import com.travelci.webhook.exceptions.BadRequestException;
 import com.travelci.webhook.exceptions.ExtractorNotFoundException;
 import com.travelci.webhook.exceptions.ExtractorWrongFormatException;
-import com.travelci.webhook.services.json.extractor.Extractor;
+import com.travelci.webhook.services.json.extractor.AbstractExtractor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
@@ -14,8 +14,8 @@ import org.springframework.web.client.RestTemplate;
 @RefreshScope
 public class WebhookServiceImpl implements WebhookService {
 
-    private final Extractor bitbucketExtractor;
-    private final Extractor githubExtractor;
+    private final AbstractExtractor bitbucketExtractor;
+    private final AbstractExtractor githubExtractor;
     private final RestTemplate restTemplate;
 
     @Value("${info.services.projects}")
@@ -23,8 +23,8 @@ public class WebhookServiceImpl implements WebhookService {
     @Value("${info.services.logger")
     private String loggerServiceUrl;
 
-    public WebhookServiceImpl(final Extractor bitbucketExtractor,
-                              final Extractor githubExtractor,
+    public WebhookServiceImpl(final AbstractExtractor bitbucketExtractor,
+                              final AbstractExtractor githubExtractor,
                               final RestTemplate restTemplate) {
         this.bitbucketExtractor = bitbucketExtractor;
         this.githubExtractor = githubExtractor;
@@ -34,7 +34,7 @@ public class WebhookServiceImpl implements WebhookService {
     @Override
     public void sendPayloadToProjectsService(final String jsonPayLoad) {
 
-        final Extractor extractor = findExtractor(jsonPayLoad);
+        final AbstractExtractor extractor = findExtractor(jsonPayLoad);
         final PayLoad payLoad = convertInPayLoad(extractor, jsonPayLoad);
 
         System.out.println(payLoad);
@@ -43,7 +43,7 @@ public class WebhookServiceImpl implements WebhookService {
     }
 
     @Override
-    public Extractor findExtractor(final String jsonPayLoad) {
+    public AbstractExtractor findExtractor(final String jsonPayLoad) {
 
         if (bitbucketExtractor.jsonHasGoodFormat(jsonPayLoad))
             return bitbucketExtractor;
@@ -54,7 +54,7 @@ public class WebhookServiceImpl implements WebhookService {
     }
 
     @Override
-    public PayLoad convertInPayLoad(final Extractor extractor,
+    public PayLoad convertInPayLoad(final AbstractExtractor extractor,
                                     final String jsonPayLoad) {
 
         try {
