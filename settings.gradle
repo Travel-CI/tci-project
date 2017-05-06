@@ -1,0 +1,21 @@
+rootProject.name = 'Travel CI'
+
+// Spring Cloud
+include 'tci-eureka'
+include 'tci-zuul'
+include 'tci-config'
+
+// Microservices
+
+// Entrypoints
+include 'tci-webhook'
+//include 'tci-scheduler'
+
+// Engine
+include 'tci-projects'
+include 'tci-commands'
+include 'tci-docker-runner'
+
+// Notifiers
+//include 'tci-logger'
+//include 'tci-notifications'

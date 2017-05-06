@@ -1,0 +1,111 @@
+version: '3'
+
+networks:
+  spring-cloud-network:
+  entrypoint-network:
+  engine-network:
+  bdd-network:
+
+volumes:
+  redis-volume:
+
+services:
+  tci-redis:
+    image: redis:latest
+    networks:
+      - bdd-network
+    volumes:
+      - redis-volume:/data
+    restart: always
+
+  tci-eureka:
+    build: ./tci-eureka
+    image: tci/tci-eureka:latest
+    restart: always
+    networks:
+      - spring-cloud-network
+    ports:
+      - "${TCI-EUREKA-PORT}:8080"
+
+  tci-zuul:
+    build: ./tci-zuul
+    image: tci/tci-zuul:latest
+    restart : always
+    networks:
+      - spring-cloud-network
+    ports:
+      - "${TCI-ZUUL-PORT}:8080"
+
+  tci-webapp:
+    build: ./tci-webapp
+    image: tci/tci-webapp:latest
+    restart: always
+    ports:
+      - "${TCI-WEBAPP-PORT}:80"
+
+  tci-webhook:
+    build: ./tci-webhook
+    image: tci/tci-webhook:latest
+    restart: always
+    networks:
+      - entrypoint-network
+    ports:
+      - "${TCI-WEBHOOK-PORT}:8080"
+
+  tci-scheduler:
+    build: ./tci-scheduler
+    image: tci/tci-scheduler:latest
+    restart: always
+    networks:
+      - entrypoint-network
+    ports:
+      - "${TCI-SCHEDULER-PORT}:8080"
+
+  tci-projects:
+    build: ./tci-projects
+    image: tci/tci-projects:latest
+    restart: always
+    networks:
+      - entrypoint-network
+      - engine-network
+    ports:
+      - "${TCI-PROJECTS-PORT}:8080"
+
+  tci-commands:
+    build: ./tci-commands
+    image: tci/tci-commands:latest
+    restart: always
+    networks:
+      - engine-network
+    ports:
+      - "${TCI-COMMANDS-PORT}:8080"
+
+  tci-docker-runner:
+    build: ./tci-docker-runner
+    image: tci/tci-docker-runner:latest
+    restart: always
+    networks:
+      - engine-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "${TCI-DOCKER-RUNNER-PORT}:8080"
+
+  tci-logger:
+    build: ./tci-logger
+    image: tci/tci-logger:latest
+    restart: always
+    networks:
+      - entrypoint-network
+      - bdd-network
+    ports:
+      - "${TCI-LOGGER-PORT}:8080"
+
+  tci-notifications:
+    build: ./tci-notifications
+    image: tci/tci-notifications:latest
+    restart: always
+    networks:
+      - entrypoint-network
+    ports:
+      - "${TCI-NOTIFICATIONS-PORT}:8080"

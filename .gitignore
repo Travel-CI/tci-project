@@ -1,10 +1,5 @@
 **/build/
-
 **/log/
 **/.gradle/
 **/.idea/
-
-
-
-
-
+.vscode
