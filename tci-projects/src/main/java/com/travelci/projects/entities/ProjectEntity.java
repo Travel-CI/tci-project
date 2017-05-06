@@ -1,6 +1,5 @@
 package com.travelci.projects.entities;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import lombok.Builder;
 import lombok.Data;
 
