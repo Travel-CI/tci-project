@@ -1,21 +1,29 @@
 package com.travelci.webhook.services.json.extractor;
 
-import com.travelci.webhook.entities.PayLoad;
-import com.travelci.webhook.exceptions.ExtractorWrongFormatException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
+import javax.validation.Validator;
+import java.util.List;
+
 
 @Service("githubExtractor")
 @RefreshScope
-public class GithubExtractorImpl implements Extractor {
+public class GithubExtractorImpl extends Extractor {
 
-    @Override
-    public boolean jsonHasGoodFormat(String jsonPayLoad) {
-        return false;
+    public GithubExtractorImpl(@Value("#{'${github.identifiers}'.split(',')}") final List<String> identifiers,
+                               @Value("${github.repository.url}") final String repositoryUrlJsonTree,
+                               @Value("${github.branch.name}") final String branchNameJsonTree,
+                               @Value("${github.commit.author}") final String commitAuthorJsonTree,
+                               @Value("${github.commit.hash}") final String commitHashJsonTree,
+                               @Value("${github.commit.message}") final String commitMessageJsonTree,
+                               @Value("${github.commit.date}") final String commitDateJsonTree,
+                               final Validator validator){
+
+        super(identifiers,repositoryUrlJsonTree,
+                branchNameJsonTree,commitAuthorJsonTree,
+                commitHashJsonTree,commitMessageJsonTree,
+                commitDateJsonTree,validator);
     }
 
-    @Override
-    public PayLoad transformJsonToPayload(String jsonPayLoad) throws ExtractorWrongFormatException {
-        return null;
-    }
 }
