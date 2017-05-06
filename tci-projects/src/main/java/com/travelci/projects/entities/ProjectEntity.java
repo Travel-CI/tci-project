@@ -33,6 +33,7 @@ public class ProjectEntity {
     private String repositoryUrl;
 
     //TODO Créer objet pour clé étrangère
+    @Transient
     private List<String> branches;
 
     @Column
