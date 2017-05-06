@@ -1,9 +1,11 @@
 package com.travelci.projects.entities;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class ProjectEntity {
     @Column
     private String repositoryUrl;
 
+    //TODO Créer objet pour clé étrangère
     @Transient
     private List<String> branches;
 
@@ -41,8 +44,8 @@ public class ProjectEntity {
     private Date lastStart;
 
     @Column
-    private Date created;
+    private Timestamp created;
 
     @Column
-    private Date updated;
+    private Timestamp updated;
 }
