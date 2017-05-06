@@ -2,8 +2,8 @@ package com.travelci.projects.entities;
 
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -15,7 +15,7 @@ public class ProjectDto {
 
     private Long id;
 
-    @NotNull
+    @NotNull @NotEmpty
     private String name;
 
     private String description;
@@ -28,6 +28,12 @@ public class ProjectDto {
 
     @NotNull
     private List<String> branches;
+
+    private String userName;
+
+    private String userPassword;
+
+    private String repositoryToken;
 
     @NotNull
     private String dockerFileLocation;

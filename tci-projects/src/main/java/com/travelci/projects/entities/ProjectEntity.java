@@ -33,8 +33,16 @@ public class ProjectEntity {
     private String repositoryUrl;
 
     //TODO Créer objet pour clé étrangère
-    @Transient
     private List<String> branches;
+
+    @Column
+    private String userName;
+
+    @Column
+    private String userPassword;
+
+    @Column
+    private String repositoryToken;
 
     @Column
     private String dockerFileLocation;
