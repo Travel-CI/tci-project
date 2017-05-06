@@ -1,5 +1,6 @@
 package com.travelci.projects.services;
 
+import com.travelci.projects.entities.PayLoad;
 import com.travelci.projects.entities.ProjectDto;
 
 import java.util.List;
@@ -8,11 +9,13 @@ public interface ProjectsService {
 
     List<ProjectDto> getProjectsList();
 
-    ProjectDto create(final ProjectDto projectDto);
+    ProjectDto create(ProjectDto projectDto);
 
-    ProjectDto update(final ProjectDto projectDto);
+    ProjectDto update(ProjectDto projectDto);
 
-    void delete(final ProjectDto projectDto);
+    void delete(ProjectDto projectDto);
 
-    ProjectDto getProjectDetails(final Long projectId);
+    ProjectDto getProjectDetails(Long projectId);
+
+    void checkPayLoadFromWebHook(PayLoad webHookPayLoad);
 }

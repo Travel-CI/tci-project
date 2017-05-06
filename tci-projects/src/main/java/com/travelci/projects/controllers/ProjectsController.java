@@ -1,5 +1,6 @@
 package com.travelci.projects.controllers;
 
+import com.travelci.projects.entities.PayLoad;
 import com.travelci.projects.entities.ProjectDto;
 import com.travelci.projects.exceptions.InvalidProjectException;
 import com.travelci.projects.services.ProjectsService;
@@ -59,11 +60,20 @@ public class ProjectsController {
 
     @GetMapping("{projectId}")
     public ProjectDto getProjectDetails(@PathVariable final Long projectId) {
+
+        if (projectId == null)
+            throw new InvalidProjectException();
+
         return projectsService.getProjectDetails(projectId);
     }
 
     @GetMapping("webhook")
-    public void checkPayLoadForStartEngine() {
+    public void checkPayLoadForStartEngine(@Valid @RequestBody final PayLoad webHookPayLoad,
+                                           final BindingResult bindingResult) {
 
+        if (bindingResult.hasErrors())
+            throw new InvalidProjectException();
+
+        projectsService.checkPayLoadFromWebHook(webHookPayLoad);
     }
 }
