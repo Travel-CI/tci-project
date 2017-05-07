@@ -61,7 +61,10 @@ public class ProjectRepositoryIT {
 
         projectRepository.save(project);
 
-        ProjectEntity searchProject = projectRepository.findFromPayLoad(payLoad.getRepositoryUrl(), payLoad.getBranchName()).orElse(null);
+        ProjectEntity searchProject = projectRepository.findFromPayLoad(
+            payLoad.getRepositoryUrl(),
+            payLoad.getBranchName()
+        ).orElse(null);
 
         assertThat(searchProject).isNotNull();
         assertThat(searchProject.getId()).isEqualTo(1);
