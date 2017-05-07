@@ -59,12 +59,8 @@ public class ProjectsController {
     }
 
     @GetMapping("{projectId}")
-    public ProjectDto getProjectDetails(@PathVariable final Long projectId) {
-
-        if (projectId == null)
-            throw new InvalidProjectException();
-
-        return projectsService.getProjectDetails(projectId);
+    public ProjectDto getProjectById(@PathVariable final Long projectId) {
+        return projectsService.getProjectById(projectId);
     }
 
     @GetMapping("webhook")

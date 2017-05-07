@@ -15,7 +15,7 @@ public interface ProjectsService {
 
     void delete(ProjectDto projectDto);
 
-    ProjectDto getProjectDetails(Long projectId);
+    ProjectDto getProjectById(Long projectId);
 
     void checkPayLoadFromWebHook(PayLoad webHookPayLoad);
 }

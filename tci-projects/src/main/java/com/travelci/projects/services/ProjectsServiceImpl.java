@@ -40,6 +40,14 @@ public class ProjectsServiceImpl implements ProjectsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public ProjectDto getProjectById(final Long projectId) {
+        return projectAdapter.toProjectDto(
+            projectRepository.findById(projectId).orElseThrow(NotFoundProjectException::new)
+        );
+    }
+
+    @Override
     public ProjectDto create(final ProjectDto projectDto) {
 
         projectDto.setCreated(new Timestamp(System.currentTimeMillis()));
@@ -53,6 +61,9 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Override
     public ProjectDto update(final ProjectDto projectDto) {
 
+        if (projectRepository.findOne(projectDto.getId()) == null)
+            throw new NotFoundProjectException();
+
         projectDto.setUpdated(new Timestamp(System.currentTimeMillis()));
 
         return projectAdapter.toProjectDto(
@@ -62,15 +73,11 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Override
     public void delete(final ProjectDto projectDto) {
-        projectRepository.delete(projectAdapter.toProjectEntity(projectDto));
-    }
 
-    @Override
-    @Transactional(readOnly = true)
-    public ProjectDto getProjectDetails(final Long projectId) {
-        return projectAdapter.toProjectDto(
-            projectRepository.findOne(projectId)
-        );
+        if (projectRepository.findOne(projectDto.getId()) == null)
+            throw new NotFoundProjectException();
+
+        projectRepository.delete(projectAdapter.toProjectEntity(projectDto));
     }
 
     @Override

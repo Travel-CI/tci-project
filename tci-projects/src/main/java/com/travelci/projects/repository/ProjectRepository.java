@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
 
+    Optional<ProjectEntity> findById(Long id);
+
     @Query("select p from ProjectEntity p where p.enable = 1 and p.repositoryUrl = :repositoryUrl and p.branches like concat('%',:branch,'%')")
     Optional<ProjectEntity> findFromPayLoad(@Param("repositoryUrl") String repositoryUrl, @Param("branch") String branch);
 }

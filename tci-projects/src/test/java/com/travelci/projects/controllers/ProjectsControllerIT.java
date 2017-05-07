@@ -19,9 +19,7 @@ import static com.jayway.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
@@ -50,6 +48,35 @@ public class ProjectsControllerIT {
             .log().all()
             .statusCode(OK.value())
             .body("$", hasSize(2));
+    }
+
+    @Test
+    public void shouldReturnProjectOneWhenGetProjectById() {
+        when()
+            .get(PROJECTS_ENDPOINT + "/{projectId}", 1)
+        .then()
+            .log().all()
+            .statusCode(OK.value())
+            .body("id", equalTo(1))
+            .body("name", equalTo("Project 1"));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenGetAnUnknownProjectId() {
+        when()
+            .get(PROJECTS_ENDPOINT + "/{projectId}", 4)
+        .then()
+            .log().all()
+            .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenProjectIdParamIsNotALongObject() {
+        when()
+            .get(PROJECTS_ENDPOINT + "/{projectId}", "test")
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
     }
 
     @Test
@@ -84,9 +111,10 @@ public class ProjectsControllerIT {
     }
 
     @Test
-    public void shouldThrowExceptionWhenAddNewProjectWithUnformatedRepositoryUrl() {
+    @DirtiesContext
+    public void shouldThrowExceptionWhenAddNewProjectWithUnformattedRepositoryUrl() {
 
-        ProjectDto unformatedProject = ProjectDto.builder()
+        final ProjectDto unformatedProject = ProjectDto.builder()
             .name("Project 3")
             .description("Unformated project")
             .enable(true)
@@ -140,7 +168,8 @@ public class ProjectsControllerIT {
     @Test
     @DirtiesContext
     public void shouldAddNewProjectsWhenRepositoryUrlHasGoodFormat() {
-        ProjectDto newProject = ProjectDto.builder()
+
+        final ProjectDto newProject = ProjectDto.builder()
             .name("Project")
             .description("Well formated project")
             .enable(true)
@@ -193,5 +222,197 @@ public class ProjectsControllerIT {
             .log().all()
             .statusCode(CREATED.value())
             .body("id", equalTo(6));
+    }
+
+    @Test
+    @DirtiesContext
+    public void shouldUpdateProjectIdOneWhenPutRequest() {
+        final ProjectDto updatedProject = ProjectDto.builder()
+            .id(1L)
+            .name("Project 1 Updated")
+            .enable(false)
+            .repositoryUrl("https://github.com/repo.git")
+            .branches(Arrays.asList("master", "dev"))
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(updatedProject)
+        .when()
+            .put(PROJECTS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(OK.value())
+            .body("id", equalTo(1))
+            .body("name", equalTo(updatedProject.getName()))
+            .body("repositoryUrl", equalTo(updatedProject.getRepositoryUrl()));
+
+        when()
+            .get(PROJECTS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(OK.value())
+            .body("$", hasSize(2));
+    }
+
+    @Test
+    @DirtiesContext
+    public void shouldThrowExceptionWhenUpdateAnUnknownProject() {
+        final ProjectDto updatedProject = ProjectDto.builder()
+            .id(3L)
+            .name("Project 3 Updated")
+            .enable(false)
+            .repositoryUrl("https://github.com/repo.git")
+            .branches(Arrays.asList("master", "dev"))
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(updatedProject)
+        .when()
+            .put(PROJECTS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    @DirtiesContext
+    public void shouldThrowExceptionWhenUpdateProjectWithUnFormatProject() {
+
+        ProjectDto updatedProject = ProjectDto.builder()
+            .id(1L)
+            .name("")
+            .enable(true)
+            .repositoryUrl("https://github.com/repo.git")
+            .branches(Arrays.asList("master", "dev"))
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(updatedProject)
+        .when()
+            .put(PROJECTS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
+
+        updatedProject = ProjectDto.builder()
+            .id(1L)
+            .name("Project 1 updated")
+            .enable(true)
+            .repositoryUrl("https://github.com/repo")
+            .branches(Arrays.asList("master", "dev"))
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(updatedProject)
+        .when()
+            .put(PROJECTS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
+
+        updatedProject = ProjectDto.builder()
+            .id(1L)
+            .name("Project 1 updated")
+            .repositoryUrl("https://github.com/repo.git")
+            .branches(Arrays.asList("master", "dev"))
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(updatedProject)
+        .when()
+            .put(PROJECTS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
+
+        updatedProject = ProjectDto.builder()
+            .id(1L)
+            .name("Project 1 updated")
+            .enable(true)
+            .repositoryUrl("https://github.com/repo.git")
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(updatedProject)
+        .when()
+            .put(PROJECTS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
+    }
+
+    @Test
+    @DirtiesContext
+    public void shouldGetOneProjectWhenDeleteProjectIdTwo() {
+        final ProjectDto deletedProject = ProjectDto.builder()
+            .id(2L)
+            .name("Project 2")
+            .description("Desc 2")
+            .enable(true)
+            .repositoryUrl("https://github.com/RC2S/RC2S-Project.git")
+            .branches(Arrays.asList("master", "dev"))
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(deletedProject)
+        .when()
+            .delete(PROJECTS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(OK.value());
+
+        when()
+            .get(PROJECTS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(OK.value())
+            .body("$", hasSize(1));
+    }
+
+    @Test
+    @DirtiesContext
+    public void shouldThrowExceptionWhenDeleteAnUnformattedProject() {
+        final ProjectDto deletedProject = ProjectDto.builder()
+            .id(3L)
+            .repositoryUrl("https://github.com/repo.git")
+            .branches(Arrays.asList("master", "dev"))
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(deletedProject)
+        .when()
+            .delete(PROJECTS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
+    }
+
+    @Test
+    @DirtiesContext
+    public void shouldThrowExceptionWhenDeleteAnUnknownProject() {
+        final ProjectDto deletedProject = ProjectDto.builder()
+            .id(3L)
+            .name("Project 3")
+            .enable(true)
+            .repositoryUrl("https://github.com/repo.git")
+            .branches(Arrays.asList("master", "dev"))
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(deletedProject)
+        .when()
+            .delete(PROJECTS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(NOT_FOUND.value());
     }
 }
