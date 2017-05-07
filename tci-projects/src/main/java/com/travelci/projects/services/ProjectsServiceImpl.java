@@ -1,9 +1,11 @@
 package com.travelci.projects.services;
 
-import com.travelci.projects.adapter.ProjectAdapter;
 import com.travelci.projects.entities.PayLoad;
+import com.travelci.projects.entities.ProjectAdapter;
 import com.travelci.projects.entities.ProjectDto;
+import com.travelci.projects.exceptions.NotFoundProjectException;
 import com.travelci.projects.repository.ProjectRepository;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RefreshScope
 @Transactional
 public class ProjectsServiceImpl implements ProjectsService {
 
@@ -74,7 +77,13 @@ public class ProjectsServiceImpl implements ProjectsService {
     @Transactional(readOnly = true)
     public void checkPayLoadFromWebHook(final PayLoad webHookPayLoad) {
 
-        ProjectDto searchProject = null; //projectAdapter.toProjectDto(projectRepository.); // FindByRepositoryUrlAndEnabledAndBranchName
+        ProjectDto searchProject = projectAdapter.toProjectDto(
+            projectRepository.findFromPayLoad(
+                webHookPayLoad.getRepositoryUrl(),
+                webHookPayLoad.getBranchName()
+            ).orElseThrow(NotFoundProjectException::new)
+        );
+
         gitService.pullProjectRepository(searchProject, webHookPayLoad);
     }
 }
