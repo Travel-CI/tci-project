@@ -293,7 +293,25 @@ public class CommandsControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldThrowExceptionWhenDeleteAnUnknowCommand() {
+    public void shouldThrowExceptionWhenDeleteAnUnformattedCommand() {
+        final CommandDto unformattedCommand = CommandDto.builder()
+            .id(1L).projectId(1L).commandOrder(1)
+            .enabled(true).enableLogs(true)
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(unformattedCommand)
+        .when()
+            .delete(COMMANDS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
+    }
+
+    @Test
+    @DirtiesContext
+    public void shouldThrowExceptionWhenDeleteAnUnknownCommand() {
         final CommandDto deletedCommand = CommandDto.builder()
             .id(6L).name("Build Docker Image")
             .command("docker build -t test .").projectId(1L)
