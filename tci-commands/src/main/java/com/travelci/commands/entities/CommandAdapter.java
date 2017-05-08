@@ -1,7 +1,5 @@
-package com.travelci.commands.adapter;
+package com.travelci.commands.entities;
 
-import com.travelci.commands.entities.CommandDto;
-import com.travelci.commands.entities.CommandEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,7 +12,7 @@ public class CommandAdapter {
                 .name(command.getName())
                 .command(command.getCommand())
                 .projectId(command.getProjectId())
-                .order(command.getOrder())
+                .commandOrder(command.getCommandOrder())
                 .enabled(command.getEnabled())
                 .enableLogs(command.getEnableLogs())
                 .build()
@@ -28,7 +26,7 @@ public class CommandAdapter {
                 .name(commandDto.getName())
                 .command(commandDto.getCommand())
                 .projectId(commandDto.getProjectId())
-                .order(commandDto.getOrder())
+                .commandOrder(commandDto.getCommandOrder())
                 .enabled(commandDto.getEnabled())
                 .enableLogs(commandDto.getEnableLogs())
                 .build()

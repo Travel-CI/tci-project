@@ -1,7 +1,5 @@
-package com.travelci.projects.adapter;
+package com.travelci.projects.entities;
 
-import com.travelci.projects.entities.ProjectDto;
-import com.travelci.projects.entities.ProjectEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,7 +14,10 @@ public class ProjectAdapter {
                 .enable(project.getEnable())
                 .repositoryUrl(project.getRepositoryUrl())
                 .branches(project.getBranches())
-                .dockerFileLocation(project.getDockerFileLocation())
+                .userName(project.getUserName())
+                .userPassword(project.getUserPassword())
+                .repositoryToken(project.getRepositoryToken())
+                .dockerfileLocation(project.getDockerfileLocation())
                 .lastStart(project.getLastStart())
                 .build()
             : null;
@@ -31,7 +32,10 @@ public class ProjectAdapter {
                 .enable(projectDto.getEnable())
                 .repositoryUrl(projectDto.getRepositoryUrl())
                 .branches(projectDto.getBranches())
-                .dockerFileLocation(projectDto.getDockerFileLocation())
+                .userName(projectDto.getUserName())
+                .userPassword(projectDto.getUserPassword())
+                .repositoryToken(projectDto.getRepositoryToken())
+                .dockerfileLocation(projectDto.getDockerfileLocation())
                 .lastStart(projectDto.getLastStart())
                 .created(projectDto.getCreated())
                 .updated(projectDto.getUpdated())
