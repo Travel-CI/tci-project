@@ -18,29 +18,53 @@ public class GitServiceIT {
 
     private static final String TEST_REPOSITORY = "https://github.com/Popoll/popoll-project.git";
 
+    private static final String ATTEMPT_FOLDER_NAME = "Popoll_Project_dev";
+
+    private ProjectDto projectDto;
+    private PayLoad payLoad;
+
     @Before
     public void setUp() {
         gitService = new GitServiceImpl(ROOT_REPOSITORIES_LOCATION);
-    }
-
-    @Test
-    public void shouldCreateRepository() {
-        final ProjectDto projectDto = ProjectDto.builder()
+        projectDto = ProjectDto.builder()
             .name("Popoll Project")
             .repositoryUrl(TEST_REPOSITORY)
             .branches(Arrays.asList("master", "dev"))
             .build();
 
-        final PayLoad payLoad = PayLoad.builder()
+        payLoad = PayLoad.builder()
             .repositoryUrl(TEST_REPOSITORY)
             .branchName("dev")
             .build();
+    }
 
-        final String attemptFolderName = "Popoll_Project_dev";
+    @Test
+    public void shouldCreateRepository() {
 
         gitService.pullProjectRepository(projectDto, payLoad);
 
-        final File repositoryFolder = new File(ROOT_REPOSITORIES_LOCATION + attemptFolderName);
+        final File repositoryFolder = new File(ROOT_REPOSITORIES_LOCATION + ATTEMPT_FOLDER_NAME);
+        assertThat(repositoryFolder.exists()).isTrue();
+        assertThat(repositoryFolder.isDirectory()).isTrue();
+        assertThat(repositoryFolder.list().length).isNotZero();
+        assertThat(repositoryFolder.list()).contains(".git", ".gitignore");
+
+        gitService.deleteRepository(repositoryFolder);
+    }
+
+    @Test
+    public void shouldPullRepositoryWhenRepositoryAlreadyExist() throws InterruptedException {
+
+        gitService.pullProjectRepository(projectDto, payLoad);
+
+        File repositoryFolder = new File(ROOT_REPOSITORIES_LOCATION + ATTEMPT_FOLDER_NAME);
+        assertThat(repositoryFolder.exists()).isTrue();
+        assertThat(repositoryFolder.isDirectory()).isTrue();
+        assertThat(repositoryFolder.list().length).isNotZero();
+        assertThat(repositoryFolder.list()).contains(".git", ".gitignore");
+
+        gitService.pullProjectRepository(projectDto, payLoad);
+        repositoryFolder = new File(ROOT_REPOSITORIES_LOCATION + ATTEMPT_FOLDER_NAME);
         assertThat(repositoryFolder.exists()).isTrue();
         assertThat(repositoryFolder.isDirectory()).isTrue();
         assertThat(repositoryFolder.list().length).isNotZero();

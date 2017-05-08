@@ -8,5 +8,6 @@ import java.io.File;
 interface GitService {
 
     void pullProjectRepository(ProjectDto projectDto, PayLoad webHookPayLoad);
+
     boolean deleteRepository(File repositoryFolder);
 }

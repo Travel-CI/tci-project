@@ -16,3 +16,7 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
     @Query("select p from ProjectEntity p where p.enable = 1 and p.repositoryUrl = :repositoryUrl and p.branches like concat('%',:branch,'%')")
     Optional<ProjectEntity> findFromPayLoad(@Param("repositoryUrl") String repositoryUrl, @Param("branch") String branch);
 }
+
+// https://spring.io/guides/gs/accessing-data-mongodb/
+// https://github.com/fakemongo/fongo
+// https://logging.apache.org/log4j/2.x/manual/appenders.html#NoSQLAppender
