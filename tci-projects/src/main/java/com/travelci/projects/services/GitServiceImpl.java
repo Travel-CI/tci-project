@@ -24,7 +24,7 @@ class GitServiceImpl implements GitService {
         this.rootRepositoriesLocation = rootRepositoriesLocation;
     }
 
-    public void pullProjectRepository(final ProjectDto projectDto,
+    public Git pullProjectRepository(final ProjectDto projectDto,
                                       final PayLoad webHookPayLoad) {
 
         final File repositoryFolder = new File(formatRepositoryFolderName(
@@ -37,22 +37,19 @@ class GitServiceImpl implements GitService {
             repositoryFolder.isDirectory() &&
             repositoryFolder.list().length == 0)) {
 
-            cloneRepositoryBranch(repositoryFolder,
+            return cloneRepositoryBranch(repositoryFolder,
                 projectDto.getRepositoryUrl(),
                 webHookPayLoad.getBranchName()
             );
         } else if (repositoryFolder.exists() &&
             repositoryFolder.isDirectory()) {
 
-            try {
-                pullRepositoryBranch(repositoryFolder,
-                    projectDto.getRepositoryUrl(),
-                    webHookPayLoad.getBranchName()
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            return pullRepositoryBranch(repositoryFolder,
+                projectDto.getRepositoryUrl(),
+                webHookPayLoad.getBranchName()
+            );
         }
+        return null;
 
         /*
         http://www.codeaffine.com/2015/05/06/jgit-initialize-repository/
@@ -83,23 +80,34 @@ class GitServiceImpl implements GitService {
     }
 
     private Git pullRepositoryBranch(final File repositoryFolder, final String repositoryUrl,
-                                     final String branch) throws IOException {
+                                     final String branch) {
+
+        Git repository = null;
+
         try {
-            final Git repository = Git.open(repositoryFolder);
+            repository = Git.open(repositoryFolder);
             repository.pull().call();
             return repository;
+        } catch (IOException e) {
+            e.printStackTrace();
         } catch (GitAPIException e) {
             e.printStackTrace();
 
             // Delete all files in folder
-            deleteRepository(repositoryFolder);
+            deleteRepository(repository, repositoryFolder);
 
             // Clone repository
             return cloneRepositoryBranch(repositoryFolder, repositoryUrl, branch);
         }
+
+        return null;
     }
 
-    public boolean deleteRepository(final File repositoryFolder) {
+    public boolean deleteRepository(final Git repository, final File repositoryFolder) {
+
+        if (repository != null)
+            repository.close();
+
         return FileSystemUtils.deleteRecursively(repositoryFolder);
     }
 
