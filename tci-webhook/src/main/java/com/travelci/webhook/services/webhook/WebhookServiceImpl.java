@@ -18,8 +18,8 @@ public class WebhookServiceImpl implements WebhookService {
     private final AbstractExtractor githubExtractor;
     private final RestTemplate restTemplate;
 
-    private String projectsServiceUrl;
-    private String loggerServiceUrl;
+    private final String projectsServiceUrl;
+    private final String loggerServiceUrl;
 
     public WebhookServiceImpl(final AbstractExtractor bitbucketExtractor,
                               final AbstractExtractor githubExtractor,
