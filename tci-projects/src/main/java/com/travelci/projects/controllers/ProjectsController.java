@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -63,13 +64,14 @@ public class ProjectsController {
         return projectsService.getProjectById(projectId);
     }
 
-    @GetMapping("webhook")
-    public void checkPayLoadForStartEngine(@Valid @RequestBody final PayLoad webHookPayLoad,
+    @PostMapping("webhook")
+    @ResponseStatus(ACCEPTED)
+    public void checkPayLoadAndStartEngine(@Valid @RequestBody final PayLoad webHookPayLoad,
                                            final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidProjectException();
 
-        projectsService.checkPayLoadFromWebHook(webHookPayLoad);
+        projectsService.startProjectEngine(webHookPayLoad);
     }
 }

@@ -16,6 +16,7 @@ public class GitServiceIT {
 
     private GitService gitService;
 
+    // TODO Use Temporary File
     private static final String ROOT_REPOSITORIES_LOCATION =
         System.getProperty("os.name").toLowerCase().contains("win") ? "C:\\Temp\\" : "/tmp/travel-ci/";
 
@@ -28,6 +29,7 @@ public class GitServiceIT {
 
     @Before
     public void setUp() {
+
         gitService = new GitServiceImpl(ROOT_REPOSITORIES_LOCATION);
         projectDto = ProjectDto.builder()
             .name("Popoll Project")
@@ -55,20 +57,28 @@ public class GitServiceIT {
         gitService.deleteRepository(repository, repositoryFolder);
     }
 
-    @Test
     @SuppressWarnings("all")
+    @Test
     public void shouldPullRepositoryWhenRepositoryAlreadyExist() throws InterruptedException, IOException {
 
+        // Clone Repository
         Git repository = gitService.pullProjectRepository(projectDto, payLoad);
 
+        // Assert Repository Folder Exists with basic files inside
         File repositoryFolder = new File(ROOT_REPOSITORIES_LOCATION + ATTEMPT_FOLDER_NAME);
         assertThat(repositoryFolder.exists()).isTrue();
         assertThat(repositoryFolder.isDirectory()).isTrue();
         assertThat(repositoryFolder.list().length).isNotZero();
         assertThat(repositoryFolder.list()).contains(".git", ".gitignore");
 
+        // Delete file for next check
+        new File(ROOT_REPOSITORIES_LOCATION + ATTEMPT_FOLDER_NAME + "/.gitignore").delete();
         repository.close();
+
+        // Reset And Pull Repository
         repository = gitService.pullProjectRepository(projectDto, payLoad);
+
+        // Assert Basic Files are present
         repositoryFolder = new File(ROOT_REPOSITORIES_LOCATION + ATTEMPT_FOLDER_NAME);
         assertThat(repositoryFolder.exists()).isTrue();
         assertThat(repositoryFolder.isDirectory()).isTrue();

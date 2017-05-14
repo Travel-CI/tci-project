@@ -1,5 +1,6 @@
 package com.travelci.projects.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Builder
 @Data
+@AllArgsConstructor
 public class PayLoad {
 
     @NotNull @NotEmpty

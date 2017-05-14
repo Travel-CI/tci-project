@@ -19,6 +19,8 @@ public class ProjectAdapter {
                 .repositoryToken(project.getRepositoryToken())
                 .dockerfileLocation(project.getDockerfileLocation())
                 .lastStart(project.getLastStart())
+                .created(project.getCreated())
+                .updated(project.getUpdated())
                 .build()
             : null;
     }

@@ -2,7 +2,6 @@ package com.travelci.projects.entities;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +15,6 @@ public class BranchListConverter implements AttributeConverter<List<String>, Str
 
     @Override
     public List<String> convertToEntityAttribute(final String branches) {
-        return new ArrayList(Arrays.asList(branches.split(",")));
+        return Arrays.asList(branches.split(","));
     }
 }

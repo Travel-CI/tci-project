@@ -6,7 +6,6 @@ import com.travelci.projects.entities.ProjectDto;
 import com.travelci.projects.exceptions.NotFoundProjectException;
 import com.travelci.projects.repository.ProjectRepository;
 import org.eclipse.jgit.api.Git;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RefreshScope
 @Transactional
 public class ProjectsServiceImpl implements ProjectsService {
 
@@ -83,8 +81,9 @@ public class ProjectsServiceImpl implements ProjectsService {
 
     @Override
     @Transactional(readOnly = true)
-    public void checkPayLoadFromWebHook(final PayLoad webHookPayLoad) {
+    public void startProjectEngine(final PayLoad webHookPayLoad) {
 
+        // Check incoming webhook with project list
         final ProjectDto searchProject = projectAdapter.toProjectDto(
             projectRepository.findFromPayLoad(
                 webHookPayLoad.getRepositoryUrl(),
@@ -92,7 +91,10 @@ public class ProjectsServiceImpl implements ProjectsService {
             ).orElseThrow(NotFoundProjectException::new)
         );
 
+        // Get Source Code
         final Git repository = gitService.pullProjectRepository(searchProject, webHookPayLoad);
         repository.close();
+
+        // Send Request to tci-commands
     }
 }
