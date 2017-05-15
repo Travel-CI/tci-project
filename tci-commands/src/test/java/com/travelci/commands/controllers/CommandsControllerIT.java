@@ -106,6 +106,7 @@ public class CommandsControllerIT {
     @Test
     @DirtiesContext
     public void shouldThrowExceptionWhenAddCommandWithAlreadySavedCommandOrderIdForAProjectId() {
+
         final CommandDto alreadyExistCommand = CommandDto.builder()
             .name("Docker build")
             .command("docker build -t test .")
@@ -175,6 +176,7 @@ public class CommandsControllerIT {
     @Test
     @DirtiesContext
     public void shouldUpdateCommandWhenPutFormattedAndExistingCommand() {
+
         final CommandDto updatedCommand = CommandDto.builder()
             .id(1L).name("Test Update")
             .command("docker build -t test .").projectId(1L)
@@ -203,6 +205,7 @@ public class CommandsControllerIT {
     @Test
     @DirtiesContext
     public void shouldThrowExceptionWhenUpdateAnUnformattedCommand() {
+
         CommandDto unformattedCommand = CommandDto.builder().name("Test Update")
             .command("docker build -t test .").projectId(1L)
             .commandOrder(1).enabled(false).enableLogs(false)
@@ -249,6 +252,7 @@ public class CommandsControllerIT {
     @Test
     @DirtiesContext
     public void shouldThrowExceptionWhenUpdateAnUnknownCommand() {
+
         final CommandDto unknownCommand = CommandDto.builder()
             .id(6L).name("Test Update")
             .command("docker build -t test .").projectId(1L)
@@ -268,6 +272,7 @@ public class CommandsControllerIT {
     @Test
     @DirtiesContext
     public void shouldDeleteCommandWhenDeleteWithGoodFormatCommand() {
+
         final CommandDto deletedCommand = CommandDto.builder()
             .id(1L).name("Build Docker Image")
             .command("docker build -t test .").projectId(1L)
@@ -293,7 +298,27 @@ public class CommandsControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldThrowExceptionWhenDeleteAnUnknowCommand() {
+    public void shouldThrowExceptionWhenDeleteAnUnformattedCommand() {
+
+        final CommandDto unformattedCommand = CommandDto.builder()
+            .id(1L).projectId(1L).commandOrder(1)
+            .enabled(true).enableLogs(true)
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(unformattedCommand)
+        .when()
+            .delete(COMMANDS_ENDPOINT)
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
+    }
+
+    @Test
+    @DirtiesContext
+    public void shouldThrowExceptionWhenDeleteAnUnknownCommand() {
+
         final CommandDto deletedCommand = CommandDto.builder()
             .id(6L).name("Build Docker Image")
             .command("docker build -t test .").projectId(1L)

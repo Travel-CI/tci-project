@@ -17,5 +17,5 @@ public interface ProjectsService {
 
     ProjectDto getProjectById(Long projectId);
 
-    void checkPayLoadFromWebHook(PayLoad webHookPayLoad);
+    void startProjectEngine(PayLoad webHookPayLoad);
 }

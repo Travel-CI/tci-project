@@ -1,3 +1,4 @@
 info:
   repositories:
-    location: /tmp/travel-ci
+    #location: /tmp/travel-ci/
+    location: D:/travel-ci/

@@ -45,7 +45,8 @@ public class ProjectRepositoryIT {
     @Test
     @DirtiesContext
     public void shouldSaveProjectWithBranchListInsideStringColumn() {
-        ProjectEntity savedProject = projectRepository.save(project);
+
+        final ProjectEntity savedProject = projectRepository.save(project);
 
         assertThat(savedProject.getId()).isEqualTo(1);
         assertThat(savedProject.getBranches()).isEqualTo(branchList);
@@ -54,14 +55,15 @@ public class ProjectRepositoryIT {
     @Test
     @DirtiesContext
     public void shouldReturnProjectWhenExecuteFromPayLoadQuery() {
-        PayLoad payLoad = PayLoad.builder()
+
+        final PayLoad payLoad = PayLoad.builder()
             .repositoryUrl("https://github.com/Popoll/popoll-project.git")
             .branchName("dev")
             .build();
 
         projectRepository.save(project);
 
-        ProjectEntity searchProject = projectRepository.findFromPayLoad(
+        final ProjectEntity searchProject = projectRepository.findFromPayLoad(
             payLoad.getRepositoryUrl(),
             payLoad.getBranchName()
         ).orElse(null);

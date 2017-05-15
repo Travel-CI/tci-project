@@ -53,6 +53,7 @@ public class ProjectsControllerIT {
 
     @Test
     public void shouldReturnProjectOneWhenGetProjectById() {
+
         when()
             .get(PROJECTS_ENDPOINT + "/{projectId}", 1)
         .then()
@@ -64,6 +65,7 @@ public class ProjectsControllerIT {
 
     @Test
     public void shouldThrowExceptionWhenGetAnUnknownProjectId() {
+
         when()
             .get(PROJECTS_ENDPOINT + "/{projectId}", 4)
         .then()
@@ -73,6 +75,7 @@ public class ProjectsControllerIT {
 
     @Test
     public void shouldThrowExceptionWhenProjectIdParamIsNotALongObject() {
+
         when()
             .get(PROJECTS_ENDPOINT + "/{projectId}", "test")
         .then()
@@ -84,7 +87,7 @@ public class ProjectsControllerIT {
     @DirtiesContext
     public void shouldGetThreeProjectsWhenAddNewProject() {
 
-        ProjectDto newProject = ProjectDto.builder()
+        final ProjectDto newProject = ProjectDto.builder()
             .name("Project 3")
             .description("Well formated project")
             .enable(true)
@@ -228,6 +231,7 @@ public class ProjectsControllerIT {
     @Test
     @DirtiesContext
     public void shouldUpdateProjectIdOneWhenPutRequest() {
+
         final ProjectDto updatedProject = ProjectDto.builder()
             .id(1L)
             .name("Project 1 Updated")
@@ -259,6 +263,7 @@ public class ProjectsControllerIT {
     @Test
     @DirtiesContext
     public void shouldThrowExceptionWhenUpdateAnUnknownProject() {
+
         final ProjectDto updatedProject = ProjectDto.builder()
             .id(3L)
             .name("Project 3 Updated")
@@ -351,6 +356,7 @@ public class ProjectsControllerIT {
     @Test
     @DirtiesContext
     public void shouldGetOneProjectWhenDeleteProjectIdTwo() {
+
         final ProjectDto deletedProject = ProjectDto.builder()
             .id(2L)
             .name("Project 2")
@@ -380,6 +386,7 @@ public class ProjectsControllerIT {
     @Test
     @DirtiesContext
     public void shouldThrowExceptionWhenDeleteAnUnformattedProject() {
+
         final ProjectDto deletedProject = ProjectDto.builder()
             .id(3L)
             .repositoryUrl("https://github.com/repo.git")
@@ -399,6 +406,7 @@ public class ProjectsControllerIT {
     @Test
     @DirtiesContext
     public void shouldThrowExceptionWhenDeleteAnUnknownProject() {
+
         final ProjectDto deletedProject = ProjectDto.builder()
             .id(3L)
             .name("Project 3")

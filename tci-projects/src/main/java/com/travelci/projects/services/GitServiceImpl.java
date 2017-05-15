@@ -2,6 +2,7 @@ package com.travelci.projects.services;
 
 import com.travelci.projects.entities.PayLoad;
 import com.travelci.projects.entities.ProjectDto;
+import com.travelci.projects.exceptions.GitException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,18 @@ import java.io.File;
 import java.io.IOException;
 
 import static java.util.Collections.singleton;
+import static org.eclipse.jgit.api.ResetCommand.ResetType.HARD;
+
+/*
+http://www.codeaffine.com/2015/05/06/jgit-initialize-repository/
+http://www.codeaffine.com/2015/11/30/jgit-clone-repository/
+http://www.codeaffine.com/2014/12/09/jgit-authentication/
+Ssh -> user + password
+Https -> OAuth token
+Async
+https://spring.io/guides/gs/async-method/
+http://callistaenterprise.se/blogg/teknik/2014/04/22/c10k-developing-non-blocking-rest-services-with-spring-mvc/
+ */
 
 @Service
 @RefreshScope
@@ -20,7 +33,7 @@ class GitServiceImpl implements GitService {
 
     private final String rootRepositoriesLocation;
 
-    public GitServiceImpl(@Value("{info.repositories.location}") final String rootRepositoriesLocation) {
+    GitServiceImpl(@Value("${info.repositories.location}") final String rootRepositoriesLocation) {
         this.rootRepositoriesLocation = rootRepositoriesLocation;
     }
 
@@ -49,15 +62,8 @@ class GitServiceImpl implements GitService {
                 webHookPayLoad.getBranchName()
             );
         }
-        return null;
 
-        /*
-        http://www.codeaffine.com/2015/05/06/jgit-initialize-repository/
-        http://www.codeaffine.com/2015/11/30/jgit-clone-repository/
-        http://www.codeaffine.com/2014/12/09/jgit-authentication/
-        Ssh -> user + password
-        Https -> OAuth token
-         */
+        throw new GitException("Fail to choose Git method to get your repository.");
     }
 
     private Git cloneRepositoryBranch(final File repositoryFolder,
@@ -74,8 +80,8 @@ class GitServiceImpl implements GitService {
                 .call();
 
         } catch (GitAPIException e) {
-            e.printStackTrace();
-            return null;
+            // TODO Send error to logger service
+            throw new GitException("Failed to clone " + branch + " from " + repositoryUrl, e);
         }
     }
 
@@ -86,12 +92,14 @@ class GitServiceImpl implements GitService {
 
         try {
             repository = Git.open(repositoryFolder);
+            repository.reset().setMode(HARD).call();
             repository.pull().call();
             return repository;
         } catch (IOException e) {
-            e.printStackTrace();
+            // TODO Send error to logger service
+            throw new GitException("Fail to open " + repositoryFolder, e);
         } catch (GitAPIException e) {
-            e.printStackTrace();
+            // TODO Send error to logger service
 
             // Delete all files in folder
             deleteRepository(repository, repositoryFolder);
@@ -99,8 +107,6 @@ class GitServiceImpl implements GitService {
             // Clone repository
             return cloneRepositoryBranch(repositoryFolder, repositoryUrl, branch);
         }
-
-        return null;
     }
 
     public boolean deleteRepository(final Git repository, final File repositoryFolder) {
