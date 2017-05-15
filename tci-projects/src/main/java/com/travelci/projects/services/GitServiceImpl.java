@@ -22,6 +22,9 @@ http://www.codeaffine.com/2015/11/30/jgit-clone-repository/
 http://www.codeaffine.com/2014/12/09/jgit-authentication/
 Ssh -> user + password
 Https -> OAuth token
+Async
+https://spring.io/guides/gs/async-method/
+http://callistaenterprise.se/blogg/teknik/2014/04/22/c10k-developing-non-blocking-rest-services-with-spring-mvc/
  */
 
 @Service

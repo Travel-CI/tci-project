@@ -40,7 +40,7 @@ public class WebhookServiceImpl implements WebhookService {
         final PayLoad payLoad = convertInPayLoad(extractor, jsonPayLoad);
 
         System.out.println(payLoad);
-        // Call Projects Service to send the payload
+        // TODO Call Projects Service to send the payload
         //restTemplate.postForObject(projectsServiceUrl, payLoad, null);
     }
 
@@ -64,7 +64,7 @@ public class WebhookServiceImpl implements WebhookService {
         } catch (ExtractorWrongFormatException e) {
 
             System.out.println(e.getMessage());
-            // Call Logger Service to Log this error
+            // TODO Call Logger Service to Log this error
             //restTemplate.postForObject(loggerServiceUrl, payLoad, null);
 
             throw new BadRequestException();
