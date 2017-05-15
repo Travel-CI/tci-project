@@ -1,6 +1,9 @@
 package com.travelci.webhook.services.webhook;
 
+import com.travelci.webhook.entities.PayLoad;
+import com.travelci.webhook.exceptions.BadRequestException;
 import com.travelci.webhook.exceptions.ExtractorNotFoundException;
+import com.travelci.webhook.exceptions.ExtractorWrongFormatException;
 import com.travelci.webhook.services.json.extractor.AbstractExtractor;
 import com.travelci.webhook.services.json.extractor.BitbucketExtractorImpl;
 import com.travelci.webhook.services.json.extractor.GithubExtractorImpl;
@@ -57,5 +60,27 @@ public class WebhookServiceTest {
     @Test(expected = ExtractorNotFoundException.class)
     public void shouldThrowExceptionWhenFindExtractorWithAnUnknownJsonFormat() {
         webhookService.findExtractor("unknownJson");
+    }
+
+    @Test
+    public void shouldReturnPayLoadGivenJsonGoodFormatWhenTransformJsonToPayLoad() throws ExtractorWrongFormatException {
+
+        when(bitbucketExtractor.transformJsonToPayload(any(String.class)))
+            .thenReturn(PayLoad.builder().commitMessage("test").build());
+
+        PayLoad payLoad = webhookService.convertInPayLoad(bitbucketExtractor, "bitbucket");
+
+        assertThat(payLoad).isNotNull();
+        assertThat(payLoad.getCommitMessage()).isEqualTo("test");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test(expected = BadRequestException.class)
+    public void shouldThrowExceptionWhenTransformJsonToPayloadFailed() throws ExtractorWrongFormatException {
+
+        when(bitbucketExtractor.transformJsonToPayload(any(String.class)))
+            .thenThrow(ExtractorWrongFormatException.class);
+
+        webhookService.convertInPayLoad(bitbucketExtractor, "bitbucket");
     }
 }
