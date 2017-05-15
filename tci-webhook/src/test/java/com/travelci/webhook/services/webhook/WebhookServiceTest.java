@@ -63,7 +63,8 @@ public class WebhookServiceTest {
     }
 
     @Test
-    public void shouldReturnPayLoadGivenJsonGoodFormatWhenTransformJsonToPayLoad() throws ExtractorWrongFormatException {
+    public void shouldReturnPayLoadGivenJsonGoodFormatWhenTransformJsonToPayLoad()
+        throws ExtractorWrongFormatException {
 
         when(bitbucketExtractor.transformJsonToPayload(any(String.class)))
             .thenReturn(PayLoad.builder().commitMessage("test").build());
@@ -76,7 +77,8 @@ public class WebhookServiceTest {
 
     @SuppressWarnings("unchecked")
     @Test(expected = BadRequestException.class)
-    public void shouldThrowExceptionWhenTransformJsonToPayloadFailed() throws ExtractorWrongFormatException {
+    public void shouldThrowExceptionWhenTransformJsonToPayloadFailed()
+        throws ExtractorWrongFormatException {
 
         when(bitbucketExtractor.transformJsonToPayload(any(String.class)))
             .thenThrow(ExtractorWrongFormatException.class);
