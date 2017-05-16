@@ -4,7 +4,9 @@ buildscript {
 		projectGroupName 	= 'com.travelci'
 		projectVersion 		= '0.2-SNAPSHOT'
 		projectName			= 'Travel CI'
+
 		sonarqubeUrl		= 'http://esgi.cloudapp.net:9092'
+		sonarqubeToken		= '246b5a19d27a8a6ff48752ffa0d2522fb3f49531'
 
 		springBootVersion 	= '1.5.2.RELEASE'
 		springCloudVersion 	= 'Dalston.RELEASE'
@@ -40,6 +42,7 @@ sonarqube {
 		property "sonar.projectKey", projectGroupName
 		property "sonar.projectVersion", projectVersion
 		property "sonar.host.url", sonarqubeUrl
+		property "sonar.login", sonarqubeToken
 		property "sonar.jacoco.reportPaths", "**/build/jacoco.exec"
 	}
 }
