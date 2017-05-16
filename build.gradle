@@ -39,9 +39,8 @@ sonarqube {
 		property "sonar.projectName", projectName
 		property "sonar.projectKey", projectGroupName
 		property "sonar.projectVersion", projectVersion
-		property "sonar.sources", "**/src/main/java"
-		property "sonar.tests", "**/src/test/java"
 		property "sonar.host.url", sonarqubeUrl
+		property "sonar.jacoco.reportPaths", "**/build/jacoco.exec"
 	}
 }
 
