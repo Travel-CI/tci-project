@@ -18,17 +18,19 @@ public class WebhookServiceImpl implements WebhookService {
     private final AbstractExtractor githubExtractor;
     private final RestTemplate restTemplate;
 
-    @Value("${info.services.projects}")
-    private String projectsServiceUrl;
-    @Value("${info.services.logger")
-    private String loggerServiceUrl;
+    private final String projectsServiceUrl;
+    private final String loggerServiceUrl;
 
     public WebhookServiceImpl(final AbstractExtractor bitbucketExtractor,
                               final AbstractExtractor githubExtractor,
-                              final RestTemplate restTemplate) {
+                              final RestTemplate restTemplate,
+                              @Value("${info.services.projects}") final String projectsServiceUrl,
+                              @Value("${info.services.logger") final String loggerServiceUrl) {
         this.bitbucketExtractor = bitbucketExtractor;
         this.githubExtractor = githubExtractor;
         this.restTemplate = restTemplate;
+        this.projectsServiceUrl = projectsServiceUrl;
+        this.loggerServiceUrl = loggerServiceUrl;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class WebhookServiceImpl implements WebhookService {
         final PayLoad payLoad = convertInPayLoad(extractor, jsonPayLoad);
 
         System.out.println(payLoad);
-        // Call Projects Service to send the payload
+        // TODO Call Projects Service to send the payload
         //restTemplate.postForObject(projectsServiceUrl, payLoad, null);
     }
 
@@ -62,7 +64,7 @@ public class WebhookServiceImpl implements WebhookService {
         } catch (ExtractorWrongFormatException e) {
 
             System.out.println(e.getMessage());
-            // Call Logger Service to Log this error
+            // TODO Call Logger Service to Log this error
             //restTemplate.postForObject(loggerServiceUrl, payLoad, null);
 
             throw new BadRequestException();

@@ -1,21 +1,26 @@
 package com.travelci.projects.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProjectDto {
 
     private Long id;
 
-    @NotNull
+    @NotNull @NotEmpty
     private String name;
 
     private String description;
@@ -23,14 +28,24 @@ public class ProjectDto {
     @NotNull
     private Boolean enable;
 
-    @NotNull
+    @NotNull @NotEmpty
+    @Pattern(
+        regexp = "((git|ssh|http(s)?)|(git@[\\w\\.]+))(:(//)?)([\\w\\.@\\:/\\-~]+)(\\.git)(/)?",
+        message = "Repository Url has wrong format"
+    )
     private String repositoryUrl;
 
-    @NotNull
+    @NotNull @NotEmpty
     private List<String> branches;
 
-    @NotNull
-    private String dockerFileLocation;
+    private String userName;
+
+    private String userPassword;
+
+    private String repositoryToken;
+
+    //@NotNull
+    private String dockerfileLocation;
 
     private Date lastStart;
 

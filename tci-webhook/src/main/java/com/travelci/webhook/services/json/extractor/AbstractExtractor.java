@@ -44,7 +44,7 @@ public abstract class AbstractExtractor {
     }
 
     public boolean jsonHasGoodFormat(final String jsonPayLoad) {
-        return identifiers.stream().anyMatch(jsonPayLoad::contains);
+        return identifiers.stream().allMatch(jsonPayLoad::contains);
     }
 
     public PayLoad transformJsonToPayload(final String jsonPayLoad) throws ExtractorWrongFormatException {

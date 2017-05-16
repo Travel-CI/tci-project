@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 @RestController
 @RequestMapping("/commands")
 public class CommandsController {
@@ -21,14 +23,11 @@ public class CommandsController {
 
     @GetMapping("{projectId}")
     public List<CommandDto> getCommandsByProject(@PathVariable final Long projectId) {
-
-        if (projectId == null)
-            throw new InvalidCommandException();
-
         return commandsService.getCommandsByProject(projectId);
     }
 
     @PostMapping
+    @ResponseStatus(CREATED)
     public CommandDto createNewCommand(@Valid @RequestBody final CommandDto commandDto,
                                        final BindingResult bindingResult) {
 

@@ -1,4 +1,4 @@
-package com.travelci.projects;
+package com.travelci.webhook;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,9 +7,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProjectsApplicationTests {
+public class WebhookApplicationTest {
 
-    @Test
-    public void contextLoads() {
-    }
+	@Test
+	public void contextLoads() {}
 }

@@ -1,7 +1,9 @@
 package com.travelci.projects.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -13,6 +15,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "project")
 public class ProjectEntity {
 
@@ -32,12 +36,21 @@ public class ProjectEntity {
     @Column
     private String repositoryUrl;
 
-    //TODO Créer objet pour clé étrangère
-    @Transient
+    @Column
+    @Convert(converter = BranchListConverter.class)
     private List<String> branches;
 
     @Column
-    private String dockerFileLocation;
+    private String userName;
+
+    @Column
+    private String userPassword;
+
+    @Column
+    private String repositoryToken;
+
+    @Column
+    private String dockerfileLocation;
 
     @Column
     private Date lastStart;

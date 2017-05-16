@@ -1,5 +1,6 @@
 package com.travelci.projects.controllers;
 
+import com.travelci.projects.entities.PayLoad;
 import com.travelci.projects.entities.ProjectDto;
 import com.travelci.projects.exceptions.InvalidProjectException;
 import com.travelci.projects.services.ProjectsService;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -58,12 +60,18 @@ public class ProjectsController {
     }
 
     @GetMapping("{projectId}")
-    public ProjectDto getProjectDetails(@PathVariable final Long projectId) {
-        return projectsService.getProjectDetails(projectId);
+    public ProjectDto getProjectById(@PathVariable final Long projectId) {
+        return projectsService.getProjectById(projectId);
     }
 
-    @GetMapping("webhook")
-    public void checkPayLoadForStartEngine() {
+    @PostMapping("webhook")
+    @ResponseStatus(ACCEPTED)
+    public void checkPayLoadAndStartEngine(@Valid @RequestBody final PayLoad webHookPayLoad,
+                                           final BindingResult bindingResult) {
 
+        if (bindingResult.hasErrors())
+            throw new InvalidProjectException();
+
+        projectsService.startProjectEngine(webHookPayLoad);
     }
 }
