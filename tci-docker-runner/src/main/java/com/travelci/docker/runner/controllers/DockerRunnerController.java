@@ -10,6 +10,5 @@ public class DockerRunnerController {
 
     @GetMapping("execute")
     public void executeCommand() {
-
     }
 }

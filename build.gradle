@@ -2,7 +2,9 @@ buildscript {
 
 	ext {
 		projectGroupName 	= 'com.travelci'
-		projectVersion 		= '0.1-SNAPSHOT'
+		projectVersion 		= '0.2-SNAPSHOT'
+		projectName			= 'Travel CI'
+		sonarqubeUrl		= 'http://esgi.cloudapp.net:9092'
 
 		springBootVersion 	= '1.5.2.RELEASE'
 		springCloudVersion 	= 'Dalston.RELEASE'
@@ -23,9 +25,24 @@ buildscript {
 	}
 }
 
+plugins {
+	id "org.sonarqube" version "2.4"
+}
+
 allprojects {
 	group projectGroupName
 	version projectVersion
+}
+
+sonarqube {
+	properties {
+		property "sonar.projectName", projectName
+		property "sonar.projectKey", projectGroupName
+		property "sonar.projectVersion", projectVersion
+		property "sonar.sources", "**/src/main/java"
+		property "sonar.tests", "**/src/test/java"
+		property "sonar.host.url", sonarqubeUrl
+	}
 }
 
 subprojects {
@@ -33,6 +50,16 @@ subprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
 	apply plugin: 'org.springframework.boot'
+	apply plugin: 'jacoco'
+
+	jacocoTestReport {
+		reports {
+			xml.enabled true
+			csv.enabled false
+		}
+	}
+
+	jacocoTestReport.dependsOn test
 
 	repositories {
 		maven {
