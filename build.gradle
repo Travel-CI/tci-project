@@ -43,7 +43,7 @@ sonarqube {
 		property "sonar.projectVersion", projectVersion
 		property "sonar.host.url", sonarqubeUrl
 		property "sonar.login", sonarqubeToken
-		property "sonar.jacoco.reportPaths", "**/build/jacoco.exec"
+		property "sonar.jacoco.reportPaths", "**/build/jacoco/test.exec"
 	}
 }
 
