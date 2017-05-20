@@ -39,9 +39,7 @@ public class WebhookServiceImpl implements WebhookService {
         final AbstractExtractor extractor = findExtractor(jsonPayLoad);
         final PayLoad payLoad = convertInPayLoad(extractor, jsonPayLoad);
 
-        System.out.println(payLoad);
-        // TODO Call Projects Service to send the payload
-        //restTemplate.postForObject(projectsServiceUrl, payLoad, null);
+        restTemplate.postForEntity(projectsServiceUrl + "/projects/webhook", payLoad, Void.class);
     }
 
     @Override
