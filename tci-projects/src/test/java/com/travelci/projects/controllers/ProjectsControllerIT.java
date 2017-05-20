@@ -428,7 +428,7 @@ public class ProjectsControllerIT {
     }
 
     @Test
-    public void shouldAcceptPayLoadCloneRepositoryAndSendToCommandsService() {
+    public void shouldAcceptPayLoadCloneRepositoryAndSendToCommandsService() throws InterruptedException {
 
         final PayLoad payLoad = PayLoad.builder()
             .repositoryUrl("https://github.com/Popoll/popoll-project.git")
@@ -453,6 +453,7 @@ public class ProjectsControllerIT {
             .log().all()
             .statusCode(ACCEPTED.value());
 
+        Thread.sleep(3000);
 
         // Assert Basic Files are present
         final File repositoryFolder = new File(ROOT_REPOSITORIES_LOCATION + ATTEMPT_FOLDER_NAME);
