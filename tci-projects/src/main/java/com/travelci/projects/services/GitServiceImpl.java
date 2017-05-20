@@ -27,6 +27,14 @@ https://spring.io/guides/gs/async-method/
 http://callistaenterprise.se/blogg/teknik/2014/04/22/c10k-developing-non-blocking-rest-services-with-spring-mvc/
  */
 
+/**
+ * GitServiceImpl
+ *
+ * Git Engine to Clone and Pull Repositories
+ *
+ * ! Packages Rights !
+ * Only used by another service
+ */
 @Service
 @RefreshScope
 class GitServiceImpl implements GitService {
@@ -38,7 +46,7 @@ class GitServiceImpl implements GitService {
     }
 
     public Git pullProjectRepository(final ProjectDto projectDto,
-                                      final PayLoad webHookPayLoad) {
+                                     final PayLoad webHookPayLoad) {
 
         final File repositoryFolder = new File(formatRepositoryFolderName(
             projectDto.getName(),

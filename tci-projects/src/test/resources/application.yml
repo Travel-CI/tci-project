@@ -2,6 +2,14 @@ eureka:
   client:
     enabled: false
 
+spring:
+  profiles:
+    active: test
+
 info:
   repositories:
-    location: /fake/path/
+    #location: /tmp/travel-ci/
+    location: C:/Temp/
+  services:
+    commands: http://localhost:8082
+    logger: http://localhost:8083

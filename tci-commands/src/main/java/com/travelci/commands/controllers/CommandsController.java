@@ -1,6 +1,7 @@
 package com.travelci.commands.controllers;
 
 import com.travelci.commands.entities.CommandDto;
+import com.travelci.commands.entities.ProjectDto;
 import com.travelci.commands.exceptions.InvalidCommandException;
 import com.travelci.commands.services.CommandsService;
 import org.springframework.validation.BindingResult;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -55,5 +57,16 @@ public class CommandsController {
             throw new InvalidCommandException();
 
         commandsService.delete(commandDto);
+    }
+
+    @PostMapping("/project")
+    @ResponseStatus(ACCEPTED)
+    public void getCommandsAndSendToDockerRunner(@Valid @RequestBody final ProjectDto projectDto,
+                                                 final BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors())
+            throw new InvalidCommandException();
+
+        commandsService.startCommandsEngine(projectDto);
     }
 }
