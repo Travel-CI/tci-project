@@ -1,6 +1,7 @@
 package com.travelci.commands.services;
 
 import com.travelci.commands.entities.CommandDto;
+import com.travelci.commands.entities.ProjectDto;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface CommandsService {
 
     void delete(CommandDto commandDto);
 
-    void executeCommand(CommandDto command);
+    void startCommandsEngine(ProjectDto projectDto);
 }

@@ -59,7 +59,7 @@ public abstract class AbstractExtractor {
                     .commitAuthor(reader.at(commitAuthorJsonTree).asText())
                     .commitHash(reader.at(commitHashJsonTree).asText())
                     .commitMessage(reader.at(commitMessageJsonTree).asText())
-                    .commitDate(null /* reader.at(commitDateJsonTree) */)
+                    .commitDate(null /* reader.at(commitDateJsonTree) */) // TODO Add date
                     .build();
 
             final Set<ConstraintViolation<PayLoad>> constraintViolations = validator.validate(payLoad);

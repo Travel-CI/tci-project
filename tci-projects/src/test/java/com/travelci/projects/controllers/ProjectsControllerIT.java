@@ -1,6 +1,7 @@
 package com.travelci.projects.controllers;
 
 import com.jayway.restassured.RestAssured;
+import com.travelci.projects.entities.PayLoad;
 import com.travelci.projects.entities.ProjectDto;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,15 +11,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.FileSystemUtils;
 
+import java.io.File;
 import java.util.Arrays;
 
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static com.jayway.restassured.http.ContentType.JSON;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static com.travelci.projects.controllers.IntegrationTestsConfig.ROOT_GIT_REPOSITORIES_FOLDER;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
@@ -423,5 +426,125 @@ public class ProjectsControllerIT {
         .then()
             .log().all()
             .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    public void shouldAcceptPayLoadCloneRepositoryAndSendToCommandsService() {
+
+        final PayLoad payLoad = PayLoad.builder()
+            .repositoryUrl("https://github.com/Popoll/popoll-project.git")
+            .branchName("master")
+            .commitAuthor("mboisnard")
+            .commitHash("aaa")
+            .commitMessage("Popoll commit")
+            .build();
+
+        final String ATTEMPT_FOLDER_NAME = "Project_1_master";
+
+        given()
+            .contentType(JSON)
+            .body(payLoad)
+        .when()
+            .post(PROJECTS_ENDPOINT + "/webhook")
+        .then()
+            .log().all()
+            .statusCode(ACCEPTED.value());
+
+        // Assert Basic Files are present
+        final File repositoryFolder = new File(ROOT_GIT_REPOSITORIES_FOLDER + ATTEMPT_FOLDER_NAME);
+        assertThat(repositoryFolder.exists()).isTrue();
+        assertThat(repositoryFolder.isDirectory()).isTrue();
+        assertThat(repositoryFolder.list().length).isNotZero();
+        assertThat(repositoryFolder.list()).contains(".git", ".gitignore");
+
+        FileSystemUtils.deleteRecursively(new File(ROOT_GIT_REPOSITORIES_FOLDER));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenPayLoadHasUnknownRepositoryUrl() {
+
+        final PayLoad wrongRepositoryPayLoad = PayLoad.builder()
+            .repositoryUrl("https://fakeurl.com/fake.git")
+            .branchName("master")
+            .commitAuthor("mboisnard")
+            .commitHash("aaa")
+            .commitMessage("Popoll commit")
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(wrongRepositoryPayLoad)
+        .when()
+            .post(PROJECTS_ENDPOINT + "/webhook")
+        .then()
+            .log().all()
+            .statusCode(NOT_FOUND.value());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenPayLoadHasWrongFormat() {
+
+        PayLoad wrongFormatPayLoad = PayLoad.builder()
+            .branchName("master")
+            .commitAuthor("mboisnard")
+            .commitHash("aaa")
+            .commitMessage("Popoll commit")
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(wrongFormatPayLoad)
+        .when()
+            .post(PROJECTS_ENDPOINT + "/webhook")
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
+
+        wrongFormatPayLoad = PayLoad.builder()
+            .repositoryUrl("https://fakeurl.com/fake.git")
+            .commitAuthor("mboisnard")
+            .commitHash("aaa")
+            .commitMessage("Popoll commit")
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(wrongFormatPayLoad)
+        .when()
+            .post(PROJECTS_ENDPOINT + "/webhook")
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
+
+        wrongFormatPayLoad = PayLoad.builder()
+            .repositoryUrl("https://fakeurl.com/fake.git")
+            .branchName("master")
+            .commitHash("aaa")
+            .commitMessage("Popoll commit")
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(wrongFormatPayLoad)
+        .when()
+            .post(PROJECTS_ENDPOINT + "/webhook")
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
+
+        wrongFormatPayLoad = PayLoad.builder()
+            .repositoryUrl("https://fakeurl.com/fake.git")
+            .branchName("master")
+            .commitAuthor("mboisnard")
+            .build();
+
+        given()
+            .contentType(JSON)
+            .body(wrongFormatPayLoad)
+        .when()
+            .post(PROJECTS_ENDPOINT + "/webhook")
+        .then()
+            .log().all()
+            .statusCode(BAD_REQUEST.value());
     }
 }

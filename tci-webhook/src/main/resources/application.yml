@@ -25,4 +25,4 @@ github:
 info:
   services:
     projects: http://localhost:8081
-    logger: http://localhost:8082
+    logger: http://localhost:8083

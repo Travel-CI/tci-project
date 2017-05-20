@@ -1,4 +1,4 @@
-package com.travelci.webhook.services.webhook;
+package com.travelci.projects.services;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
