@@ -32,7 +32,7 @@ http://callistaenterprise.se/blogg/teknik/2014/04/22/c10k-developing-non-blockin
  *
  * Git Engine to Clone and Pull Repositories
  *
- * ! Packages Rights !
+ * ! Package Rights !
  * Only used by another service
  */
 @Service
