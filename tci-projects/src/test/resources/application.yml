@@ -2,6 +2,11 @@ eureka:
   client:
     enabled: false
 
+spring:
+  profiles:
+    active: test
+
 info:
-  repositories:
-    location: /fake/path/
+  services:
+    commands: http://localhost:8082
+    logger: http://localhost:8083

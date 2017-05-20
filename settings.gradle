@@ -1,4 +1,4 @@
-rootProject.name = 'Travel CI'
+rootProject.name = 'Travel-CI'
 
 // Spring Cloud
 include 'tci-eureka'

@@ -1,5 +1,13 @@
+eureka:
+  client:
+    enabled: false
+
+spring:
+  profiles:
+    active: test
+
 bitbucket:
-  identifiers: "\"self\":{\"href\": \"https://api.bitbucket.org/,\"diff\": {\"href\": \"https://api.bitbucket.org/"
+  identifiers: "\"self\": {\"href\": \"https://api.bitbucket.org/,\"diff\": {\"href\": \"https://api.bitbucket.org/"
   repository:
     url: /repository/links/html/href
   branch:

@@ -2,6 +2,7 @@ package com.travelci.commands.services;
 
 import com.travelci.commands.entities.CommandAdapter;
 import com.travelci.commands.entities.CommandDto;
+import com.travelci.commands.entities.ProjectDto;
 import com.travelci.commands.exceptions.InvalidCommandException;
 import com.travelci.commands.exceptions.NotFoundCommandException;
 import com.travelci.commands.repository.CommandRepository;
@@ -16,7 +17,6 @@ import java.util.stream.Collectors;
 public class CommandsServiceImpl implements CommandsService {
 
     private final CommandRepository commandRepository;
-
     private final CommandAdapter commandAdapter;
 
     public CommandsServiceImpl(final CommandRepository commandRepository,
@@ -67,7 +67,11 @@ public class CommandsServiceImpl implements CommandsService {
     }
 
     @Override
-    public void executeCommand(final CommandDto command) {
+    public void startCommandsEngine(final ProjectDto projectDto) {
 
+        final List<CommandDto> commands = getCommandsByProject(projectDto.getId());
+
+        if (commands.isEmpty())
+            throw new NotFoundCommandException();
     }
 }

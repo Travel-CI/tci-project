@@ -6,8 +6,10 @@ import com.travelci.projects.entities.ProjectDto;
 import com.travelci.projects.exceptions.NotFoundProjectException;
 import com.travelci.projects.repository.ProjectRepository;
 import org.eclipse.jgit.api.Git;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -20,13 +22,23 @@ public class ProjectsServiceImpl implements ProjectsService {
     private final ProjectRepository projectRepository;
     private final ProjectAdapter projectAdapter;
     private final GitService gitService;
+    private final RestTemplate restTemplate;
+
+    private final String commandsServiceUrl;
+    private final String loggerServiceUrl;
 
     public ProjectsServiceImpl(final ProjectRepository projectRepository,
                                final ProjectAdapter projectAdapter,
-                               final GitService gitService) {
+                               final GitService gitService,
+                               final RestTemplate restTemplate,
+                               @Value("${info.services.commands}") final String commandsServiceUrl,
+                               @Value("${info.services.logger}") final String loggerServiceUrl) {
         this.projectRepository = projectRepository;
         this.projectAdapter = projectAdapter;
         this.gitService = gitService;
+        this.restTemplate = restTemplate;
+        this.commandsServiceUrl = commandsServiceUrl;
+        this.loggerServiceUrl = loggerServiceUrl;
     }
 
     @Override
@@ -96,5 +108,6 @@ public class ProjectsServiceImpl implements ProjectsService {
         repository.close();
 
         // Send Request to tci-commands
+        restTemplate.postForEntity(commandsServiceUrl + "/commands/project", searchProject, Void.class);
     }
 }

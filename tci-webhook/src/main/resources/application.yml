@@ -1,5 +1,5 @@
 bitbucket:
-  identifiers: "\"self\":{\"href\": \"https://api.bitbucket.org/,\"diff\": {\"href\": \"https://api.bitbucket.org/"
+  identifiers: "\"self\": {\"href\": \"https://api.bitbucket.org/,\"diff\": {\"href\": \"https://api.bitbucket.org/"
   repository:
     url: /repository/links/html/href
   branch:
@@ -25,4 +25,4 @@ github:
 info:
   services:
     projects: http://localhost:8081
-    logger: http://localhost:8082
+    logger: http://localhost:8083
