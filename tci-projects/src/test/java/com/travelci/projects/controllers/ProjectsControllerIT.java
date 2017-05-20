@@ -19,6 +19,7 @@ import java.util.Arrays;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static com.jayway.restassured.http.ContentType.JSON;
+import static com.travelci.projects.controllers.IntegrationTestsConfig.ROOT_GIT_REPOSITORIES_FOLDER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -428,7 +429,7 @@ public class ProjectsControllerIT {
     }
 
     @Test
-    public void shouldAcceptPayLoadCloneRepositoryAndSendToCommandsService() throws InterruptedException {
+    public void shouldAcceptPayLoadCloneRepositoryAndSendToCommandsService() {
 
         final PayLoad payLoad = PayLoad.builder()
             .repositoryUrl("https://github.com/Popoll/popoll-project.git")
@@ -437,10 +438,6 @@ public class ProjectsControllerIT {
             .commitHash("aaa")
             .commitMessage("Popoll commit")
             .build();
-
-        // TODO Temporary Folder
-        final String ROOT_REPOSITORIES_LOCATION =
-            System.getProperty("os.name").toLowerCase().contains("win") ? "C:\\Temp\\" : "/tmp/travel-ci/";
 
         final String ATTEMPT_FOLDER_NAME = "Project_1_master";
 
@@ -453,16 +450,14 @@ public class ProjectsControllerIT {
             .log().all()
             .statusCode(ACCEPTED.value());
 
-        Thread.sleep(3000);
-
         // Assert Basic Files are present
-        final File repositoryFolder = new File(ROOT_REPOSITORIES_LOCATION + ATTEMPT_FOLDER_NAME);
+        final File repositoryFolder = new File(ROOT_GIT_REPOSITORIES_FOLDER + ATTEMPT_FOLDER_NAME);
         assertThat(repositoryFolder.exists()).isTrue();
         assertThat(repositoryFolder.isDirectory()).isTrue();
         assertThat(repositoryFolder.list().length).isNotZero();
         assertThat(repositoryFolder.list()).contains(".git", ".gitignore");
 
-        FileSystemUtils.deleteRecursively(repositoryFolder);
+        FileSystemUtils.deleteRecursively(new File(ROOT_GIT_REPOSITORIES_FOLDER));
     }
 
     @Test
