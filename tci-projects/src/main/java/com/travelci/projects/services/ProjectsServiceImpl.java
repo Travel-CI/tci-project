@@ -7,6 +7,7 @@ import com.travelci.projects.exceptions.NotFoundProjectException;
 import com.travelci.projects.repository.ProjectRepository;
 import org.eclipse.jgit.api.Git;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -14,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.ACCEPTED;
 
 @Service
 @Transactional
@@ -108,6 +111,14 @@ public class ProjectsServiceImpl implements ProjectsService {
         repository.close();
 
         // Send Request to tci-commands
-        restTemplate.postForEntity(commandsServiceUrl + "/commands/project", searchProject, Void.class);
+        final ResponseEntity<Void> response = restTemplate.postForEntity(
+            commandsServiceUrl + "/commands/project",
+            searchProject,
+            Void.class
+        );
+
+        if (!ACCEPTED.equals(response.getStatusCode())) {
+            // TODO Call logger service
+        }
     }
 }

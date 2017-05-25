@@ -8,12 +8,15 @@ import com.travelci.commands.exceptions.NotFoundCommandException;
 import com.travelci.commands.repository.CommandRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.ACCEPTED;
 
 @Service
 @RefreshScope
@@ -85,6 +88,14 @@ public class CommandsServiceImpl implements CommandsService {
         if (commands.isEmpty())
             throw new NotFoundCommandException();
 
-        restTemplate.postForEntity(dockerRunnerServiceUrl + "/docker/execute", commands, Void.class);
+        final ResponseEntity<Void> response = restTemplate.postForEntity(
+            dockerRunnerServiceUrl + "/docker/execute",
+            commands,
+            Void.class
+        );
+
+        if (!ACCEPTED.equals(response.getStatusCode())) {
+            // TODO Call logger service
+        }
     }
 }
