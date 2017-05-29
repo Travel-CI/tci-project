@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class TciWebappPage {
+export class MaestroToolsPage {
   navigateTo() {
     return browser.get('/');
   }

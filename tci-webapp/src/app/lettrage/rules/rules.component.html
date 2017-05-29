@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <i class="fa fa-align-justify"></i> Table
+      </div>
+      <div class="card-block">
+
+        <p-dataTable [value]="rules" [tableStyleClass]="'table table-stripped'">
+          <p-column field="id" header="Id"></p-column>
+          <p-column field="name" header="Name"></p-column>
+          <p-column field="att1" header="Attribut 1"></p-column>
+          <p-column field="att2" header="Attribut 2"></p-column>
+          <p-column styleClass="col-button">
+            <ng-template pTemplate="header">
+              <button type="button" pButton icon="fa-refresh"></button>
+            </ng-template>
+            <ng-template let-car="rowData" pTemplate="body">
+              <button type="button" pButton icon="fa-search"></button>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+
+      </div>
+    </div>
+  </div>
+</div>

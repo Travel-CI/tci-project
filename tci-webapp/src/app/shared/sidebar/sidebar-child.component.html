@@ -1,0 +1,21 @@
+<ng-template ngFor let-child [ngForOf]="childrenItems">
+  <ng-container *ngIf="child.active">
+
+    <ng-container *ngIf="!child.children; then simpleChild else dropdownChild"></ng-container>
+
+    <ng-template #simpleChild>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" [routerLink]="[child.path]"><i class="fa fa-puzzle-piece"></i> {{ child.label }}</a>
+      </li>
+    </ng-template>
+
+    <ng-template #dropdownChild>
+      <li class="nav-item nav-dropdown" routerLinkActive="open">
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-puzzle-piece"></i> {{ child.label }}</a>
+        <ul class="nav-dropdown-items">
+          <app-sidebar-child [childrenItems]="child.children"></app-sidebar-child>
+        </ul>
+      </li>
+    </ng-template>
+  </ng-container>
+</ng-template>
