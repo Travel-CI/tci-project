@@ -21,12 +21,12 @@ public class DockerRunnerController {
         this.dockerRunnerService = dockerRunnerService;
     }
 
-    @GetMapping("execute")
+    @PostMapping("execute")
     @ResponseStatus(ACCEPTED)
     public void executeCommand(@Valid @RequestBody final List<CommandDto> commands,
                                final BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors() || commands.isEmpty())
+        if (bindingResult.hasErrors() /*|| commands.isEmpty()*/)
             throw new WrongFormatCommandException();
 
         dockerRunnerService.executeCommandsInDocker(commands);

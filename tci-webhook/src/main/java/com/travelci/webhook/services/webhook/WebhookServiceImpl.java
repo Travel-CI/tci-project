@@ -28,7 +28,7 @@ public class WebhookServiceImpl implements WebhookService {
                               final AbstractExtractor githubExtractor,
                               final RestTemplate restTemplate,
                               @Value("${info.services.projects}") final String projectsServiceUrl,
-                              @Value("${info.services.logger") final String loggerServiceUrl) {
+                              @Value("${info.services.logger}") final String loggerServiceUrl) {
         this.bitbucketExtractor = bitbucketExtractor;
         this.githubExtractor = githubExtractor;
         this.restTemplate = restTemplate;

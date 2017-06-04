@@ -26,5 +26,13 @@ public class DockerRunnerControllerIT {
     @Test
     public void shouldExecuteCommand() {
 
+        /*given()
+            .contentType(JSON)
+            .body(new ArrayList<CommandDto>())
+        .when()
+            .post(DOCKER_RUNNER_ENDPOINT + "/execute")
+        .then()
+            .log().all()
+            .statusCode(ACCEPTED.value());*/
     }
 }

@@ -1,3 +1,9 @@
+// Exclude Spring Cloud Transitive Dependency
+// Collide with javax.ws.rs-api in Spotify Docker Client library
+configurations {
+    all*.exclude group: 'javax.ws.rs', module: 'jsr311-api'
+}
+
 dependencies {
     // https://github.com/spotify/docker-client
     compile "com.spotify:docker-client:${dockerClientVersion}"
