@@ -5,3 +5,5 @@ eureka:
 info:
   docker:
     uri: unix:///var/run/docker.sock
+    projectsRootFolderInHost: /tmp/travel-ci
+    projectFolderInContainer: /app

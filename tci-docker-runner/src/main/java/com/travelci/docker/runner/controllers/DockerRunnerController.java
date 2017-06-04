@@ -29,6 +29,6 @@ public class DockerRunnerController {
         if (bindingResult.hasErrors() /*|| commands.isEmpty()*/)
             throw new WrongFormatCommandException();
 
-        dockerRunnerService.executeCommandsInDocker(commands);
+        dockerRunnerService.executeCommandsInContainer(commands);
     }
 }
