@@ -69,7 +69,10 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
         try {
             final ContainerCreation container = docker.createContainer(containerConfig);
             docker.startContainer(container.id());
-            docker.copyToContainer(Paths.get(projectsRootFolder), container.id(), projectFolderInContainer);
+
+            if (projectsRootFolder != null && !projectsRootFolder.isEmpty()
+            && projectFolderInContainer != null && !projectFolderInContainer.isEmpty())
+                docker.copyToContainer(Paths.get(projectsRootFolder), container.id(), projectFolderInContainer);
 
             return container.id();
         } catch (DockerException | InterruptedException | IOException e) {
