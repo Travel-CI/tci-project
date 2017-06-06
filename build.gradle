@@ -16,6 +16,7 @@ buildscript {
 
 		junitVersion 		= '4.12'
 		restAssuredVersion 	= '2.9.0'
+		jacksonYamlVersion	= '2.8.8'
 	}
 
 	repositories {

@@ -6,4 +6,6 @@ configurations {
 
 dependencies {
     compile "com.spotify:docker-client:${dockerClientVersion}"
+    testCompile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonYamlVersion}"
+
 }

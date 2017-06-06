@@ -1,5 +1,8 @@
 info:
   docker:
-    uri: unix:///var/run/docker.sock
-    projectsRootFolderInHost: /tmp/travel-ci
-    projectFolderInContainer: /app
+      windows:
+        uri: http://localhost:2375
+      unix:
+        uri: unix:///var/run/docker.sock
+      projectsRootFolderInHost: /tmp/travel-ci
+      projectFolderInContainer: /app
