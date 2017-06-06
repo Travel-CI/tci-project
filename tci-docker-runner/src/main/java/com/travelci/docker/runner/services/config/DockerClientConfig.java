@@ -13,7 +13,7 @@ public class DockerClientConfig {
     @Value("${info.docker.windows.uri}")
     private String dockerSocketUriForWindows;
 
-    @Value("${info.docker.unix.uri")
+    @Value("${info.docker.unix.uri}")
     private String dockerSocketUriForUnix;
 
     @Bean(name = "dockerClient")
