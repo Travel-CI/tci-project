@@ -5,7 +5,7 @@ pipelines:
     - step:
         script:
           - ls -al /run/
-          - ls -al /opt/atlassian/pipelines/
+          - ls -al /opt/atlassian/pipelines/agent
           - ls -al /opt/atlassian/pipelines/agent/build
           - bash ./gradlew jacocoTestReport --stacktrace --info
           - bash ./gradlew sonarqube
