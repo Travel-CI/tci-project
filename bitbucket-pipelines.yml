@@ -4,7 +4,7 @@ pipelines:
   default:
     - step:
         script:
-          - ls -al /run/ | grep docker
+          - ls -al /run/
           - bash ./gradlew jacocoTestReport --stacktrace --info
           - bash ./gradlew sonarqube
 
