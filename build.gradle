@@ -9,13 +9,14 @@ buildscript {
 		sonarqubeToken		= '246b5a19d27a8a6ff48752ffa0d2522fb3f49531'
 
 		springBootVersion 	= '1.5.2.RELEASE'
-		springCloudVersion 	= 'Dalston.RELEASE'
+		springCloudVersion 	= 'Dalston.SR1'
 
-		jgitVersion			= '4.6.1.201703071140-r'
-		dockerClientVersion = '8.2.1'
+		jgitVersion			= '4.8.0.201705170830-rc1'
+		dockerClientVersion = '8.6.2'
 
 		junitVersion 		= '4.12'
 		restAssuredVersion 	= '2.9.0'
+		jacksonYamlVersion	= '2.8.8'
 	}
 
 	repositories {

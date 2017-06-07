@@ -40,7 +40,7 @@ public class ExtractorTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenJsonPayLoadMatchWithIdentifiers(){
+    public void shouldReturnTrueWhenJsonPayLoadMatchWithIdentifiers() {
 
         final boolean hasGoodFormat = bitbucketExtractor.jsonHasGoodFormat(goodJsonPayLoad);
         assertThat(hasGoodFormat).isTrue();

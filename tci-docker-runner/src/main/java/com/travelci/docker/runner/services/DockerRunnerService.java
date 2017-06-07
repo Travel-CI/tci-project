@@ -6,5 +6,11 @@ import java.util.List;
 
 public interface DockerRunnerService {
 
-    void executeCommandsInDocker(List<CommandDto> commands);
+    String buildImageFromDockerFile(String imageName, String dockerfileLocation);
+
+    String startContainer(String imageId);
+
+    void executeCommandsInContainer(List<CommandDto> commands);
+
+    void stopContainer(String containerId);
 }
