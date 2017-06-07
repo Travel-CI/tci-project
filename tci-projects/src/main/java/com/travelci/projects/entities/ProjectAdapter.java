@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProjectAdapter {
 
-    public ProjectDto toProjectDto(final ProjectEntity project) {
+    public ProjectDto toProjectDto(final Project project) {
         return project != null ?
             ProjectDto.builder()
                 .id(project.getId())
@@ -25,9 +25,9 @@ public class ProjectAdapter {
             : null;
     }
 
-    public ProjectEntity toProjectEntity(final ProjectDto projectDto) {
+    public Project toProjectEntity(final ProjectDto projectDto) {
         return projectDto != null ?
-            ProjectEntity.builder()
+            Project.builder()
                 .id(projectDto.getId())
                 .name(projectDto.getName())
                 .description(projectDto.getDescription())

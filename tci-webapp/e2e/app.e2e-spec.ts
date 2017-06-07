@@ -1,10 +1,10 @@
-import { TciWebappPage } from './app.po';
+import { MaestroToolsPage } from './app.po';
 
-describe('tci-webapp App', () => {
-  let page: TciWebappPage;
+describe('maestro-tools App', () => {
+  let page: MaestroToolsPage;
 
   beforeEach(() => {
-    page = new TciWebappPage();
+    page = new MaestroToolsPage();
   });
 
   it('should display message saying app works', () => {

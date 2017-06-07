@@ -18,7 +18,7 @@ public class GithubExtractorImpl extends AbstractExtractor {
                                @Value("${github.commit.hash}") final String commitHashJsonTree,
                                @Value("${github.commit.message}") final String commitMessageJsonTree,
                                @Value("${github.commit.date}") final String commitDateJsonTree,
-                               final Validator validator){
+                               final Validator validator) {
 
         super(identifiers, repositoryUrlJsonTree,
             branchNameJsonTree, commitAuthorJsonTree,
