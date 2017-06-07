@@ -9,6 +9,8 @@ pipelines:
           - ls -al /opt/atlassian/pipelines/agent/cache
           - ls -al /opt/atlassian/pipelines/agent/tmp
           - ls -al /opt/atlassian/pipelines/agent/build
+          - echo $DOCKER_HOST
+          - docker version
           - bash ./gradlew jacocoTestReport --stacktrace --info
           - bash ./gradlew sonarqube
 
