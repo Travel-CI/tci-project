@@ -1,11 +1,14 @@
 package com.travelci.docker.runner.services;
 
 import com.spotify.docker.client.DefaultDockerClient;
+import com.spotify.docker.client.DockerCertificates;
+import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.Container;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static com.spotify.docker.client.DockerClient.ListContainersParam.allContainers;
@@ -18,13 +21,19 @@ public class DockerServiceIT {
     private DefaultDockerClient dockerClient;
 
     private static final String DOCKER_SOCKET = System.getProperty("os.name").contains("Windows")
-                                                    ? "http://localhost:2375"
+                                                    ? "https://192.168.99.100:2376"
                                                     : "unix:///var/run/docker.sock";
 
     @Before
-    public void setUp() {
+    public void setUp() throws DockerCertificateException {
 
-        dockerClient = new DefaultDockerClient(DOCKER_SOCKET);
+        if (System.getProperty("os.name").contains("Windows"))
+            dockerClient = DefaultDockerClient.builder()
+                .uri(DOCKER_SOCKET)
+                .dockerCertificates(new DockerCertificates(Paths.get("C:\\Users\\Julien\\.docker\\machine\\certs")))
+                .build();
+        else
+            dockerClient = new DefaultDockerClient(DOCKER_SOCKET);
 
         dockerRunnerService = new DockerRunnerServiceImpl(dockerClient,
             "", "");

@@ -1,8 +1,9 @@
 info:
   docker:
-      windows:
-        uri: http://localhost:2375
-      unix:
-        uri: unix:///var/run/docker.sock
-      projectsRootFolderInHost: /tmp/travel-ci
-      projectFolderInContainer: /app
+    windows:
+      uri: https://192.168.99.100:2376
+      cert: "C:\\Users\\Julien\\.docker\\machine\\certs"
+    unix:
+      uri: unix:///var/run/docker.sock
+    projectsRootFolderInHost: /tmp/travel-ci
+    projectFolderInContainer: /app
