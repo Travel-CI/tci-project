@@ -12,7 +12,7 @@ buildscript {
 		springCloudVersion 	= 'Dalston.SR1'
 
 		jgitVersion			= '4.8.0.201705170830-rc1'
-		dockerClientVersion = '8.6.2'
+		dockerClientVersion = '8.7.2'
 
 		junitVersion 		= '4.12'
 		restAssuredVersion 	= '2.9.0'

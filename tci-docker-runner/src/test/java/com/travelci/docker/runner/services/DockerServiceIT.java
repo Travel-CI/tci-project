@@ -7,13 +7,16 @@ import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.Container;
 import com.spotify.docker.client.messages.ContainerChange;
 import com.spotify.docker.client.messages.Image;
+import com.travelci.docker.runner.entities.CommandDto;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.spotify.docker.client.DockerClient.ListContainersParam.allContainers;
@@ -23,8 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DockerServiceIT {
 
     private DockerRunnerService dockerRunnerService;
-
     private DefaultDockerClient dockerClient;
+    private static final String BUSYBOX_TEST_IMAGE = "busybox:1";
 
     @Before
     public void setUp() throws DockerCertificateException {
@@ -85,13 +88,11 @@ public class DockerServiceIT {
 
     @Test
     @Ignore
-    public void shouldCreateASimpleBusyBoxContainerAndRunAndStopAndDeleteIt() throws DockerException, InterruptedException {
+    public void shouldCreateBusyBoxContainerAndRunAndStopAndDeleteIt() throws DockerException, InterruptedException {
 
-        final String imageName = "busybox:1";
+        dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
-        dockerClient.pull(imageName);
-
-        final String containerId = dockerRunnerService.startContainer(imageName);
+        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE);
         assertThat(containerId).isNotNull();
         assertThat(containerId).isNotEmpty();
 
@@ -101,7 +102,7 @@ public class DockerServiceIT {
             .filter(container -> containerId.equals(container.id()))
             .findFirst();
         assertThat(startedContainer.isPresent()).isTrue();
-        assertThat(startedContainer.get().image()).isEqualTo(imageName);
+        assertThat(startedContainer.get().image()).isEqualTo(BUSYBOX_TEST_IMAGE);
         assertThat(startedContainer.get().status()).contains("Up");
 
         // Stop Container and Delete It
@@ -115,22 +116,21 @@ public class DockerServiceIT {
 
     @Test
     @Ignore
-    public void shouldCreateBusyBoxContainerAndCopyFilesInContainerAndDeleteIt() throws DockerException, InterruptedException {
+    public void shouldCreateBusyBoxContainerAndStartAndCopyFilesInContainerAndDeleteIt() throws DockerException, InterruptedException {
 
         final String projectsRootFolder = getClass().getClassLoader()
             .getResource("Dockerfile").toString()
             .replace("file:", "")
             .replace("Dockerfile", "");
         final String projectFolderInContainer = "/";
-        final String imageName = "busybox:1";
 
         // Create Service with projectsRootFolder = docker-runner test resources folder
         dockerRunnerService = new DockerRunnerServiceImpl(dockerClient,
             projectsRootFolder, projectFolderInContainer);
-        dockerClient.pull(imageName);
+        dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
         // Start Container and Copy test resources files (Dockerfile && application.yml)
-        final String containerId = dockerRunnerService.startContainer(imageName);
+        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE);
         assertThat(containerId).isNotNull();
         assertThat(containerId).isNotEmpty();
 
@@ -141,6 +141,32 @@ public class DockerServiceIT {
         assertThat(containerChanges.size()).isEqualTo(2);
         assertThat(containerChanges.get(0).path()).isEqualTo("/Dockerfile");
         assertThat(containerChanges.get(1).path()).isEqualTo("/application.yml");
+
+        // Stop Container and Delete It
+        dockerRunnerService.stopContainer(containerId);
+        final Optional<Container> checkDeletedContainer = dockerClient.listContainers(allContainers())
+            .stream()
+            .filter(container -> containerId.equals(container.id()))
+            .findFirst();
+        assertThat(checkDeletedContainer.isPresent()).isFalse();
+    }
+
+    @Test
+    @Ignore
+    public void shouldExecutePwdCommandInBusyBoxContainer() throws DockerException, InterruptedException {
+
+        dockerClient.pull(BUSYBOX_TEST_IMAGE);
+
+        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE);
+        assertThat(containerId).isNotNull();
+        assertThat(containerId).isNotEmpty();
+
+        final List<CommandDto> commandList = new ArrayList<>();
+        commandList.add(CommandDto.builder().command("pwd").build());
+
+        Map<String, String> results = dockerRunnerService.executeCommandsInContainer(containerId, commandList);
+        assertThat(results.isEmpty()).isFalse();
+        assertThat(results.size()).isEqualTo(1);
 
         // Stop Container and Delete It
         dockerRunnerService.stopContainer(containerId);
