@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
-// https://github.com/spotify/docker-client
 @Service
 public class DockerRunnerServiceImpl implements DockerRunnerService {
 
@@ -56,14 +55,9 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
     @Override
     public String startContainer(final String imageId) {
 
-        /*final Bind volume = Bind.builder()
-            .from(projectsRootFolder)
-            .to(projectFolderInContainer)
-            .build();*/
-
         final ContainerConfig containerConfig = ContainerConfig.builder()
             .image(imageId)
-            //.hostConfig(HostConfig.builder().appendBinds(volume).build())
+            .tty(true)
             .build();
 
         try {
@@ -94,7 +88,7 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
     public void stopContainer(final String containerId) {
 
         try {
-            docker.stopContainer(containerId, 5);
+            docker.stopContainer(containerId, 2);
             docker.removeContainer(containerId);
         } catch (DockerException | InterruptedException e) {
             throw new DockerStopContainerException(e.getMessage(), e.getCause());
