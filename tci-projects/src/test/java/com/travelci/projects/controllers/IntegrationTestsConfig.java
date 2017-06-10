@@ -20,7 +20,7 @@ import static org.springframework.http.HttpStatus.ACCEPTED;
 
 @Configuration
 @Profile("test")
-public class IntegrationTestsConfig {
+class IntegrationTestsConfig {
 
     public static String ROOT_GIT_REPOSITORIES_FOLDER;
 
