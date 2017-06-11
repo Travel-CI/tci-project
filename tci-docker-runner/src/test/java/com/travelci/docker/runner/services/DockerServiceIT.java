@@ -34,7 +34,7 @@ public class DockerServiceIT {
 
         final String windowsSocketUri = "https://192.168.99.100:2376";
         final String windowsCertificatesUri = "C:\\Users\\Julien\\.docker\\machine\\certs";
-        final String unixSocketUri = "unix:///var/run/docker.sock";
+        final String unixSocketUri = "http://localhost:2375";
 
         if (System.getProperty("os.name").contains("Windows"))
             dockerClient = DefaultDockerClient.builder()
@@ -167,6 +167,7 @@ public class DockerServiceIT {
         Map<String, String> results = dockerRunnerService.executeCommandsInContainer(containerId, commandList);
         assertThat(results.isEmpty()).isFalse();
         assertThat(results.size()).isEqualTo(1);
+        assertThat(results.get("pwd")).isEqualTo("/\n");
 
         // Stop Container and Delete It
         dockerRunnerService.stopContainer(containerId);

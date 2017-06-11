@@ -104,7 +104,6 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
                 final LogStream output = docker.execStart(execCreation.id());
                 final String execOutput = output.readFully();
 
-                System.out.println(execOutput);
                 commandResults.put(command.getCommand(), execOutput);
 
             } catch (DockerException | InterruptedException e) {
