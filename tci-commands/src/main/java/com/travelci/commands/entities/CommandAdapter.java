@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommandAdapter {
 
-    public CommandDto toCommandDto(final CommandEntity command) {
+    public CommandDto toCommandDto(final Command command) {
         return command != null ?
             CommandDto.builder()
                 .id(command.getId())
@@ -19,9 +19,9 @@ public class CommandAdapter {
             : null;
     }
 
-    public CommandEntity toCommandEntity(final CommandDto commandDto) {
+    public Command toCommandEntity(final CommandDto commandDto) {
         return commandDto != null ?
-            CommandEntity.builder()
+            Command.builder()
                 .id(commandDto.getId())
                 .name(commandDto.getName())
                 .command(commandDto.getCommand())

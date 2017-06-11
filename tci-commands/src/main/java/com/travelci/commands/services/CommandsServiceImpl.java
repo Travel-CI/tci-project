@@ -6,23 +6,37 @@ import com.travelci.commands.entities.ProjectDto;
 import com.travelci.commands.exceptions.InvalidCommandException;
 import com.travelci.commands.exceptions.NotFoundCommandException;
 import com.travelci.commands.repository.CommandRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpStatus.ACCEPTED;
+
 @Service
+@RefreshScope
 @Transactional
 public class CommandsServiceImpl implements CommandsService {
 
     private final CommandRepository commandRepository;
     private final CommandAdapter commandAdapter;
+    private final RestTemplate restTemplate;
+
+    private final String dockerRunnerServiceUrl;
 
     public CommandsServiceImpl(final CommandRepository commandRepository,
-                               final CommandAdapter commandAdapter) {
+                               final CommandAdapter commandAdapter,
+                               final RestTemplate restTemplate,
+                               @Value("${info.services.docker-runner}") final String dockerRunnerServiceUrl) {
         this.commandRepository = commandRepository;
         this.commandAdapter = commandAdapter;
+        this.restTemplate = restTemplate;
+        this.dockerRunnerServiceUrl = dockerRunnerServiceUrl;
     }
 
     @Override
@@ -73,5 +87,15 @@ public class CommandsServiceImpl implements CommandsService {
 
         if (commands.isEmpty())
             throw new NotFoundCommandException();
+
+        final ResponseEntity<Void> response = restTemplate.postForEntity(
+            dockerRunnerServiceUrl + "/docker/execute",
+            commands,
+            Void.class
+        );
+
+        if (!ACCEPTED.equals(response.getStatusCode())) {
+            // TODO Call logger service
+        }
     }
 }

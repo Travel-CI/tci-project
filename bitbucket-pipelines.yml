@@ -6,3 +6,6 @@ pipelines:
         script:
           - bash ./gradlew jacocoTestReport --stacktrace
           - bash ./gradlew sonarqube
+
+options:
+  docker: true

@@ -1,0 +1,3 @@
+info:
+  services:
+    docker-runner: http://localhost:8004
