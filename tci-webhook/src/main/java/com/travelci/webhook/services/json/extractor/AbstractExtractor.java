@@ -47,7 +47,8 @@ public abstract class AbstractExtractor {
         return identifiers.stream().allMatch(jsonPayLoad::contains);
     }
 
-    public PayLoad transformJsonToPayload(final String jsonPayLoad) throws ExtractorWrongFormatException {
+    public PayLoad transformJsonToPayload(final String jsonPayLoad)
+        throws ExtractorWrongFormatException {
 
         try {
             final ObjectMapper mapper = new ObjectMapper();

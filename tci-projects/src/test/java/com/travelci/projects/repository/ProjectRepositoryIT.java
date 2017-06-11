@@ -1,7 +1,7 @@
 package com.travelci.projects.repository;
 
 import com.travelci.projects.entities.PayLoad;
-import com.travelci.projects.entities.ProjectEntity;
+import com.travelci.projects.entities.Project;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +25,7 @@ public class ProjectRepositoryIT {
     @Autowired
     private ProjectRepository projectRepository;
 
-    private ProjectEntity project;
+    private Project project;
     private List<String> branchList;
 
     @Before
@@ -33,7 +33,7 @@ public class ProjectRepositoryIT {
 
         branchList = Arrays.asList("master", "dev", "features/TCI-1");
 
-        project = ProjectEntity.builder()
+        project = Project.builder()
             .name("Project 1")
             .enable(true)
             .repositoryUrl("https://github.com/Popoll/popoll-project.git")
@@ -46,7 +46,7 @@ public class ProjectRepositoryIT {
     @DirtiesContext
     public void shouldSaveProjectWithBranchListInsideStringColumn() {
 
-        final ProjectEntity savedProject = projectRepository.save(project);
+        final Project savedProject = projectRepository.save(project);
 
         assertThat(savedProject.getId()).isEqualTo(1);
         assertThat(savedProject.getBranches()).isEqualTo(branchList);
@@ -63,7 +63,7 @@ public class ProjectRepositoryIT {
 
         projectRepository.save(project);
 
-        final ProjectEntity searchProject = projectRepository.findFromPayLoad(
+        final Project searchProject = projectRepository.findFromPayLoad(
             payLoad.getRepositoryUrl(),
             payLoad.getBranchName()
         ).orElse(null);

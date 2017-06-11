@@ -1,4 +1,4 @@
-package com.travelci.projects.services;
+package com.travelci.commands.services;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @Profile("default")
-class RestConfig {
+public class RestConfig {
 
     @Bean
     @LoadBalanced

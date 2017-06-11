@@ -1,6 +1,6 @@
-package com.travelci.webhook.controllers;
+package com.travelci.commands.controllers;
 
-import com.travelci.webhook.entities.PayLoad;
+import com.travelci.commands.entities.CommandDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -15,14 +15,14 @@ import static org.springframework.http.HttpStatus.ACCEPTED;
 
 @Configuration
 @Profile("test")
-class RestConfig {
+public class IntegrationTestsConfig {
 
     @Bean
     public RestTemplate restTemplate() {
 
         final RestTemplate restTemplate = mock(RestTemplate.class);
 
-        when(restTemplate.postForEntity(any(String.class), any(PayLoad.class), anyObject()))
+        when(restTemplate.postForEntity(any(String.class), any(CommandDto.class), anyObject()))
             .thenReturn(new ResponseEntity<>(ACCEPTED));
 
         return restTemplate;
