@@ -6,7 +6,9 @@ import com.travelci.projects.entities.ProjectDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
@@ -29,6 +31,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @Sql(executionPhase = BEFORE_TEST_METHOD, scripts = "classpath:project-init.sql")
 @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:project-teardown.sql")
 public class ProjectsControllerIT {
