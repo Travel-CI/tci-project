@@ -2,7 +2,7 @@ buildscript {
 
 	ext {
 		projectGroupName 	= 'com.travelci'
-		projectVersion 		= '0.3-SNAPSHOT'
+		projectVersion 		= '0.4-SNAPSHOT'
 		projectName			= 'Travel CI'
 
 		sonarqubeUrl		= 'http://esgi.cloudapp.net:9092'
@@ -12,11 +12,12 @@ buildscript {
 		springCloudVersion 	= 'Dalston.SR1'
 
 		jgitVersion			= '4.8.0.201705170830-rc1'
-		dockerClientVersion = '8.6.2'
+		dockerClientVersion = '8.7.2'
 
 		junitVersion 		= '4.12'
 		restAssuredVersion 	= '2.9.0'
 		jacksonYamlVersion	= '2.8.8'
+		commonIOVersion		= '2.5'
 	}
 
 	repositories {

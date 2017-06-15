@@ -15,7 +15,7 @@ import static org.springframework.http.HttpStatus.ACCEPTED;
 
 @Configuration
 @Profile("test")
-public class RestConfig {
+class RestConfig {
 
     @Bean
     public RestTemplate restTemplate() {

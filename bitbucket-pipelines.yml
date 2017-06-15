@@ -4,7 +4,7 @@ pipelines:
   default:
     - step:
         script:
-          - bash ./gradlew jacocoTestReport --stacktrace --info
+          - bash ./gradlew jacocoTestReport --stacktrace
           - bash ./gradlew sonarqube
 
 options:

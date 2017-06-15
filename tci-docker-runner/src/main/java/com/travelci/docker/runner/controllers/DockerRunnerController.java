@@ -26,9 +26,9 @@ public class DockerRunnerController {
     public void executeCommand(@Valid @RequestBody final List<CommandDto> commands,
                                final BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors() /*|| commands.isEmpty()*/)
+        if (bindingResult.hasErrors() || commands.isEmpty())
             throw new WrongFormatCommandException();
 
-        dockerRunnerService.executeCommandsInContainer(commands);
+        dockerRunnerService.startDockerRunnerEngine(commands);
     }
 }

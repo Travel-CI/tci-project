@@ -4,6 +4,7 @@ package com.travelci.docker.runner.controllers;
 import com.jayway.restassured.RestAssured;
 import com.travelci.docker.runner.entities.CommandDto;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.context.embedded.LocalServerPort;
@@ -31,6 +32,7 @@ public class DockerRunnerControllerIT {
     }
 
     @Test
+    @Ignore
     public void shouldExecuteCommand() {
 
         given()
