@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
@@ -111,13 +112,18 @@ public class ProjectsServiceImpl implements ProjectsService {
         repository.close();
 
         // Send Request to tci-commands
-        final ResponseEntity<Void> response = restTemplate.postForEntity(
-            commandsServiceUrl + "/commands/project",
-            searchProject,
-            Void.class
-        );
+        try {
+            final ResponseEntity<Void> response = restTemplate.postForEntity(
+                commandsServiceUrl + "/commands/project",
+                searchProject,
+                Void.class
+            );
 
-        if (!ACCEPTED.equals(response.getStatusCode())) {
+            if (!ACCEPTED.equals(response.getStatusCode()))
+                throw new RestClientException(
+                    "Response Status Code is wrong. Expected : ACCEPTED, Given : " + response.getStatusCode()
+                );
+        } catch (RestClientException e) {
             // TODO Call logger service
         }
     }

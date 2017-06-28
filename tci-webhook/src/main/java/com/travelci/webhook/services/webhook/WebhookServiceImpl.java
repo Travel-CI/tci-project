@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import static org.springframework.http.HttpStatus.ACCEPTED;
@@ -42,13 +43,19 @@ public class WebhookServiceImpl implements WebhookService {
         final AbstractExtractor extractor = findExtractor(jsonPayLoad);
         final PayLoad payLoad = convertInPayLoad(extractor, jsonPayLoad);
 
-        final ResponseEntity<Void> response = restTemplate.postForEntity(
-            projectsServiceUrl + "/projects/webhook",
-            payLoad,
-            Void.class
-        );
+        try {
+            final ResponseEntity<Void> response = restTemplate.postForEntity(
+                projectsServiceUrl + "/projects/webhook",
+                payLoad,
+                Void.class
+            );
 
-        if (!ACCEPTED.equals(response.getStatusCode())) {
+            if (!ACCEPTED.equals(response.getStatusCode()))
+                throw new RestClientException(
+                    "Response Status Code is wrong. Expected : ACCEPTED, Given : " + response.getStatusCode()
+                );
+        } catch (RestClientException e) {
+            System.out.println("Wrong request");
             // TODO Call logger service
         }
     }
