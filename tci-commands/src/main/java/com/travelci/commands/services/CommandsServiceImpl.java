@@ -2,6 +2,7 @@ package com.travelci.commands.services;
 
 import com.travelci.commands.entities.CommandAdapter;
 import com.travelci.commands.entities.CommandDto;
+import com.travelci.commands.entities.DockerCommandsProject;
 import com.travelci.commands.entities.ProjectDto;
 import com.travelci.commands.exceptions.InvalidCommandException;
 import com.travelci.commands.exceptions.NotFoundCommandException;
@@ -11,6 +12,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -32,7 +34,8 @@ public class CommandsServiceImpl implements CommandsService {
     public CommandsServiceImpl(final CommandRepository commandRepository,
                                final CommandAdapter commandAdapter,
                                final RestTemplate restTemplate,
-                               @Value("${info.services.docker-runner}") final String dockerRunnerServiceUrl) {
+                               @Value("${info.services.docker-runner}")
+                               final String dockerRunnerServiceUrl) {
         this.commandRepository = commandRepository;
         this.commandAdapter = commandAdapter;
         this.restTemplate = restTemplate;
@@ -88,13 +91,25 @@ public class CommandsServiceImpl implements CommandsService {
         if (commands.isEmpty())
             throw new NotFoundCommandException();
 
-        final ResponseEntity<Void> response = restTemplate.postForEntity(
-            dockerRunnerServiceUrl + "/docker/execute",
-            commands,
-            Void.class
-        );
+        final DockerCommandsProject dockerCommandsProject = DockerCommandsProject.builder()
+            .project(projectDto)
+            .commands(commands)
+            .build();
 
-        if (!ACCEPTED.equals(response.getStatusCode())) {
+        try {
+            final ResponseEntity<Void> response = restTemplate.postForEntity(
+                dockerRunnerServiceUrl + "/docker/execute",
+                dockerCommandsProject,
+                Void.class
+            );
+
+            if (!ACCEPTED.equals(response.getStatusCode()))
+                throw new RestClientException(
+                    "Response Status Code is wrong. Expected : ACCEPTED, Given : " + response.getStatusCode()
+                );
+        } catch (RestClientException e) {
+            System.out.println("Wrong request" + e.getLocalizedMessage());
+            e.printStackTrace();
             // TODO Call logger service
         }
     }

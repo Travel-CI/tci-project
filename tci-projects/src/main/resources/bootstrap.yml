@@ -4,10 +4,3 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
-  datasource:
-    driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/travelci
-    username: tciprojects
-    password: tciprojects
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect

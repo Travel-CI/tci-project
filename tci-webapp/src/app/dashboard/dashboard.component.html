@@ -1,0 +1,17 @@
+<div class="row">
+
+  <ng-template ngFor let-app [ngForOf]="applications">
+    <ng-container *ngIf="app.active">
+      <div class="col-sm-6 col-md-4 card-clickable" (click)="onAppClicked(app.path)">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-puzzle-piece"></i> {{ app.label }}
+          </div>
+          <div class="card-block">
+            {{ app.description }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+</div>
