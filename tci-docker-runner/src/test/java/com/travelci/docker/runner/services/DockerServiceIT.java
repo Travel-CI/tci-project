@@ -49,7 +49,6 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
     public void shouldBuildDockerImageAndDeleteIt() throws IOException, DockerException, InterruptedException {
 
         final String imageName = "test-tci-image";
@@ -87,7 +86,6 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
     public void shouldCreateBusyBoxContainerAndRunAndStopAndDeleteIt() throws DockerException, InterruptedException {
 
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
@@ -115,7 +113,6 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
     public void shouldCreateBusyBoxContainerAndStartAndCopyFilesInContainerAndDeleteIt() throws DockerException, InterruptedException {
 
         final String projectsRootFolder = getClass().getClassLoader()
@@ -152,7 +149,6 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
     public void shouldExecutePwdCommandInBusyBoxContainer() throws DockerException, InterruptedException {
 
         dockerClient.pull(BUSYBOX_TEST_IMAGE);

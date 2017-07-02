@@ -4,7 +4,7 @@ import {AddComponent} from "./add/add.component";
 const routes: Routes = [
   { path: '', redirectTo: 'project', pathMatch: 'full' },
   { path: '', children: [
-    { path: 'project-add', component: AddComponent }
+    { path: 'add', component: AddComponent }
   ]}
 ];
 
