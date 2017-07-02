@@ -30,16 +30,12 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
 
     private final DockerClient docker;
 
-    private final String projectsRootFolder;
     private final String projectFolderInContainer;
 
     public DockerRunnerServiceImpl(final DockerClient docker,
-                                   @Value("${info.docker.projectsRootFolderInHost}")
-                                   final String projectsRootFolder,
                                    @Value("${info.docker.projectFolderInContainer}")
                                    final String projectFolderInContainer) {
         this.docker = docker;
-        this.projectsRootFolder = projectsRootFolder;
         this.projectFolderInContainer = projectFolderInContainer;
     }
 
@@ -62,7 +58,9 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
             .toString();
 
         // Name in LowerCase : Docker Build Convention
-        final String imageId = buildImageFromDockerFile(project.getName().toLowerCase(), dockerFileFolder);
+        final String imageName = projectLocation.substring(projectLocation.lastIndexOf("/") + 1).toLowerCase();
+
+        final String imageId = buildImageFromDockerFile(imageName, dockerFileFolder);
         final String containerId = startContainer(imageId, projectLocation);
         executeCommandsInContainer(containerId, commands);
         stopContainer(containerId);

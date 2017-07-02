@@ -121,7 +121,6 @@ public class ProjectsServiceImpl implements ProjectsService {
                         searchProject.getName(),
                         webHookPayLoad.getBranchName())
                 )
-                .repositoryUrl(searchProject.getRepositoryUrl())
                 .dockerfileLocation(searchProject.getDockerfileLocation())
                 .build();
 

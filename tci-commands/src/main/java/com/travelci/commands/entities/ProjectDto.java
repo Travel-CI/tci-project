@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Builder
 @Data
@@ -20,13 +19,6 @@ public class ProjectDto {
 
     @NotNull @NotEmpty
     private String name;
-
-    @NotNull @NotEmpty
-    @Pattern(
-        regexp = "((git|ssh|http(s)?)|(git@[\\w\\.]+))(:(//)?)([\\w\\.@\\:/\\-~]+)(\\.git)?(/)?",
-        message = "Repository Url has wrong format"
-    )
-    private String repositoryUrl;
 
     private String dockerfileLocation;
 }
