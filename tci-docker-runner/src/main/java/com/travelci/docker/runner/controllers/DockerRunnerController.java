@@ -1,13 +1,12 @@
 package com.travelci.docker.runner.controllers;
 
-import com.travelci.docker.runner.entities.CommandDto;
+import com.travelci.docker.runner.entities.DockerCommandsProject;
 import com.travelci.docker.runner.exceptions.WrongFormatCommandException;
 import com.travelci.docker.runner.services.DockerRunnerService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.ACCEPTED;
 
@@ -23,12 +22,12 @@ public class DockerRunnerController {
 
     @PostMapping("execute")
     @ResponseStatus(ACCEPTED)
-    public void executeCommand(@Valid @RequestBody final List<CommandDto> commands,
+    public void executeCommand(@Valid @RequestBody final DockerCommandsProject dockerCommandsProject,
                                final BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors() || commands.isEmpty())
+        if (bindingResult.hasErrors())
             throw new WrongFormatCommandException();
 
-        dockerRunnerService.startDockerRunnerEngine(commands);
+        dockerRunnerService.startDockerRunnerEngine(dockerCommandsProject);
     }
 }

@@ -6,7 +6,9 @@ import com.travelci.projects.entities.ProjectDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
@@ -29,6 +31,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @Sql(executionPhase = BEFORE_TEST_METHOD, scripts = "classpath:project-init.sql")
 @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:project-teardown.sql")
 public class ProjectsControllerIT {
@@ -138,29 +141,7 @@ public class ProjectsControllerIT {
             .log().all()
             .statusCode(BAD_REQUEST.value());
 
-        unformatedProject.setRepositoryUrl("https://github.com/Popoll/popoll-project");
-
-        given()
-            .contentType(JSON)
-            .body(unformatedProject)
-        .when()
-            .post(PROJECTS_ENDPOINT)
-        .then()
-            .log().all()
-            .statusCode(BAD_REQUEST.value());
-
         unformatedProject.setRepositoryUrl("https//github.com/Popoll/popoll-project.git");
-
-        given()
-            .contentType(JSON)
-            .body(unformatedProject)
-        .when()
-            .post(PROJECTS_ENDPOINT)
-        .then()
-            .log().all()
-            .statusCode(BAD_REQUEST.value());
-
-        unformatedProject.setRepositoryUrl("git://github.com/Popoll/popoll-project");
 
         given()
             .contentType(JSON)
@@ -309,41 +290,8 @@ public class ProjectsControllerIT {
         updatedProject = ProjectDto.builder()
             .id(1L)
             .name("Project 1 updated")
-            .enable(true)
-            .repositoryUrl("https://github.com/repo")
-            .branches(Arrays.asList("master", "dev"))
-            .build();
-
-        given()
-            .contentType(JSON)
-            .body(updatedProject)
-        .when()
-            .put(PROJECTS_ENDPOINT)
-        .then()
-            .log().all()
-            .statusCode(BAD_REQUEST.value());
-
-        updatedProject = ProjectDto.builder()
-            .id(1L)
-            .name("Project 1 updated")
             .repositoryUrl("https://github.com/repo.git")
             .branches(Arrays.asList("master", "dev"))
-            .build();
-
-        given()
-            .contentType(JSON)
-            .body(updatedProject)
-        .when()
-            .put(PROJECTS_ENDPOINT)
-        .then()
-            .log().all()
-            .statusCode(BAD_REQUEST.value());
-
-        updatedProject = ProjectDto.builder()
-            .id(1L)
-            .name("Project 1 updated")
-            .enable(true)
-            .repositoryUrl("https://github.com/repo.git")
             .build();
 
         given()
