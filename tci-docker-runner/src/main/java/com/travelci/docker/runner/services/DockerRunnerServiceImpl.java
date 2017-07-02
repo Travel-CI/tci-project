@@ -7,6 +7,8 @@ import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.ContainerCreation;
 import com.spotify.docker.client.messages.ExecCreation;
 import com.travelci.docker.runner.entities.CommandDto;
+import com.travelci.docker.runner.entities.DockerCommandsProject;
+import com.travelci.docker.runner.entities.ProjectDto;
 import com.travelci.docker.runner.exceptions.DockerBuildImageException;
 import com.travelci.docker.runner.exceptions.DockerExecuteCommandException;
 import com.travelci.docker.runner.exceptions.DockerStartContainerException;
@@ -32,9 +34,9 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
     private final String projectFolderInContainer;
 
     public DockerRunnerServiceImpl(final DockerClient docker,
-                                   @Value("info.docker.projectsRootFolderInHost")
+                                   @Value("${info.docker.projectsRootFolderInHost}")
                                    final String projectsRootFolder,
-                                   @Value("info.docker.projectFolderInContainer")
+                                   @Value("${info.docker.projectFolderInContainer}")
                                    final String projectFolderInContainer) {
         this.docker = docker;
         this.projectsRootFolder = projectsRootFolder;
@@ -42,8 +44,28 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
     }
 
     @Override
-    public void startDockerRunnerEngine(final List<CommandDto> commands) {
+    public void startDockerRunnerEngine(final DockerCommandsProject dockerCommandsProject) {
 
+        final ProjectDto project = dockerCommandsProject.getProject();
+        final List<CommandDto> commands = dockerCommandsProject.getCommands();
+
+        final String projectLocation = project.getName();
+
+        final String customDockerfileLocation = project.getDockerfileLocation() != null
+                && !project.getDockerfileLocation().isEmpty()
+            ? project.getDockerfileLocation()
+            : "";
+
+        final String dockerFileFolder = new StringBuilder()
+            .append(projectLocation)
+            .append(customDockerfileLocation)
+            .toString();
+
+        // Name in LowerCase : Docker Build Convention
+        final String imageId = buildImageFromDockerFile(project.getName().toLowerCase(), dockerFileFolder);
+        final String containerId = startContainer(imageId, projectLocation);
+        executeCommandsInContainer(containerId, commands);
+        stopContainer(containerId);
     }
 
     @Override
@@ -67,7 +89,7 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
     }
 
     @Override
-    public String startContainer(final String imageId) {
+    public String startContainer(final String imageId, final String projectFolder) {
 
         final ContainerConfig containerConfig = ContainerConfig.builder()
             .image(imageId)
@@ -78,9 +100,9 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
             final ContainerCreation container = docker.createContainer(containerConfig);
             docker.startContainer(container.id());
 
-            if (projectsRootFolder != null && !projectsRootFolder.isEmpty()
-            && projectFolderInContainer != null && !projectFolderInContainer.isEmpty())
-                docker.copyToContainer(Paths.get(projectsRootFolder), container.id(), projectFolderInContainer);
+            if (!projectFolder.isEmpty() && projectFolderInContainer != null
+                && !projectFolderInContainer.isEmpty())
+                docker.copyToContainer(Paths.get(projectFolder), container.id(), projectFolderInContainer);
 
             return container.id();
         } catch (DockerException | InterruptedException | IOException e) {
@@ -105,6 +127,9 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
                 final String execOutput = output.readFully();
 
                 commandResults.put(command.getCommand(), execOutput);
+
+                System.out.println(command.getCommand() + " " + execOutput);
+                // TODO Log command result here
 
             } catch (DockerException | InterruptedException e) {
                 throw new DockerExecuteCommandException(e.getMessage(), e.getCause());

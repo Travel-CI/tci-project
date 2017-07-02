@@ -113,9 +113,21 @@ public class ProjectsServiceImpl implements ProjectsService {
 
         // Send Request to tci-commands
         try {
+
+            // Setup Project Dto Object for Commands and Docker Runner (git folder name, webhook branch)
+            final ProjectDto sentProjectDto = ProjectDto.builder()
+                .id(searchProject.getId())
+                .name(gitService.formatRepositoryFolderName(
+                        searchProject.getName(),
+                        webHookPayLoad.getBranchName())
+                )
+                .repositoryUrl(searchProject.getRepositoryUrl())
+                .dockerfileLocation(searchProject.getDockerfileLocation())
+                .build();
+
             final ResponseEntity<Void> response = restTemplate.postForEntity(
                 commandsServiceUrl + "/commands/project",
-                searchProject,
+                sentProjectDto,
                 Void.class
             );
 
@@ -124,6 +136,7 @@ public class ProjectsServiceImpl implements ProjectsService {
                     "Response Status Code is wrong. Expected : ACCEPTED, Given : " + response.getStatusCode()
                 );
         } catch (RestClientException e) {
+            System.out.println("Wrong request");
             // TODO Call logger service
         }
     }

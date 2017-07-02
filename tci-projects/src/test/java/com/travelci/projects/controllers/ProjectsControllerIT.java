@@ -141,29 +141,7 @@ public class ProjectsControllerIT {
             .log().all()
             .statusCode(BAD_REQUEST.value());
 
-        unformatedProject.setRepositoryUrl("https://github.com/Popoll/popoll-project");
-
-        given()
-            .contentType(JSON)
-            .body(unformatedProject)
-        .when()
-            .post(PROJECTS_ENDPOINT)
-        .then()
-            .log().all()
-            .statusCode(BAD_REQUEST.value());
-
         unformatedProject.setRepositoryUrl("https//github.com/Popoll/popoll-project.git");
-
-        given()
-            .contentType(JSON)
-            .body(unformatedProject)
-        .when()
-            .post(PROJECTS_ENDPOINT)
-        .then()
-            .log().all()
-            .statusCode(BAD_REQUEST.value());
-
-        unformatedProject.setRepositoryUrl("git://github.com/Popoll/popoll-project");
 
         given()
             .contentType(JSON)
@@ -312,41 +290,8 @@ public class ProjectsControllerIT {
         updatedProject = ProjectDto.builder()
             .id(1L)
             .name("Project 1 updated")
-            .enable(true)
-            .repositoryUrl("https://github.com/repo")
-            .branches(Arrays.asList("master", "dev"))
-            .build();
-
-        given()
-            .contentType(JSON)
-            .body(updatedProject)
-        .when()
-            .put(PROJECTS_ENDPOINT)
-        .then()
-            .log().all()
-            .statusCode(BAD_REQUEST.value());
-
-        updatedProject = ProjectDto.builder()
-            .id(1L)
-            .name("Project 1 updated")
             .repositoryUrl("https://github.com/repo.git")
             .branches(Arrays.asList("master", "dev"))
-            .build();
-
-        given()
-            .contentType(JSON)
-            .body(updatedProject)
-        .when()
-            .put(PROJECTS_ENDPOINT)
-        .then()
-            .log().all()
-            .statusCode(BAD_REQUEST.value());
-
-        updatedProject = ProjectDto.builder()
-            .id(1L)
-            .name("Project 1 updated")
-            .enable(true)
-            .repositoryUrl("https://github.com/repo.git")
             .build();
 
         given()

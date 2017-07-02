@@ -9,7 +9,6 @@ import com.spotify.docker.client.messages.ContainerChange;
 import com.spotify.docker.client.messages.Image;
 import com.travelci.docker.runner.entities.CommandDto;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -49,7 +48,6 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
     public void shouldBuildDockerImageAndDeleteIt() throws IOException, DockerException, InterruptedException {
 
         final String imageName = "test-tci-image";
@@ -87,12 +85,11 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
     public void shouldCreateBusyBoxContainerAndRunAndStopAndDeleteIt() throws DockerException, InterruptedException {
 
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
-        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE);
+        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE, "");
         assertThat(containerId).isNotNull();
         assertThat(containerId).isNotEmpty();
 
@@ -115,7 +112,6 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
     public void shouldCreateBusyBoxContainerAndStartAndCopyFilesInContainerAndDeleteIt() throws DockerException, InterruptedException {
 
         final String projectsRootFolder = getClass().getClassLoader()
@@ -130,7 +126,7 @@ public class DockerServiceIT {
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
         // Start Container and Copy test resources files (Dockerfile && application.yml)
-        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE);
+        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE, projectsRootFolder);
         assertThat(containerId).isNotNull();
         assertThat(containerId).isNotEmpty();
 
@@ -152,12 +148,11 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
     public void shouldExecutePwdCommandInBusyBoxContainer() throws DockerException, InterruptedException {
 
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
-        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE);
+        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE, "");
         assertThat(containerId).isNotNull();
         assertThat(containerId).isNotEmpty();
 
