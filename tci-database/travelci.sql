@@ -7,6 +7,7 @@ CREATE USER tcilogger WITH PASSWORD 'tcilogger';
 
 GRANT ALL PRIVILEGES ON DATABASE travelci to tcicommands;
 GRANT ALL PRIVILEGES ON DATABASE travelci to tciprojects;
+GRANT ALL PRIVILEGES ON DATABASE travelci to tcilogger;
 
 
 DROP TABLE IF EXISTS project CASCADE;
