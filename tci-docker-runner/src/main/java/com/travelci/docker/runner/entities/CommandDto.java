@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class CommandDto {
 
+    @NotNull
     private Long id;
 
     @NotNull

@@ -1,4 +1,4 @@
-package com.travelci.commands.entities;
+package com.travelci.docker.runner.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,18 +7,17 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectDto {
+public class DockerCommandsProject {
 
     @NotNull
-    private Long id;
+    private ProjectDto project;
 
     @NotNull @NotEmpty
-    private String name;
-
-    private String dockerfileLocation;
+    private List<CommandDto> commands;
 }

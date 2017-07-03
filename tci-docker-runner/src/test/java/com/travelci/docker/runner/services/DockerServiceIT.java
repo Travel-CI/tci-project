@@ -44,8 +44,7 @@ public class DockerServiceIT {
         else
             dockerClient = new DefaultDockerClient(unixSocketUri);
 
-        dockerRunnerService = new DockerRunnerServiceImpl(dockerClient,
-            "", "");
+        dockerRunnerService = new DockerRunnerServiceImpl(dockerClient, "");
     }
 
     @Test
@@ -90,7 +89,7 @@ public class DockerServiceIT {
 
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
-        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE);
+        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE, "");
         assertThat(containerId).isNotNull();
         assertThat(containerId).isNotEmpty();
 
@@ -115,19 +114,18 @@ public class DockerServiceIT {
     @Test
     public void shouldCreateBusyBoxContainerAndStartAndCopyFilesInContainerAndDeleteIt() throws DockerException, InterruptedException {
 
-        final String projectsRootFolder = getClass().getClassLoader()
+        final String projectFolder = getClass().getClassLoader()
             .getResource("Dockerfile").toString()
             .replace("file:", "")
             .replace("Dockerfile", "");
         final String projectFolderInContainer = "/";
 
         // Create Service with projectsRootFolder = docker-runner test resources folder
-        dockerRunnerService = new DockerRunnerServiceImpl(dockerClient,
-            projectsRootFolder, projectFolderInContainer);
+        dockerRunnerService = new DockerRunnerServiceImpl(dockerClient, projectFolderInContainer);
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
         // Start Container and Copy test resources files (Dockerfile && application.yml)
-        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE);
+        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE, projectFolder);
         assertThat(containerId).isNotNull();
         assertThat(containerId).isNotEmpty();
 
@@ -153,7 +151,7 @@ public class DockerServiceIT {
 
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
-        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE);
+        final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE, "");
         assertThat(containerId).isNotNull();
         assertThat(containerId).isNotEmpty();
 

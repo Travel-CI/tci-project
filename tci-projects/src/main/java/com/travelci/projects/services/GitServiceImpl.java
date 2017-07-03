@@ -125,7 +125,7 @@ class GitServiceImpl implements GitService {
         return FileSystemUtils.deleteRecursively(repositoryFolder);
     }
 
-    private String formatRepositoryFolderName(final String projectName, final String branchName) {
+    public String formatRepositoryFolderName(final String projectName, final String branchName) {
         return new StringBuilder()
             .append(rootRepositoriesLocation)
             .append(projectName.replaceAll(" ", "_"))
