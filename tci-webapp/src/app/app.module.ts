@@ -19,7 +19,9 @@ import {GlobalState} from "./global.state";
 import {SidebarChildComponent} from "./shared/sidebar/menu/sidebar-child.component";
 import {AppTranslationModule} from "./app.translation.module";
 import {FormsModule} from "@angular/forms";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ProjectComponent } from './project/project.component';
+import { DataTableModule } from 'primeng/primeng';
 
 const NGA_SERVICES = [
   BaImageLoaderService,
@@ -49,6 +51,8 @@ const APP_PROVIDERS = [
   imports: [
     FormsModule,
     BrowserModule,
+    BrowserAnimationsModule,
+    DataTableModule,
     AppRoutingModule,
     HttpModule,
     AppTranslationModule,
@@ -56,8 +60,7 @@ const APP_PROVIDERS = [
     TabsModule.forRoot()
   ],
   declarations: [
-    NGA_COMPONENTS,
-    ProjectComponent
+    NGA_COMPONENTS
   ],
   providers: [{
     provide: LocationStrategy,
