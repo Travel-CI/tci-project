@@ -22,4 +22,4 @@ WORKDIR /usr/app/
 
 EXPOSE 8080
 
-CMD ['java', '-jar', 'tci-docker-runner.jar']
+CMD ["java", "-jar", "tci-docker-runner.jar"]

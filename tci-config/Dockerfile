@@ -6,4 +6,4 @@ WORKDIR /usr/app/
 
 EXPOSE 8888
 
-CMD ['java', '-jar', 'tci-config.jar']
+CMD ["java", "-jar", "tci-config.jar"]

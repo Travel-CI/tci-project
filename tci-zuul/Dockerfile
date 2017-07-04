@@ -6,4 +6,4 @@ WORKDIR /usr/app/
 
 EXPOSE 8001
 
-CMD ['java', '-jar', 'tci-zuul.jar']
+CMD ["java", "-jar", "tci-zuul.jar"]

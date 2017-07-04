@@ -6,12 +6,15 @@ networks:
 
 volumes:
   tci-database-volume:
+  tci-projects-volume:
 
 services:
   travelci-database:
     image: travelci/tci-database:latest
     networks:
       - bdd-network
+    environment:
+      - POSTGRES_DB=travelci
     volumes:
       - tci-database-volume:/var/lib/postgresql/data
 
@@ -20,25 +23,53 @@ services:
     networks:
       - spring-cloud-network
     ports:
-      - "${TCI-CONFIG-PORT}:8888"
+      - "${TCI_CONFIG_PORT}:8888"
 
   travelci-eureka:
     image: travelci/tci-eureka:latest
     networks:
       - spring-cloud-network
     ports:
-      - "${TCI-EUREKA-PORT}:8000"
+      - "${TCI_EUREKA_PORT}:8000"
 
   travelci-zuul:
     image: travelci/tci-zuul:latest
     networks:
       - spring-cloud-network
     ports:
-      - "${TCI-ZUUL-PORT}:8001"
+      - "${TCI_ZUUL_PORT}:8001"
 
   travelci-webhook:
     image: travelci/tci-webhook:latest
     networks:
       - spring-cloud-network
     ports:
-      - "${TCI-WEBHOOK-PORT}:8080"
+      - "${TCI_WEBHOOK_PORT}:8080"
+  
+  travelci-projects:
+    image: travelci/tci-projects:latest
+    networks:
+      - spring-cloud-network
+      - bdd-network
+    volumes:
+      - tci-projects-volume:/usr/app/travel-ci
+    ports:
+      - "${TCI_PROJECTS_PORT}:8080"
+
+  travelci-commands:
+    image: travelci/tci-commands:latest
+    networks:
+      - spring-cloud-network
+      - bdd-network
+    ports:
+      - "${TCI_COMMANDS_PORT}:8080"
+
+  travelci-docker-runner:
+    image: travelci/tci-docker-runner:latest
+    networks:
+      - spring-cloud-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - tci-projects-volume:/usr/app/travel-ci
+    ports:
+      - "${TCI_DOCKER_RUNNER_PORT}:8080"
