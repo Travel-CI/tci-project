@@ -1,6 +1,6 @@
 import { MaestroToolsPage } from './app.po';
 
-describe('maestro-tools App', () => {
+describe('travel-ci App', () => {
   let page: MaestroToolsPage;
 
   beforeEach(() => {
