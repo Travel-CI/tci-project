@@ -9,28 +9,28 @@
         <div class="form-group row">
           <label class="col-md-3 form-control-label" for="name">Nom</label>
           <div class="col-md-9">
-            <input type="text" id="name" class="form-control" placeholder="Nom du Projet"/>
+            <input type="text" id="name" class="form-control" placeholder="Nom du Projet" [(ngModel)]="project.name"/>
           </div>
         </div>
 
         <div class="form-group row">
           <label class="col-md-3 form-control-label" for="name">Description</label>
           <div class="col-md-9">
-            <textarea type="text" id="description" class="form-control" placeholder="Description"></textarea>
+            <textarea type="text" id="description" class="form-control" placeholder="Description" [(ngModel)]="project.description"></textarea>
           </div>
         </div>
 
         <div class="form-group row">
           <label class="col-md-3 form-control-label" for="name">Lien du Repository</label>
           <div class="col-md-9">
-            <input type="text" id="repositoryurl" class="form-control" placeholder="ex: https://github.com/Travel-CI/tci-project"/>
+            <input type="text" id="repositoryurl" class="form-control" placeholder="ex: https://github.com/Travel-CI/tci-project" [(ngModel)]="project.repositoryUrl"/>
           </div>
         </div>
         
         <div class="form-group row">
           <label class="col-md-3 form-control-label" for="branches">Branches</label>
           <div class="col-md-9">
-            <input type="text" id="branches" class="form-control" placeholder="ex: master; dev; another_branch_to_build"/>
+            <input type="text" id="branches" class="form-control" placeholder="ex: master; dev; another_branch_to_build" [(ngModel)]="project.branches"/>
           </div>
       </div>
 

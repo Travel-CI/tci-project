@@ -5,9 +5,12 @@ import { AddComponent } from './add/add.component'
 import { DataTableModule } from 'primeng/primeng';
 import {SelectModule} from "ng2-select-compat";
 import { TranslateModule } from "@ngx-translate/core";
+import {FormsModule} from "@angular/forms";
+import {ProjectService} from "./services/project.service";
 
 @NgModule({
   imports: [
+    FormsModule,
     CommonModule,
     ProjectRoutingModule,
     DataTableModule,
@@ -16,6 +19,9 @@ import { TranslateModule } from "@ngx-translate/core";
   ],
   declarations: [
     AddComponent
+  ],
+  providers: [
+    ProjectService
   ]
 })
 export class ProjectModule { }

@@ -9,15 +9,16 @@ export class ProjectService {
 
   constructor(private http: Http) {}
 
-  getAllEntities(): Promise<Project[]> {
+ create(): Promise<Project> {
 
-    return this.http.get(environment.apiBaseUrl + '/project')
-      .toPromise()
-      .then((res: Response) => res.json() as Project[])
-      .catch((err: Error) => this.handleError(err));
-  }
+    return this.http.post('/api/projects',
+      null
+    )
+    .toPromise()
+    .then((res: Response) => res.json() as Project);
+ }
 
-  handleError(err: Error): Promise<Project[]> {
+  /*handleError(err: Error): Promise<Project> {
 
     if (environment.enableDebug)
       console.error(err);
@@ -25,6 +26,6 @@ export class ProjectService {
     //return Promise.reject(err.message || err);
 
     // Fake Data for test
-    return Promise.resolve([]);
-  }
+    return Promise.resolve(Err);
+  }*/
 }

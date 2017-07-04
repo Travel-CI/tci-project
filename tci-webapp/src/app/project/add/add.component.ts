@@ -7,9 +7,17 @@ import {ProjectService} from '../services/project.service';
 })
 export class AddComponent implements OnInit {
 
-  constructor() { }
+  private project: any = {};
+
+  constructor(
+    private projectService: ProjectService
+  ) { }
 
   ngOnInit() {
+  }
+
+  createProject() {
+    this.projectService.create();
   }
 
 }
