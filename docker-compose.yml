@@ -2,110 +2,65 @@ version: '3'
 
 networks:
   spring-cloud-network:
-  entrypoint-network:
-  engine-network:
   bdd-network:
 
 volumes:
-  redis-volume:
+  tci-database-volume:
+  tci-projects-volume:
 
 services:
-  tci-redis:
-    image: redis:latest
+  travelci-database:
+    image: travelci/tci-database:latest
     networks:
       - bdd-network
+    environment:
+      - POSTGRES_DB=travelci
     volumes:
-      - redis-volume:/data
-    restart: always
+      - tci-database-volume:/var/lib/postgresql/data
 
-  tci-eureka:
-    build: ./tci-eureka
-    image: tci/tci-eureka:latest
-    restart: always
+  travelci-config:
+    image: travelci/tci-config:latest
     networks:
       - spring-cloud-network
     ports:
-      - "${TCI-EUREKA-PORT}:8080"
+      - "${TCI_CONFIG_PORT}:8888"
 
-  tci-zuul:
-    build: ./tci-zuul
-    image: tci/tci-zuul:latest
-    restart : always
+  travelci-eureka:
+    image: travelci/tci-eureka:latest
     networks:
       - spring-cloud-network
     ports:
-      - "${TCI-ZUUL-PORT}:8080"
+      - "${TCI_EUREKA_PORT}:8000"
 
-  tci-webapp:
-    build: ./tci-webapp
-    image: tci/tci-webapp:latest
-    restart: always
-    ports:
-      - "${TCI-WEBAPP-PORT}:80"
-
-  tci-webhook:
-    build: ./tci-webhook
-    image: tci/tci-webhook:latest
-    restart: always
+  travelci-zuul:
+    image: travelci/tci-zuul:latest
     networks:
-      - entrypoint-network
+      - spring-cloud-network
     ports:
-      - "${TCI-WEBHOOK-PORT}:8080"
+      - "${TCI_ZUUL_PORT}:8001"
 
-  tci-scheduler:
-    build: ./tci-scheduler
-    image: tci/tci-scheduler:latest
-    restart: always
+  travelci-webhook:
+    image: travelci/tci-webhook:latest
     networks:
-      - entrypoint-network
-    ports:
-      - "${TCI-SCHEDULER-PORT}:8080"
-
-  tci-projects:
-    build: ./tci-projects
-    image: tci/tci-projects:latest
-    restart: always
+      - spring-cloud-network
+  
+  travelci-projects:
+    image: travelci/tci-projects:latest
     networks:
-      - entrypoint-network
-      - engine-network
-    ports:
-      - "${TCI-PROJECTS-PORT}:8080"
-
-  tci-commands:
-    build: ./tci-commands
-    image: tci/tci-commands:latest
-    restart: always
-    networks:
-      - engine-network
-    ports:
-      - "${TCI-COMMANDS-PORT}:8080"
-
-  tci-docker-runner:
-    build: ./tci-docker-runner
-    image: tci/tci-docker-runner:latest
-    restart: always
-    networks:
-      - engine-network
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - "${TCI-DOCKER-RUNNER-PORT}:8080"
-
-  tci-logger:
-    build: ./tci-logger
-    image: tci/tci-logger:latest
-    restart: always
-    networks:
-      - entrypoint-network
+      - spring-cloud-network
       - bdd-network
-    ports:
-      - "${TCI-LOGGER-PORT}:8080"
+    volumes:
+      - tci-projects-volume:/usr/app/travel-ci
 
-  tci-notifications:
-    build: ./tci-notifications
-    image: tci/tci-notifications:latest
-    restart: always
+  travelci-commands:
+    image: travelci/tci-commands:latest
     networks:
-      - entrypoint-network
-    ports:
-      - "${TCI-NOTIFICATIONS-PORT}:8080"
+      - spring-cloud-network
+      - bdd-network
+
+  travelci-docker-runner:
+    image: travelci/tci-docker-runner:latest
+    networks:
+      - spring-cloud-network
+    volumes:
+      - tci-projects-volume:/usr/app/travel-ci

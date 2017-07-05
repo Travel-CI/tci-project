@@ -1,6 +1,3 @@
-DROP DATABASE IF EXISTS travelci;
-CREATE DATABASE travelci;
-
 CREATE USER tciprojects WITH PASSWORD 'tciprojects';
 CREATE USER tcicommands WITH PASSWORD 'tcicommands';
 CREATE USER tcilogger WITH PASSWORD 'tcilogger';
@@ -8,7 +5,6 @@ CREATE USER tcilogger WITH PASSWORD 'tcilogger';
 GRANT ALL PRIVILEGES ON DATABASE travelci to tcicommands;
 GRANT ALL PRIVILEGES ON DATABASE travelci to tciprojects;
 GRANT ALL PRIVILEGES ON DATABASE travelci to tcilogger;
-
 
 DROP TABLE IF EXISTS project CASCADE;
 CREATE TABLE project (id bigserial NOT NULL, branches varchar(255), created timestamp, description varchar(255), dockerfile_location varchar(255), enable boolean, last_start timestamp, name varchar(255), repository_token varchar(255), repository_url varchar(255), updated timestamp, user_name varchar(255), user_password varchar(255), PRIMARY KEY (id));

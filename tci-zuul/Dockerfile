@@ -4,6 +4,6 @@ COPY build/libs/tci-zuul-*.jar /usr/app/tci-zuul.jar
 
 WORKDIR /usr/app/
 
-EXPOSE 8080
+EXPOSE 8001
 
-CMD ['java', '-jar', 'tci-zuul.jar']
+CMD ["java", "-jar", "tci-zuul.jar"]
