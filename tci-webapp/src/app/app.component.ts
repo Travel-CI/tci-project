@@ -1,15 +1,38 @@
-import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import {Component} from "@angular/core";
+import { GlobalState } from './global.state';
+import { BaImageLoaderService, BaThemePreloader, BaThemeSpinner } from './services';
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
-  selector: 'body',
+  selector: 'app',
+  styleUrls: ['./app.component.scss'],
   template: '<router-outlet></router-outlet>'
 })
 export class AppComponent {
 
-  constructor(private _translate: TranslateService) {
+  isMenuCollapsed: boolean = false;
 
-    _translate.setDefaultLang('fr');
-    _translate.use('fr');
+  constructor(private _state: GlobalState,
+              private translate: TranslateService,
+              private _imageLoader: BaImageLoaderService,
+              private _spinner: BaThemeSpinner) {
+
+    this._loadImages();
+
+    this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
+      this.isMenuCollapsed = isCollapsed;
+    });
+  }
+
+  public ngAfterViewInit(): void {
+    // hide spinner once all loaders are completed
+    BaThemePreloader.load().then((values) => {
+      this._spinner.hide();
+    });
+  }
+
+  private _loadImages(): void {
+    // register some loaders
+    //BaThemePreloader.registerLoader(this._imageLoader.load(''));
   }
 }

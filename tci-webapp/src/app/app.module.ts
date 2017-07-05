@@ -1,61 +1,75 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { AppRoutingModule } from './app.routing';
+import {BrowserModule} from "@angular/platform-browser";
+import {NgModule} from "@angular/core";
+import {LocationStrategy, PathLocationStrategy} from "@angular/common";
+import {AppRoutingModule} from "./app.routing";
+import {HttpModule} from "@angular/http";
+import {AppComponent} from "./app.component";
+import {LayoutComponent} from "./layout/layout.component";
+import {BsDropdownModule} from "ngx-bootstrap/dropdown";
+import {TabsModule} from "ngx-bootstrap";
+import {SIDEBAR_TOGGLE_DIRECTIVES} from "./shared/sidebar/sidebar.directive";
+import {NAV_DROPDOWN_DIRECTIVES} from "./shared/nav-dropdown.directive";
+import {SidebarComponent} from "./shared/sidebar/sidebar.component";
+import {TopbarComponent} from "./shared/topbar/topbar.component";
+import {FooterComponent} from "./shared/footer/footer.component";
+import {DashboardComponent} from "./dashboard/dashboard.component";
+import {SidebarService} from "./shared/sidebar/sidebar.service";
+import {BaImageLoaderService, BaMenuService, BaThemePreloader, BaThemeSpinner} from "./services";
+import {GlobalState} from "./global.state";
+import {SidebarChildComponent} from "./shared/sidebar/menu/sidebar-child.component";
+import {AppTranslationModule} from "./app.translation.module";
+import {FormsModule} from "@angular/forms";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ProjectComponent } from './project/project.component';
+import { DataTableModule } from 'primeng/primeng';
 
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { Http, HttpModule } from '@angular/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+const NGA_SERVICES = [
+  BaImageLoaderService,
+  BaThemePreloader,
+  BaThemeSpinner,
+  BaMenuService,
+  SidebarService
+];
 
-import { AppComponent } from './app.component';
+const NGA_COMPONENTS = [
+  AppComponent,
+  TopbarComponent,
+  SidebarComponent,
+  SidebarChildComponent,
+  FooterComponent,
+  NAV_DROPDOWN_DIRECTIVES,
+  SIDEBAR_TOGGLE_DIRECTIVES,
+  LayoutComponent,
+  DashboardComponent
+];
 
-import { LayoutComponent } from './layout/layout.component';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { TabsModule } from 'ngx-bootstrap';
-import { SIDEBAR_TOGGLE_DIRECTIVES } from './shared/sidebar/sidebar.directive';
-import { NAV_DROPDOWN_DIRECTIVES } from './shared/nav-dropdown.directive';
-import { SidebarComponent } from './shared/sidebar/sidebar.component';
-import { TopbarComponent } from './shared/topbar/topbar.component';
-import { FooterComponent } from './shared/footer/footer.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { SidebarService } from './shared/sidebar/sidebar.service';
-import { SidebarChildComponent } from './shared/sidebar/sidebar-child.component';
-
-// AoT requires an exported function for factories
-export function HttpLoaderFactory(http: Http) {
-  return new TranslateHttpLoader(http);
-}
+const APP_PROVIDERS = [
+  GlobalState
+];
 
 @NgModule({
   imports: [
+    FormsModule,
     BrowserModule,
+    BrowserAnimationsModule,
+    DataTableModule,
     AppRoutingModule,
     HttpModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [ Http ]
-      }
-    }),
+    AppTranslationModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot()
   ],
   declarations: [
-    AppComponent,
-    TopbarComponent,
-    SidebarComponent,
-    SidebarChildComponent,
-    FooterComponent,
-    NAV_DROPDOWN_DIRECTIVES,
-    SIDEBAR_TOGGLE_DIRECTIVES,
-    LayoutComponent,
-    DashboardComponent
+    NGA_COMPONENTS
   ],
   providers: [{
     provide: LocationStrategy,
     useClass: PathLocationStrategy
-  }, SidebarService ],
+  },
+    ...NGA_SERVICES,
+    APP_PROVIDERS
+  ],
+
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
