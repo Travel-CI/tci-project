@@ -1,0 +1,6 @@
+spring:
+  application:
+     name: tci-docker-runner
+  cloud:
+    config:
+      uri: http://travelci-config:8888

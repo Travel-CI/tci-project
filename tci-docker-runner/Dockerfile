@@ -1,7 +1,5 @@
 FROM openjdk:8-jre
 
-ENV DOCKER_REMOTE_API_PORT 4243
-
 # Install Docker
 RUN apt-get update && \
 	apt-get install -y --no-install-recommends \
@@ -14,7 +12,11 @@ RUN apt-get update && \
 	apt-get -y install docker-engine && \
 	rm -rf /var/lib/apt/lists/*
 
-RUN echo 'DOCKER_OPTS="-H tcp://0.0.0.0:$DOCKER_REMOTE_API_PORT -H unix:///var/run/docker.sock"' >> /etc/default/docker
+RUN service docker stop
+
+RUN sed -i "s/ExecStart=\/usr\/bin\/dockerd -H fd:\/\//ExecStart=\/usr\/bin\/dockerd -H fd:\/\/ -H tcp:\/\/0.0.0.0:2375 -H unix:\/\/\/var\/run\/docker.sock/g"  /lib/systemd/system/docker.service
+
+RUN service docker start
 
 COPY build/libs/tci-docker-runner-*.jar /usr/app/tci-docker-runner.jar
 
@@ -22,4 +24,4 @@ WORKDIR /usr/app/
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "tci-docker-runner.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "tci-docker-runner.jar"]
