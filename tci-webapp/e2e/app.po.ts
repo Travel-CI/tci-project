@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class MaestroToolsPage {
+export class TravelCIPage {
   navigateTo() {
     return browser.get('/');
   }
