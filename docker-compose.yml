@@ -43,8 +43,6 @@ services:
     image: travelci/tci-webhook:latest
     networks:
       - spring-cloud-network
-    ports:
-      - "${TCI_WEBHOOK_PORT}:8080"
   
   travelci-projects:
     image: travelci/tci-projects:latest
@@ -53,23 +51,16 @@ services:
       - bdd-network
     volumes:
       - tci-projects-volume:/usr/app/travel-ci
-    ports:
-      - "${TCI_PROJECTS_PORT}:8080"
 
   travelci-commands:
     image: travelci/tci-commands:latest
     networks:
       - spring-cloud-network
       - bdd-network
-    ports:
-      - "${TCI_COMMANDS_PORT}:8080"
 
   travelci-docker-runner:
     image: travelci/tci-docker-runner:latest
     networks:
       - spring-cloud-network
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
       - tci-projects-volume:/usr/app/travel-ci
-    ports:
-      - "${TCI_DOCKER_RUNNER_PORT}:8080"
