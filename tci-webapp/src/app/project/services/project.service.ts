@@ -9,23 +9,19 @@ export class ProjectService {
 
   constructor(private http: Http) {}
 
- create(): Promise<Project> {
+  create(): Promise<Project> {
 
-    return this.http.post('/api/projects',
+    return this.http.post('/api/projects/add',
       null
     )
     .toPromise()
     .then((res: Response) => res.json() as Project);
- }
+  }
 
-  /*handleError(err: Error): Promise<Project> {
+  getAllProjects(): Promise<Project[]> {
 
-    if (environment.enableDebug)
-      console.error(err);
-
-    //return Promise.reject(err.message || err);
-
-    // Fake Data for test
-    return Promise.resolve(Err);
-  }*/
+    return this.http.get('/api/projects')
+      .toPromise()
+      .then((res: Response) => res.json() as Project[])
+  }
 }

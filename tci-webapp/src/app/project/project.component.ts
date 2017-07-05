@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Project} from './models/project';
+import {ProjectService} from './services/project.service';
 
 @Component({
   templateUrl: './project.component.html'
@@ -9,16 +10,14 @@ export class ProjectComponent implements OnInit {
 
   private projects: Project[];
 
-  constructor() {}
+  constructor(
+    private projectService: ProjectService
+  ) {}
 
   ngOnInit() {
-    this.projects = [{
-      id: 25,
-      name: 'Project 1',
-      description: 'Le meilleur projet',
-      enable: true,
-      repositoryUrl: 'https://github.com/mboisnard/test-repo',
-      branches: [ "master", "dev"]
-    }];
+    this.projectService.getAllProjects()
+      .then((res: Project[]) => {
+        this.projects = res;
+      });
   }
 }
