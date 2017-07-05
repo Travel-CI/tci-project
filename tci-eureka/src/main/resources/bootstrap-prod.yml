@@ -3,9 +3,4 @@ spring:
      name: tci-eureka
   cloud:
     config:
-      uri: http://travelci-config:8888spring:
-  application:
-     name: tci-eureka
-  cloud:
-    config:
       uri: http://travelci-config:8888
