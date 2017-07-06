@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import {FormsModule} from '@angular/forms';
 import {ProjectService} from './services/project.service';
 import {ProjectComponent} from './project.component';
+import {ToasterModule} from "angular2-toaster";
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import {ProjectComponent} from './project.component';
     ProjectRoutingModule,
     DataTableModule,
     SelectModule,
+    ToasterModule,
     TranslateModule.forChild()
   ],
   declarations: [
