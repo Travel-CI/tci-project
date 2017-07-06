@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Project} from '../models/project';
 import {ProjectService} from '../services/project.service';
 
 @Component({
@@ -8,6 +7,7 @@ import {ProjectService} from '../services/project.service';
 export class AddComponent implements OnInit {
 
   private project: any = {};
+  private branches: string = "";
 
   constructor(
     private projectService: ProjectService
@@ -17,7 +17,9 @@ export class AddComponent implements OnInit {
   }
 
   createProject() {
-    this.projectService.create();
+    let branchesToArray = this.branches.replace(" ", "").split(";");
+    this.project.branches = branchesToArray;
+    this.projectService.create(this.project);
   }
 
 }
