@@ -59,7 +59,7 @@ public class CommandsServiceImpl implements CommandsService {
             throw new InvalidCommandException("CommandOrder already exist for this project");
 
         return commandAdapter.toCommandDto(
-            commandRepository.save(commandAdapter.toCommandEntity(commandDto))
+            commandRepository.save(commandAdapter.toCommand(commandDto))
         );
     }
 
@@ -70,7 +70,7 @@ public class CommandsServiceImpl implements CommandsService {
             .orElseThrow(NotFoundCommandException::new);
 
         return commandAdapter.toCommandDto(
-            commandRepository.save(commandAdapter.toCommandEntity(commandDto))
+            commandRepository.save(commandAdapter.toCommand(commandDto))
         );
     }
 
@@ -80,7 +80,7 @@ public class CommandsServiceImpl implements CommandsService {
         commandRepository.findById(commandDto.getId())
             .orElseThrow(NotFoundCommandException::new);
 
-        commandRepository.delete(commandAdapter.toCommandEntity(commandDto));
+        commandRepository.delete(commandAdapter.toCommand(commandDto));
     }
 
     @Override

@@ -19,7 +19,7 @@ public class CommandAdapter {
             : null;
     }
 
-    public Command toCommandEntity(final CommandDto commandDto) {
+    public Command toCommand(final CommandDto commandDto) {
         return commandDto != null ?
             Command.builder()
                 .id(commandDto.getId())

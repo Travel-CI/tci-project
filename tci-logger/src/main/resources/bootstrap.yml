@@ -1,0 +1,16 @@
+spring:
+  application:
+     name: tci-logger
+  cloud:
+    config:
+      uri: http://localhost:8888
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/travelci
+    username: tcicommands
+    password: tcicommands
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create

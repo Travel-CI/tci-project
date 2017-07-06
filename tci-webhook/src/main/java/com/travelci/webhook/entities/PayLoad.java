@@ -26,5 +26,5 @@ public class PayLoad {
     @NotNull @NotEmpty
     private String commitMessage;
 
-    private Date commitDate;
+    private Date commitDate; // TODO Remove it !
 }

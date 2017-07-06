@@ -3,6 +3,7 @@ package com.travelci.projects.services;
 import com.travelci.projects.entities.PayLoad;
 import com.travelci.projects.entities.ProjectAdapter;
 import com.travelci.projects.entities.ProjectDto;
+import com.travelci.projects.exceptions.GitException;
 import com.travelci.projects.exceptions.NotFoundProjectException;
 import com.travelci.projects.repository.ProjectRepository;
 import org.eclipse.jgit.api.Git;
@@ -69,7 +70,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         projectDto.setUpdated(projectDto.getCreated());
 
         return projectAdapter.toProjectDto(
-            projectRepository.save(projectAdapter.toProjectEntity(projectDto))
+            projectRepository.save(projectAdapter.toProject(projectDto))
         );
     }
 
@@ -82,7 +83,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         projectDto.setUpdated(new Timestamp(System.currentTimeMillis()));
 
         return projectAdapter.toProjectDto(
-            projectRepository.save(projectAdapter.toProjectEntity(projectDto))
+            projectRepository.save(projectAdapter.toProject(projectDto))
         );
     }
 
@@ -92,7 +93,7 @@ public class ProjectsServiceImpl implements ProjectsService {
         if (projectRepository.findOne(projectDto.getId()) == null)
             throw new NotFoundProjectException();
 
-        projectRepository.delete(projectAdapter.toProjectEntity(projectDto));
+        projectRepository.delete(projectAdapter.toProject(projectDto));
     }
 
     @Override
@@ -107,9 +108,15 @@ public class ProjectsServiceImpl implements ProjectsService {
             ).orElseThrow(NotFoundProjectException::new)
         );
 
+        // TODO Call Create Build Logger
+
         // Get Source Code
-        final Git repository = gitService.pullProjectRepository(searchProject, webHookPayLoad);
-        repository.close();
+        try {
+            final Git repository = gitService.pullProjectRepository(searchProject, webHookPayLoad);
+            repository.close();
+        } catch(GitException e) {
+            // TODO Call add error in build Logger
+        }
 
         // Send Request to tci-commands
         try {

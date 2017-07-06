@@ -88,7 +88,6 @@ class GitServiceImpl implements GitService {
                 .call();
 
         } catch (GitAPIException e) {
-            // TODO Send error to logger service
             throw new GitException("Failed to clone " + branch + " from " + repositoryUrl, e);
         }
     }
@@ -104,10 +103,8 @@ class GitServiceImpl implements GitService {
             repository.pull().call();
             return repository;
         } catch (IOException e) {
-            // TODO Send error to logger service
             throw new GitException("Fail to open " + repositoryFolder, e);
         } catch (GitAPIException e) {
-            // TODO Send error to logger service
 
             // Delete all files in folder
             deleteRepository(repository, repositoryFolder);
