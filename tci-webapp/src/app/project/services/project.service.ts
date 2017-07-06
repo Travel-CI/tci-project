@@ -14,7 +14,7 @@ export class ProjectService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.post('/api/projects/add', project, options)
+    return this.http.post('/api/projects', project, options)
     .toPromise()
     .then((res: Response) => res.json() as Project)
     .catch((err: Error) => this.handleError(err));
