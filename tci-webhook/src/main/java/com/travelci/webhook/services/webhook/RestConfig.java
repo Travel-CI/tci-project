@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@Profile("default")
+@Profile({"default", "prod"})
 class RestConfig {
 
     @Bean

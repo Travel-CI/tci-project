@@ -6,4 +6,4 @@ WORKDIR /usr/app/
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "tci-webhook.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "tci-webhook.jar"]

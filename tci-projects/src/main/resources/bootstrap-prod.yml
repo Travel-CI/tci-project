@@ -1,0 +1,6 @@
+spring:
+  application:
+     name: tci-projects
+  cloud:
+    config:
+      uri: http://travelci-config:8888

@@ -6,4 +6,4 @@ WORKDIR /usr/app/
 
 EXPOSE 8000
 
-CMD ["java", "-jar", "tci-eureka.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "tci-eureka.jar"]
