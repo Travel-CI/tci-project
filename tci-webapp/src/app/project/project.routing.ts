@@ -5,8 +5,9 @@ import {ProjectComponent} from './project.component';
 const routes: Routes = [
   { path: '', redirectTo: 'project', pathMatch: 'full' },
   { path: '', children: [
-    { path: 'project', component: ProjectComponent },
-    { path: 'add', component: AddComponent }
+    { path: '', component: ProjectComponent },
+    { path: 'add', component: AddComponent },
+    { path: 'edit/:id', component: AddComponent }
   ]}
 ];
 

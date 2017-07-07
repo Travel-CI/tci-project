@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Project} from './models/project';
 import {ProjectService} from './services/project.service';
+import {Router} from "@angular/router";
 
 @Component({
   templateUrl: './project.component.html'
@@ -13,7 +14,8 @@ export class ProjectComponent implements OnInit {
   private projects: Project[];
 
   constructor(
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -28,5 +30,9 @@ export class ProjectComponent implements OnInit {
         this.projects = res;
         this.loading = false;
       });
+  }
+
+  redirectToEditPage(project: Project){
+    this.router.navigate(['/project/edit', project.id]);
   }
 }
