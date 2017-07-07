@@ -8,6 +8,8 @@ import {ProjectService} from './services/project.service';
 
 export class ProjectComponent implements OnInit {
 
+  private loading: Boolean = false;
+
   private projects: Project[];
 
   constructor(
@@ -15,9 +17,16 @@ export class ProjectComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.getAllProjectsForList();
+  }
+
+  private getAllProjectsForList() {
+    this.loading = true;
+
     this.projectService.getAllProjects()
       .then((res: Project[]) => {
         this.projects = res;
+        this.loading = false;
       });
   }
 }
