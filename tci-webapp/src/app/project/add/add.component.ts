@@ -34,12 +34,23 @@ export class AddComponent implements OnInit {
     this.project.branches = this.project.branches.replace(" ", "").split(";");
     this.projectService.create(this.project)
       .then((res: Project) => {
-        this.toasterService.pop('success', 'Project Created', 'Your Project has been created.');
+        this.toasterService.pop('success', 'Project Successfully Created', 'Your Project has been created.');
         this.clearFields();
       })
       .catch((res: any) => {
         this.toasterService.pop('error', 'Creation Failed', res);
       });
+  }
+
+  updateProject() {
+    this.project.branches = this.project.branches.replace(" ", "").split(";");
+    this.projectService.update(this.project)
+      .then((res: Project) => {
+        this.toasterService.pop('success', 'Project Successfully Updated', 'Your Project has been updated.');
+      })
+      .catch((res: any) => {
+        this.toasterService.pop('error', 'Update Failed', res);
+      })
   }
 
   fillFieldsForEdit() {
