@@ -4,6 +4,5 @@ eureka:
 
 info:
   docker:
-      uri: http://localhost:2375
-    projectsRootFolderInHost: /tmp/travel-ci
+    uri: http://localhost:2375
     projectFolderInContainer: /app

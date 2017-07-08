@@ -64,3 +64,9 @@ services:
       - spring-cloud-network
     volumes:
       - tci-projects-volume:/usr/app/travel-ci
+
+  travelci-logger:
+    image: travelci/tci-logger:latest
+    networks:
+      - spring-cloud-network
+      - bdd-network
