@@ -79,7 +79,6 @@ public class CommandsControllerIT {
     public void shouldAddNewCommandWhenCommandDtoHasGoodFormat() {
 
         final CommandDto newCommand = CommandDto.builder()
-            .name("Docker build")
             .command("docker build -t test .")
             .projectId(3L)
             .commandOrder(1)
@@ -111,7 +110,6 @@ public class CommandsControllerIT {
     public void shouldThrowExceptionWhenAddCommandWithAlreadySavedCommandOrderIdForAProjectId() {
 
         final CommandDto alreadyExistCommand = CommandDto.builder()
-            .name("Docker build")
             .command("docker build -t test .")
             .projectId(1L)
             .commandOrder(1)
@@ -133,7 +131,7 @@ public class CommandsControllerIT {
     @DirtiesContext
     public void shouldThrowExceptionWhenAddUnformattedCommand() {
 
-        CommandDto unformattedCommand = CommandDto.builder().name("Docker build")
+        CommandDto unformattedCommand = CommandDto.builder()
             .command("docker build -t test .").commandOrder(1)
             .enabled(true).enableLogs(true)
             .build();
@@ -147,7 +145,7 @@ public class CommandsControllerIT {
             .log().all()
             .statusCode(BAD_REQUEST.value());
 
-        unformattedCommand = CommandDto.builder().name("Docker build")
+        unformattedCommand = CommandDto.builder()
             .command("docker build -t test .").projectId(3L)
             .enabled(true).enableLogs(true)
             .build();
@@ -161,7 +159,7 @@ public class CommandsControllerIT {
             .log().all()
             .statusCode(BAD_REQUEST.value());
 
-        unformattedCommand = CommandDto.builder().name("Docker build")
+        unformattedCommand = CommandDto.builder()
             .projectId(3L).commandOrder(1)
             .enabled(true).enableLogs(true)
             .build();
@@ -181,7 +179,7 @@ public class CommandsControllerIT {
     public void shouldUpdateCommandWhenPutFormattedAndExistingCommand() {
 
         final CommandDto updatedCommand = CommandDto.builder()
-            .id(1L).name("Test Update")
+            .id(1L)
             .command("docker build -t test .").projectId(1L)
             .commandOrder(1).enabled(false).enableLogs(false)
             .build();
@@ -194,7 +192,6 @@ public class CommandsControllerIT {
         .then()
             .log().all()
             .statusCode(OK.value())
-            .body("name", equalTo(updatedCommand.getName()))
             .body("enabled", equalTo(false));
 
         when()
@@ -209,7 +206,7 @@ public class CommandsControllerIT {
     @DirtiesContext
     public void shouldThrowExceptionWhenUpdateAnUnformattedCommand() {
 
-        CommandDto unformattedCommand = CommandDto.builder().name("Test Update")
+        CommandDto unformattedCommand = CommandDto.builder()
             .command("docker build -t test .").projectId(1L)
             .commandOrder(1).enabled(false).enableLogs(false)
             .build();
@@ -224,7 +221,7 @@ public class CommandsControllerIT {
             .statusCode(NOT_FOUND.value());
 
         unformattedCommand = CommandDto.builder().id(1L)
-            .command("docker build -t test .").projectId(1L)
+            .projectId(1L)
             .commandOrder(1).enabled(false).enableLogs(false)
             .build();
 
@@ -238,7 +235,7 @@ public class CommandsControllerIT {
             .statusCode(BAD_REQUEST.value());
 
         unformattedCommand = CommandDto.builder().id(1L)
-            .name("Test Update").command("docker build -t test .")
+            .command("docker build -t test .")
             .commandOrder(1).enabled(false).enableLogs(false)
             .build();
 
@@ -257,7 +254,7 @@ public class CommandsControllerIT {
     public void shouldThrowExceptionWhenUpdateAnUnknownCommand() {
 
         final CommandDto unknownCommand = CommandDto.builder()
-            .id(6L).name("Test Update")
+            .id(6L)
             .command("docker build -t test .").projectId(1L)
             .commandOrder(1).enabled(false).enableLogs(false)
             .build();
@@ -277,8 +274,7 @@ public class CommandsControllerIT {
     public void shouldDeleteCommandWhenDeleteWithGoodFormatCommand() {
 
         final CommandDto deletedCommand = CommandDto.builder()
-            .id(1L).name("Build Docker Image")
-            .command("docker build -t test .").projectId(1L)
+            .id(1L).command("docker build -t test .").projectId(1L)
             .commandOrder(1).enabled(true).enableLogs(true)
             .build();
 
@@ -323,8 +319,7 @@ public class CommandsControllerIT {
     public void shouldThrowExceptionWhenDeleteAnUnknownCommand() {
 
         final CommandDto deletedCommand = CommandDto.builder()
-            .id(6L).name("Build Docker Image")
-            .command("docker build -t test .").projectId(1L)
+            .id(6L).command("docker build -t test .").projectId(1L)
             .commandOrder(1).enabled(true).enableLogs(true)
             .build();
 

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CommandsService {
 
-    List<CommandDto> getCommandsByProject(Long projectId);
+    List<CommandDto> getCommandsByProjectId(Long projectId);
 
     CommandDto create(CommandDto commandDto);
 

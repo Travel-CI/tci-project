@@ -126,6 +126,8 @@ public class DockerRunnerServiceImpl implements DockerRunnerService {
 
                 commandResults.put(command.getCommand(), execOutput);
 
+                // TODO Get errors log
+
                 System.out.println(command.getCommand() + " " + execOutput);
                 // TODO Log command result here
 

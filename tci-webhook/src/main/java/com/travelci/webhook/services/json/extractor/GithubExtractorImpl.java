@@ -17,12 +17,11 @@ public class GithubExtractorImpl extends AbstractExtractor {
                                @Value("${github.commit.author}") final String commitAuthorJsonTree,
                                @Value("${github.commit.hash}") final String commitHashJsonTree,
                                @Value("${github.commit.message}") final String commitMessageJsonTree,
-                               @Value("${github.commit.date}") final String commitDateJsonTree,
                                final Validator validator) {
 
         super(identifiers, repositoryUrlJsonTree,
             branchNameJsonTree, commitAuthorJsonTree,
             commitHashJsonTree, commitMessageJsonTree,
-            commitDateJsonTree, validator);
+            validator);
     }
 }

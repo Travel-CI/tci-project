@@ -11,6 +11,16 @@ CREATE TABLE project (id bigserial NOT NULL, branches varchar(255), created time
 ALTER TABLE project OWNER TO tciprojects;
 
 DROP TABLE IF EXISTS command CASCADE;
-CREATE TABLE command (id bigserial NOT NULL, command varchar(255), command_order int4, enable_logs boolean, enabled boolean, name varchar(255), project_id int8, PRIMARY KEY (id));
+CREATE TABLE command (id bigserial NOT NULL, command varchar(255), command_order int4, enable_logs boolean, enabled boolean, project_id int8, PRIMARY KEY (id));
 ALTER TABLE command ADD CONSTRAINT project_id_fk FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE;
 ALTER TABLE command OWNER TO tcicommands;
+
+DROP TABLE IF EXISTS build CASCADE;
+CREATE TABLE build (id bigserial NOT NULL, build_end timestamp, build_start timestamp, build_status int4, commit_hash varchar(255), commit_message varchar(255), error varchar(255), project_id int8, start_by varchar(255), primary key (id));
+ALTER TABLE build ADD CONSTRAINT build_project_id_fk FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE;
+ALTER TABLE build OWNER TO tcilogger;
+
+DROP TABLE IF EXISTS step CASCADE;
+CREATE TABLE step (id int8 NOT NULL, command varchar(255), command_result varchar(255), step_end timestamp, step_start timestamp, step_status int4, build_root_id int8, primary key (id));
+ALTER TABLE step ADD CONSTRAINT build_id_fk FOREIGN KEY (build_root_id) REFERENCES build (id) ON DELETE CASCADE;
+ALTER TABLE step OWNER TO tcilogger;
