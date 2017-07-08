@@ -3,6 +3,8 @@ eureka:
     enabled: false
 
 info:
+  services:
+    logger: http://localhost:8003
   docker:
     uri: http://localhost:2375
     projectFolderInContainer: /app

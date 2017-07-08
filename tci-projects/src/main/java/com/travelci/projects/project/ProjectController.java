@@ -58,6 +58,11 @@ public class ProjectController {
         projectService.delete(projectDto);
     }
 
+    @DeleteMapping("{projectId}")
+    public Long deleteProjectById(@PathVariable final Long projectId) {
+        return projectService.deleteProjectById(projectId);
+    }
+
     @GetMapping("{projectId}")
     public ProjectDto getProjectById(@PathVariable final Long projectId) {
         return projectService.getProjectById(projectId);

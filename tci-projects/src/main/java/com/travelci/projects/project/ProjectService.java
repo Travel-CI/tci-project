@@ -15,6 +15,8 @@ interface ProjectService {
 
     void delete(ProjectDto projectDto);
 
+    Long deleteProjectById(Long projectId);
+
     ProjectDto getProjectById(Long projectId);
 
     void startProjectEngine(PayLoad webHookPayLoad);

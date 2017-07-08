@@ -2,6 +2,7 @@ package com.travelci.logger.step.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.travelci.logger.build.entities.Build;
+import com.travelci.logger.build.entities.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,8 +25,7 @@ public class StepDto {
 
     private String commandResult;
 
-    @NotNull
-    private StepStatus stepStatus;
+    private Status status;
 
     @NotNull
     private Timestamp stepStart;

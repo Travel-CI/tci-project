@@ -30,7 +30,7 @@ public class WebhookServiceTest {
     @Before
     public void setUp() {
         webhookService = new WebhookServiceImpl(bitbucketExtractor, githubExtractor,
-            restTemplate, "", "");
+            restTemplate, "");
     }
 
     @Test

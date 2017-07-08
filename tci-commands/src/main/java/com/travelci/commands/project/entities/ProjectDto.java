@@ -1,5 +1,6 @@
 package com.travelci.commands.project.entities;
 
+import com.travelci.commands.logger.entities.BuildDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,4 +22,7 @@ public class ProjectDto {
     private String name;
 
     private String dockerfileLocation;
+
+    @NotNull
+    private BuildDto currentBuild;
 }

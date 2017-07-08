@@ -1,5 +1,6 @@
 package com.travelci.projects.project.entities;
 
+import com.travelci.projects.logger.entities.BuildDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,7 +45,6 @@ public class ProjectDto {
 
     private String repositoryToken;
 
-    //@NotNull
     private String dockerfileLocation;
 
     private Date lastStart;
@@ -52,4 +52,6 @@ public class ProjectDto {
     private Timestamp created;
 
     private Timestamp updated;
+
+    private BuildDto currentBuild;
 }
