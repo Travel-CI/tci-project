@@ -22,9 +22,6 @@ public class Command {
     private Long id;
 
     @Column
-    private String name;
-
-    @Column
     private String command;
 
     @Column

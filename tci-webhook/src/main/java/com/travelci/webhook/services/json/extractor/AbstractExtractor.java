@@ -20,7 +20,6 @@ public abstract class AbstractExtractor {
     private final String commitAuthorJsonTree;
     private final String commitHashJsonTree;
     private final String commitMessageJsonTree;
-    private final String commitDateJsonTree;
 
     private final Validator validator;
 
@@ -30,7 +29,6 @@ public abstract class AbstractExtractor {
                              final String commitAuthorJsonTree,
                              final String commitHashJsonTree,
                              final String commitMessageJsonTree,
-                             final String commitDateJsonTree,
                              final Validator validator) {
 
         this.identifiers = identifiers;
@@ -39,7 +37,6 @@ public abstract class AbstractExtractor {
         this.commitAuthorJsonTree = commitAuthorJsonTree;
         this.commitHashJsonTree = commitHashJsonTree;
         this.commitMessageJsonTree = commitMessageJsonTree;
-        this.commitDateJsonTree = commitDateJsonTree;
         this.validator = validator;
     }
 
@@ -60,7 +57,6 @@ public abstract class AbstractExtractor {
                     .commitAuthor(reader.at(commitAuthorJsonTree).asText())
                     .commitHash(reader.at(commitHashJsonTree).asText())
                     .commitMessage(reader.at(commitMessageJsonTree).asText())
-                    .commitDate(null /* reader.at(commitDateJsonTree) */) // TODO Add date
                     .build();
 
             final Set<ConstraintViolation<PayLoad>> constraintViolations = validator.validate(payLoad);

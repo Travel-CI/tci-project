@@ -16,9 +16,6 @@ public class CommandDto {
     private Long id;
 
     @NotNull
-    private String name;
-
-    @NotNull
     private String command;
 
     @NotNull

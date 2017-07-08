@@ -44,7 +44,7 @@ public class CommandsServiceImpl implements CommandsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CommandDto> getCommandsByProject(final Long projectId) {
+    public List<CommandDto> getCommandsByProjectId(final Long projectId) {
         return commandRepository.findByProjectIdOrderByCommandOrderAsc(projectId)
             .stream()
             .map(commandAdapter::toCommandDto)
@@ -59,7 +59,7 @@ public class CommandsServiceImpl implements CommandsService {
             throw new InvalidCommandException("CommandOrder already exist for this project");
 
         return commandAdapter.toCommandDto(
-            commandRepository.save(commandAdapter.toCommandEntity(commandDto))
+            commandRepository.save(commandAdapter.toCommand(commandDto))
         );
     }
 
@@ -70,7 +70,7 @@ public class CommandsServiceImpl implements CommandsService {
             .orElseThrow(NotFoundCommandException::new);
 
         return commandAdapter.toCommandDto(
-            commandRepository.save(commandAdapter.toCommandEntity(commandDto))
+            commandRepository.save(commandAdapter.toCommand(commandDto))
         );
     }
 
@@ -80,16 +80,18 @@ public class CommandsServiceImpl implements CommandsService {
         commandRepository.findById(commandDto.getId())
             .orElseThrow(NotFoundCommandException::new);
 
-        commandRepository.delete(commandAdapter.toCommandEntity(commandDto));
+        commandRepository.delete(commandAdapter.toCommand(commandDto));
     }
 
     @Override
     public void startCommandsEngine(final ProjectDto projectDto) {
 
-        final List<CommandDto> commands = getCommandsByProject(projectDto.getId());
+        final List<CommandDto> commands = getCommandsByProjectId(projectDto.getId());
 
-        if (commands.isEmpty())
+        if (commands.isEmpty()) {
+            // TODO Log end Build with error
             throw new NotFoundCommandException();
+        }
 
         final DockerCommandsProject dockerCommandsProject = DockerCommandsProject.builder()
             .project(projectDto)

@@ -25,7 +25,7 @@ public class CommandsController {
 
     @GetMapping("{projectId}")
     public List<CommandDto> getCommandsByProject(@PathVariable final Long projectId) {
-        return commandsService.getCommandsByProject(projectId);
+        return commandsService.getCommandsByProjectId(projectId);
     }
 
     @PostMapping

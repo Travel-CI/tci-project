@@ -25,7 +25,6 @@ public class ExtractorTest {
             "/bitbucket/commit/author",
             "/bitbucket/commit/hash",
             "/bitbucket/commit/message",
-            "/bitbucket/commit/date",
             Validation.buildDefaultValidatorFactory().getValidator()
         );
 

@@ -1,7 +1,6 @@
 package com.travelci.docker.runner.services;
 
 import com.spotify.docker.client.DefaultDockerClient;
-import com.spotify.docker.client.DockerCertificates;
 import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.Container;
@@ -9,11 +8,9 @@ import com.spotify.docker.client.messages.ContainerChange;
 import com.spotify.docker.client.messages.Image;
 import com.travelci.docker.runner.entities.CommandDto;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,18 +29,9 @@ public class DockerServiceIT {
     @Before
     public void setUp() throws DockerCertificateException {
 
-        final String windowsSocketUri = "https://192.168.99.100:2376";
-        final String windowsCertificatesUri = "C:\\Users\\Julien\\.docker\\machine\\certs";
-        final String unixSocketUri = "http://localhost:2375";
+        final String dockerSocket = "http://localhost:2375";
 
-        if (System.getProperty("os.name").contains("Windows"))
-            dockerClient = DefaultDockerClient.builder()
-                .uri(windowsSocketUri)
-                .dockerCertificates(new DockerCertificates(Paths.get(windowsCertificatesUri)))
-                .build();
-        else
-            dockerClient = new DefaultDockerClient(unixSocketUri);
-
+        dockerClient = new DefaultDockerClient(dockerSocket);
         dockerRunnerService = new DockerRunnerServiceImpl(dockerClient, "");
     }
 

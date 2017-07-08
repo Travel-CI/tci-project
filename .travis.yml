@@ -25,7 +25,7 @@ script:
   - ./gradlew jacocoTestReport --stacktrace
   - ./gradlew sonarqube
   - cd tci-webapp && npm install
-  - ng build
+  - npm run build
   - cd ..
 
 before_cache:

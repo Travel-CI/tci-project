@@ -17,5 +17,5 @@ include 'tci-commands'
 include 'tci-docker-runner'
 
 // Notifiers
-//include 'tci-logger'
+include 'tci-logger'
 //include 'tci-notifications'

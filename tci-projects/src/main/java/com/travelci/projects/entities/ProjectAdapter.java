@@ -25,7 +25,7 @@ public class ProjectAdapter {
             : null;
     }
 
-    public Project toProjectEntity(final ProjectDto projectDto) {
+    public Project toProject(final ProjectDto projectDto) {
         return projectDto != null ?
             Project.builder()
                 .id(projectDto.getId())
