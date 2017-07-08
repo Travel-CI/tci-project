@@ -9,7 +9,6 @@ public class CommandAdapter {
         return command != null ?
             CommandDto.builder()
                 .id(command.getId())
-                .name(command.getName())
                 .command(command.getCommand())
                 .projectId(command.getProjectId())
                 .commandOrder(command.getCommandOrder())
@@ -23,7 +22,6 @@ public class CommandAdapter {
         return commandDto != null ?
             Command.builder()
                 .id(commandDto.getId())
-                .name(commandDto.getName())
                 .command(commandDto.getCommand())
                 .projectId(commandDto.getProjectId())
                 .commandOrder(commandDto.getCommandOrder())

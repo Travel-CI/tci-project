@@ -16,12 +16,11 @@ public class BitbucketExtractorImpl extends AbstractExtractor {
                                   @Value("${bitbucket.commit.author}") final String commitAuthorJsonTree,
                                   @Value("${bitbucket.commit.hash}") final String commitHashJsonTree,
                                   @Value("${bitbucket.commit.message}") final String commitMessageJsonTree,
-                                  @Value("${bitbucket.commit.date}") final String commitDateJsonTree,
                                   final Validator validator) {
 
         super(identifiers, repositoryUrlJsonTree,
             branchNameJsonTree, commitAuthorJsonTree,
             commitHashJsonTree, commitMessageJsonTree,
-            commitDateJsonTree, validator);
+            validator);
     }
 }

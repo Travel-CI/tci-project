@@ -5,7 +5,6 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @Builder
 @Data
@@ -25,6 +24,4 @@ public class PayLoad {
 
     @NotNull @NotEmpty
     private String commitMessage;
-
-    private Date commitDate; // TODO Remove it !
 }

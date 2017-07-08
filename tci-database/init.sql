@@ -11,7 +11,7 @@ CREATE TABLE project (id bigserial NOT NULL, branches varchar(255), created time
 ALTER TABLE project OWNER TO tciprojects;
 
 DROP TABLE IF EXISTS command CASCADE;
-CREATE TABLE command (id bigserial NOT NULL, command varchar(255), command_order int4, enable_logs boolean, enabled boolean, name varchar(255), project_id int8, PRIMARY KEY (id));
+CREATE TABLE command (id bigserial NOT NULL, command varchar(255), command_order int4, enable_logs boolean, enabled boolean, project_id int8, PRIMARY KEY (id));
 ALTER TABLE command ADD CONSTRAINT project_id_fk FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE;
 ALTER TABLE command OWNER TO tcicommands;
 

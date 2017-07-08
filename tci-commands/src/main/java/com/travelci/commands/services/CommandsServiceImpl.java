@@ -44,7 +44,7 @@ public class CommandsServiceImpl implements CommandsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CommandDto> getCommandsByProject(final Long projectId) {
+    public List<CommandDto> getCommandsByProjectId(final Long projectId) {
         return commandRepository.findByProjectIdOrderByCommandOrderAsc(projectId)
             .stream()
             .map(commandAdapter::toCommandDto)
@@ -86,10 +86,12 @@ public class CommandsServiceImpl implements CommandsService {
     @Override
     public void startCommandsEngine(final ProjectDto projectDto) {
 
-        final List<CommandDto> commands = getCommandsByProject(projectDto.getId());
+        final List<CommandDto> commands = getCommandsByProjectId(projectDto.getId());
 
-        if (commands.isEmpty())
+        if (commands.isEmpty()) {
+            // TODO Log end Build with error
             throw new NotFoundCommandException();
+        }
 
         final DockerCommandsProject dockerCommandsProject = DockerCommandsProject.builder()
             .project(projectDto)
