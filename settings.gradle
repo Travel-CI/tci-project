@@ -9,7 +9,6 @@ include 'tci-config'
 
 // Entrypoints
 include 'tci-webhook'
-//include 'tci-scheduler'
 
 // Engine
 include 'tci-projects'
