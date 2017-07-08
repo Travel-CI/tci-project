@@ -1,6 +1,5 @@
 package com.travelci.logger.step.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.travelci.logger.build.entities.Build;
 import com.travelci.logger.build.entities.Status;
 import lombok.AllArgsConstructor;
@@ -32,6 +31,5 @@ public class StepDto {
 
     private Timestamp stepEnd;
 
-    @JsonBackReference
     private Build buildRoot;
 }

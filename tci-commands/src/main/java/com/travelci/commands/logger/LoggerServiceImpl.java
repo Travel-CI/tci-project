@@ -5,6 +5,7 @@ import com.travelci.commands.logger.exceptions.LoggerException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
 
+import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -37,10 +39,9 @@ public class LoggerServiceImpl implements LoggerService {
         build.setBuildEnd(new Timestamp(System.currentTimeMillis()));
 
         try {
-            final ResponseEntity<BuildDto> response = restTemplate.postForEntity(
-                loggerServiceUrl + "/builds/error",
-                build, BuildDto.class
-            );
+            final HttpEntity<BuildDto> entity = new HttpEntity<>(build);
+            final ResponseEntity<BuildDto> response = restTemplate.exchange(
+                loggerServiceUrl + "/builds/error", PUT, entity, BuildDto.class);
 
             if (!OK.equals(response.getStatusCode()))
                 throw new RestClientException(

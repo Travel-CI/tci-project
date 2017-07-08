@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 @RestController
 @RequestMapping("/steps")
 public class StepController {
@@ -20,6 +22,7 @@ public class StepController {
     }
 
     @PostMapping
+    @ResponseStatus(CREATED)
     public StepDto createNewStep(@Valid @RequestBody final StepDto step,
                                  final BindingResult bindingResult) {
 

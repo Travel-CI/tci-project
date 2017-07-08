@@ -7,6 +7,7 @@ import com.travelci.projects.webhook.entities.PayLoad;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
 
+import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -46,7 +48,7 @@ public class LoggerServiceImpl implements LoggerService {
             .projectId(project.getId())
             .build();
 
-        return sendBuildToLogger(build, "/builds", CREATED, "Error while build creation");
+        return sendBuildToLogger(build, "/builds", CREATED, false, "Error while build creation");
     }
 
     @Override
@@ -54,18 +56,26 @@ public class LoggerServiceImpl implements LoggerService {
 
         build.setError(exception.getLocalizedMessage());
         build.setBuildEnd(new Timestamp(System.currentTimeMillis()));
-        return sendBuildToLogger(build, "/builds/error", OK, "Error while sending build error");
+        return sendBuildToLogger(build, "/builds/error", OK, true, "Error while sending build error");
     }
 
     @SuppressWarnings("all")
-    private BuildDto sendBuildToLogger(final BuildDto buildToSend, final String url,
-                                       final HttpStatus attemptedStatus, final String errorMessage) {
+    private BuildDto sendBuildToLogger(final BuildDto buildToSend, final String url, final HttpStatus expectedStatus,
+                                       final Boolean isPut, final String errorMessage) {
 
         try {
-            final ResponseEntity<BuildDto> response = restTemplate.postForEntity(
-                loggerServiceUrl + url, buildToSend, BuildDto.class);
+            ResponseEntity<BuildDto> response = null;
+            if (isPut) {
+                final HttpEntity<BuildDto> entity = new HttpEntity<>(buildToSend);
+                response = restTemplate.exchange(
+                    loggerServiceUrl + url, PUT, entity, BuildDto.class);
+            }
+            else {
+                response = restTemplate.postForEntity(
+                    loggerServiceUrl + url, buildToSend, BuildDto.class);
+            }
 
-            if (attemptedStatus != response.getStatusCode())
+            if (!expectedStatus.equals(response.getStatusCode()))
                 throw new RestClientException(
                     "Response Status Code is wrong. Expected : OK, Given : " + response.getStatusCode());
 
