@@ -35,7 +35,7 @@ public class IntegrationTestsConfig {
         when(restTemplate.postForEntity(any(String.class), any(ProjectDto.class), anyObject()))
             .thenReturn(new ResponseEntity<>(ACCEPTED));
 
-        when(restTemplate.postForEntity(eq("http://localhost:8083"), any(BuildDto.class), anyObject()))
+        when(restTemplate.postForEntity(eq("http://localhost:8083/builds"), any(BuildDto.class), anyObject()))
             .thenReturn(new ResponseEntity<>(BuildDto.builder().id(1L).build(), CREATED));
 
         return restTemplate;

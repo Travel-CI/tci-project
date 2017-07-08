@@ -31,7 +31,6 @@ public class LoggerServiceImpl implements LoggerService {
     }
 
     @Override
-    @SuppressWarnings("all")
     public BuildDto endBuildByError(final BuildDto build, final Exception exception) {
 
         build.setError(exception.getLocalizedMessage());

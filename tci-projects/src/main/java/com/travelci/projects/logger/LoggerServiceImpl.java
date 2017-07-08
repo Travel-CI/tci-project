@@ -7,6 +7,7 @@ import com.travelci.projects.webhook.entities.PayLoad;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -45,40 +46,33 @@ public class LoggerServiceImpl implements LoggerService {
             .projectId(project.getId())
             .build();
 
-        try {
-            final ResponseEntity<BuildDto> response = restTemplate.postForEntity(
-                loggerServiceUrl + "/builds", build, BuildDto.class);
-
-            if (!CREATED.equals(response.getStatusCode()))
-                throw new RestClientException(
-                    "Response Status Code is wrong. Expected : CREATED, Given : " + response.getStatusCode());
-
-            return response.getBody();
-        } catch(final RestClientException e) {
-            log.error(e.getLocalizedMessage(), e.getCause());
-            throw new LoggerException("Error while build creation");
-        }
+        return sendBuildToLogger(build, "/builds", CREATED, "Error while build creation");
     }
 
     @Override
-    @SuppressWarnings("all")
     public BuildDto endBuildByError(final BuildDto build, final Exception exception) {
 
         build.setError(exception.getLocalizedMessage());
         build.setBuildEnd(new Timestamp(System.currentTimeMillis()));
+        return sendBuildToLogger(build, "/builds/error", OK, "Error while sending build error");
+    }
+
+    @SuppressWarnings("all")
+    private BuildDto sendBuildToLogger(final BuildDto buildToSend, final String url,
+                                       final HttpStatus attemptedStatus, final String errorMessage) {
 
         try {
             final ResponseEntity<BuildDto> response = restTemplate.postForEntity(
-                loggerServiceUrl + "/builds/error", build, BuildDto.class);
+                loggerServiceUrl + url, buildToSend, BuildDto.class);
 
-            if (!OK.equals(response.getStatusCode()))
+            if (!attemptedStatus.equals(response.getStatusCode()))
                 throw new RestClientException(
                     "Response Status Code is wrong. Expected : OK, Given : " + response.getStatusCode());
 
             return response.getBody();
         } catch(final RestClientException e) {
             log.error(e.getLocalizedMessage(), e.getCause());
-            throw new LoggerException("Error while sending build error");
+            throw new LoggerException(errorMessage);
         }
     }
 }
