@@ -6,9 +6,15 @@ import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.Container;
 import com.spotify.docker.client.messages.ContainerChange;
 import com.spotify.docker.client.messages.Image;
-import com.travelci.docker.runner.input.entities.CommandDto;
+import com.travelci.docker.runner.command.entities.CommandDto;
+import com.travelci.docker.runner.logger.LoggerService;
+import com.travelci.docker.runner.logger.entities.BuildDto;
+import com.travelci.docker.runner.logger.entities.StepDto;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,11 +25,16 @@ import java.util.Optional;
 import static com.spotify.docker.client.DockerClient.ListContainersParam.allContainers;
 import static com.spotify.docker.client.DockerClient.ListImagesParam.allImages;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class DockerServiceIT {
 
     private DockerRunnerService dockerRunnerService;
     private DefaultDockerClient dockerClient;
+    @Mock private LoggerService loggerService;
+
     private static final String BUSYBOX_TEST_IMAGE = "busybox:1";
 
     @Before
@@ -32,7 +43,7 @@ public class DockerServiceIT {
         final String dockerSocket = "http://localhost:2375";
 
         dockerClient = new DefaultDockerClient(dockerSocket);
-        dockerRunnerService = new DockerRunnerServiceImpl(dockerClient, "");
+        dockerRunnerService = new DockerRunnerServiceImpl(loggerService, dockerClient, "");
     }
 
     @Test
@@ -109,7 +120,7 @@ public class DockerServiceIT {
         final String projectFolderInContainer = "/";
 
         // Create Service with projectsRootFolder = docker-runner test resources folder
-        dockerRunnerService = new DockerRunnerServiceImpl(dockerClient, projectFolderInContainer);
+        dockerRunnerService = new DockerRunnerServiceImpl(loggerService, dockerClient, projectFolderInContainer);
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
         // Start Container and Copy test resources files (Dockerfile && application.yml)
@@ -137,6 +148,9 @@ public class DockerServiceIT {
     @Test
     public void shouldExecutePwdCommandInBusyBoxContainer() throws DockerException, InterruptedException {
 
+        when(loggerService.startNewStep(any(CommandDto.class), any(BuildDto.class)))
+            .thenReturn(StepDto.builder().build());
+
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
         final String containerId = dockerRunnerService.startContainer(BUSYBOX_TEST_IMAGE, "");
@@ -146,7 +160,7 @@ public class DockerServiceIT {
         final List<CommandDto> commandList = new ArrayList<>();
         commandList.add(CommandDto.builder().command("pwd").build());
 
-        Map<String, String> results = dockerRunnerService.executeCommandsInContainer(containerId, commandList);
+        final Map<String, String> results = dockerRunnerService.executeCommandsInContainer(containerId, commandList, null);
         assertThat(results.isEmpty()).isFalse();
         assertThat(results.size()).isEqualTo(1);
         assertThat(results.get("pwd")).isEqualTo("/\n");

@@ -24,3 +24,6 @@ DROP TABLE IF EXISTS step CASCADE;
 CREATE TABLE step (id int8 NOT NULL, command varchar(255), command_result varchar(255), step_end timestamp, step_start timestamp, step_status int4, build_root_id int8, primary key (id));
 ALTER TABLE step ADD CONSTRAINT build_id_fk FOREIGN KEY (build_root_id) REFERENCES build (id) ON DELETE CASCADE;
 ALTER TABLE step OWNER TO tcilogger;
+
+create table build (id  bigserial not null, branch varchar(255), build_end timestamp, build_start timestamp, commit_hash varchar(255), commit_message varchar(255), error varchar(255), project_id int8, start_by varchar(255), status int4, primary key (id));
+create table step (id int8 not null, command varchar(255), command_result varchar(255), step_end timestamp, step_start timestamp, step_status int4, build_root_id int8, primary key (id));

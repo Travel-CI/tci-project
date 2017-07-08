@@ -1,6 +1,7 @@
 package com.travelci.logger.step.entities;
 
 import com.travelci.logger.build.entities.Build;
+import com.travelci.logger.build.entities.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+
+import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Builder
@@ -27,7 +30,8 @@ public class Step {
     private String commandResult;
 
     @Column
-    private StepStatus stepStatus;
+    @Enumerated(STRING)
+    private Status status;
 
     @Column
     private Timestamp stepStart;

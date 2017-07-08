@@ -3,6 +3,7 @@ package com.travelci.commands.command;
 import com.travelci.commands.command.entities.CommandAdapter;
 import com.travelci.commands.command.entities.CommandDto;
 import com.travelci.commands.docker.entities.DockerCommandsProject;
+import com.travelci.commands.logger.LoggerService;
 import com.travelci.commands.project.entities.ProjectDto;
 import com.travelci.commands.command.exceptions.InvalidCommandException;
 import com.travelci.commands.command.exceptions.NotFoundCommandException;
@@ -27,17 +28,17 @@ class CommandServiceImpl implements CommandService {
     private final CommandRepository commandRepository;
     private final CommandAdapter commandAdapter;
     private final RestTemplate restTemplate;
+    private final LoggerService loggerService;
 
     private final String dockerRunnerServiceUrl;
 
-    CommandServiceImpl(final CommandRepository commandRepository,
-                       final CommandAdapter commandAdapter,
-                       final RestTemplate restTemplate,
-                       @Value("${info.services.docker-runner}")
-                       final String dockerRunnerServiceUrl) {
+    CommandServiceImpl(final CommandRepository commandRepository, final CommandAdapter commandAdapter,
+                       final RestTemplate restTemplate, final LoggerService loggerService,
+                       @Value("${info.services.docker-runner}") final String dockerRunnerServiceUrl) {
         this.commandRepository = commandRepository;
         this.commandAdapter = commandAdapter;
         this.restTemplate = restTemplate;
+        this.loggerService = loggerService;
         this.dockerRunnerServiceUrl = dockerRunnerServiceUrl;
     }
 
@@ -85,11 +86,16 @@ class CommandServiceImpl implements CommandService {
     @Override
     public void startCommandsEngine(final ProjectDto projectDto) {
 
-        final List<CommandDto> commands = getCommandsByProjectId(projectDto.getId());
+        final List<CommandDto> commands = commandRepository
+            .findByProjectIdAndEnabledIsTrueOrderByCommandOrderAsc(projectDto.getId())
+            .stream()
+            .map(commandAdapter::toCommandDto)
+            .collect(Collectors.toList());
 
         if (commands.isEmpty()) {
-            // TODO Log end Build with error
-            throw new NotFoundCommandException();
+            final RuntimeException e = new NotFoundCommandException("There is no command to execute");
+            loggerService.endBuildByError(projectDto.getCurrentBuild(), e);
+            throw e;
         }
 
         final DockerCommandsProject dockerCommandsProject = DockerCommandsProject.builder()
@@ -100,18 +106,14 @@ class CommandServiceImpl implements CommandService {
         try {
             final ResponseEntity<Void> response = restTemplate.postForEntity(
                 dockerRunnerServiceUrl + "/docker/execute",
-                dockerCommandsProject,
-                Void.class
+                dockerCommandsProject, Void.class
             );
 
             if (!ACCEPTED.equals(response.getStatusCode()))
                 throw new RestClientException(
-                    "Response Status Code is wrong. Expected : ACCEPTED, Given : " + response.getStatusCode()
-                );
+                    "Response Status Code is wrong. Expected : ACCEPTED, Given : " + response.getStatusCode());
         } catch (RestClientException e) {
-            System.out.println("Wrong request" + e.getLocalizedMessage());
-            e.printStackTrace();
-            // TODO Call logger service
+            loggerService.endBuildByError(projectDto.getCurrentBuild(), e);
         }
     }
 }

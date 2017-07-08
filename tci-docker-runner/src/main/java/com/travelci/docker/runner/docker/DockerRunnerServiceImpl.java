@@ -6,14 +6,15 @@ import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.ContainerCreation;
 import com.spotify.docker.client.messages.ExecCreation;
-import com.travelci.docker.runner.input.entities.CommandDto;
-import com.travelci.docker.runner.input.entities.DockerCommandsProject;
-import com.travelci.docker.runner.input.entities.ProjectDto;
-import com.travelci.docker.runner.docker.exceptions.DockerBuildImageException;
-import com.travelci.docker.runner.docker.exceptions.DockerExecuteCommandException;
-import com.travelci.docker.runner.docker.exceptions.DockerStartContainerException;
-import com.travelci.docker.runner.docker.exceptions.DockerStopContainerException;
+import com.travelci.docker.runner.command.entities.CommandDto;
+import com.travelci.docker.runner.command.entities.DockerCommandsProject;
+import com.travelci.docker.runner.docker.exceptions.*;
+import com.travelci.docker.runner.logger.LoggerService;
+import com.travelci.docker.runner.logger.entities.BuildDto;
+import com.travelci.docker.runner.logger.entities.StepDto;
+import com.travelci.docker.runner.project.entities.ProjectDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,15 +27,19 @@ import static com.spotify.docker.client.DockerClient.ExecCreateParam.attachStder
 import static com.spotify.docker.client.DockerClient.ExecCreateParam.attachStdout;
 
 @Service
+@RefreshScope
 class DockerRunnerServiceImpl implements DockerRunnerService {
 
+    private final LoggerService loggerService;
     private final DockerClient docker;
 
     private final String projectFolderInContainer;
 
-    DockerRunnerServiceImpl(final DockerClient docker,
+    DockerRunnerServiceImpl(final LoggerService loggerService,
+                            final DockerClient docker,
                             @Value("${info.docker.projectFolderInContainer}")
                             final String projectFolderInContainer) {
+        this.loggerService = loggerService;
         this.docker = docker;
         this.projectFolderInContainer = projectFolderInContainer;
     }
@@ -60,10 +65,15 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
         // Name in LowerCase : Docker Build Convention
         final String imageName = projectLocation.substring(projectLocation.lastIndexOf("/") + 1).toLowerCase();
 
-        final String imageId = buildImageFromDockerFile(imageName, dockerFileFolder);
-        final String containerId = startContainer(imageId, projectLocation);
-        executeCommandsInContainer(containerId, commands);
-        stopContainer(containerId);
+        try {
+            final String imageId = buildImageFromDockerFile(imageName, dockerFileFolder);
+            final String containerId = startContainer(imageId, projectLocation);
+            executeCommandsInContainer(containerId, commands, project.getCurrentBuild());
+            stopContainer(containerId);
+        } catch (DockerRunnerException e) {
+            loggerService.endBuildByError(project.getCurrentBuild(), e.getLocalizedMessage());
+            throw e;
+        }
     }
 
     @Override
@@ -110,31 +120,57 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
 
     @Override
     public Map<String, String> executeCommandsInContainer(final String containerId,
-                                                          final List<CommandDto> commands) {
+                                                          final List<CommandDto> commands,
+                                                          final BuildDto currentBuild) {
 
         final Map<String, String> commandResults = new LinkedHashMap<>();
 
         for (final CommandDto command : commands) {
 
+            final StepDto step = loggerService.startNewStep(command, currentBuild);
+
             try {
-                final ExecCreation execCreation = docker.execCreate(
-                    containerId, command.getCommand().split(" "),
+
+                final String[] executedCommand = new String[] {
+                    "sh", "-c", command.getCommand() + " 2>&1 1>~/dockerOutput | tee -a ~/dockerOutput"
+                };
+
+                final String[] stdoutStderrCommand = new String[] {
+                    "sh", "-c", "cat ~/dockerOutput"
+                };
+
+                // Execute command, return stderr (if stderr string is not empty, there is a mistake with the command)
+                final ExecCreation commandCreation = docker.execCreate(
+                    containerId, executedCommand,
                     attachStdout(), attachStderr());
 
-                final LogStream output = docker.execStart(execCreation.id());
-                final String execOutput = output.readFully();
+                final LogStream commandLs = docker.execStart(commandCreation.id());
+                final String stderrOutput = commandLs.readFully();
 
-                commandResults.put(command.getCommand(), execOutput);
+                // Execute command to get the stdout / stderr of previous command
+                final ExecCreation stdoutStderrCommandCreation = docker.execCreate(
+                    containerId, stdoutStderrCommand,
+                    attachStdout(), attachStderr());
 
-                // TODO Get errors log
+                final LogStream stdoutStderrLs = docker.execStart(stdoutStderrCommandCreation.id());
+                final String stdoutStderOutput = stdoutStderrLs.readFully();
 
-                System.out.println(command.getCommand() + " " + execOutput);
-                // TODO Log command result here
+                if (!stderrOutput.isEmpty()) {
+                    loggerService.endStepByError(step, stdoutStderOutput);
+                    loggerService.endBuildByError(currentBuild, "step failed : " + command.getCommand());
+                    return commandResults;
+                }
+                else
+                    loggerService.endStepBySuccess(step, stdoutStderOutput);
 
+                commandResults.put(command.getCommand(), stdoutStderOutput);
             } catch (DockerException | InterruptedException e) {
+                loggerService.endStepByError(step, e.getLocalizedMessage());
                 throw new DockerExecuteCommandException(e.getMessage(), e.getCause());
             }
         }
+
+        loggerService.endBuildBySuccess(currentBuild);
 
         return commandResults;
     }

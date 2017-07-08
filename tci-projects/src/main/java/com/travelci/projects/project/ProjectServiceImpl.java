@@ -1,6 +1,8 @@
 package com.travelci.projects.project;
 
 import com.travelci.projects.git.GitService;
+import com.travelci.projects.logger.LoggerService;
+import com.travelci.projects.logger.entities.BuildDto;
 import com.travelci.projects.webhook.entities.PayLoad;
 import com.travelci.projects.project.entities.ProjectAdapter;
 import com.travelci.projects.project.entities.ProjectDto;
@@ -8,6 +10,7 @@ import com.travelci.projects.git.exceptions.GitException;
 import com.travelci.projects.project.exceptions.NotFoundProjectException;
 import org.eclipse.jgit.api.Git;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,29 +24,28 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.ACCEPTED;
 
 @Service
+@RefreshScope
 @Transactional
 class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ProjectAdapter projectAdapter;
     private final GitService gitService;
+    private final LoggerService loggerService;
     private final RestTemplate restTemplate;
 
     private final String commandsServiceUrl;
-    private final String loggerServiceUrl;
 
     ProjectServiceImpl(final ProjectRepository projectRepository,
-                       final ProjectAdapter projectAdapter,
-                       final GitService gitService,
-                       final RestTemplate restTemplate,
-                       @Value("${info.services.commands}") final String commandsServiceUrl,
-                       @Value("${info.services.logger}") final String loggerServiceUrl) {
+                       final ProjectAdapter projectAdapter, final GitService gitService,
+                       final LoggerService loggerService, final RestTemplate restTemplate,
+                       @Value("${info.services.commands}") final String commandsServiceUrl) {
         this.projectRepository = projectRepository;
         this.projectAdapter = projectAdapter;
         this.gitService = gitService;
+        this.loggerService = loggerService;
         this.restTemplate = restTemplate;
         this.commandsServiceUrl = commandsServiceUrl;
-        this.loggerServiceUrl = loggerServiceUrl;
     }
 
     @Override
@@ -108,26 +110,32 @@ class ProjectServiceImpl implements ProjectService {
             ).orElseThrow(NotFoundProjectException::new)
         );
 
-        // TODO Call Create Build Logger
+        // Save A New Build
+        final BuildDto build = loggerService.startNewBuild(webHookPayLoad, searchProject);
 
-        // Get Source Code
+        // Set the Last Start after new build is created
+        searchProject.setLastStart(new Timestamp(System.currentTimeMillis()));
+        projectRepository.save(projectAdapter.toProject(searchProject));
+
+        // Get Source Code by calling GitService
         try {
             final Git repository = gitService.pullProjectRepository(searchProject, webHookPayLoad);
             repository.close();
-        } catch(GitException e) {
-            // TODO Call add error in build Logger
+        } catch(final GitException e) {
+            loggerService.endBuildByError(build, e);
         }
 
         // Send Request to tci-commands
         try {
 
-            // Setup Project Dto Object for Commands and Docker Runner (git folder name, webhook branch)
+            // Setup Project Dto Object for Commands and Docker Runner
             final ProjectDto sentProjectDto = ProjectDto.builder()
                 .id(searchProject.getId())
                 .name(gitService.formatRepositoryFolderName(
                         searchProject.getName(),
                         webHookPayLoad.getBranchName())
                 )
+                .currentBuild(build)
                 .dockerfileLocation(searchProject.getDockerfileLocation())
                 .build();
 
@@ -139,11 +147,10 @@ class ProjectServiceImpl implements ProjectService {
 
             if (!ACCEPTED.equals(response.getStatusCode()))
                 throw new RestClientException(
-                    "Response Status Code is wrong. Expected : ACCEPTED, Given : " + response.getStatusCode()
-                );
-        } catch (RestClientException e) {
-            System.out.println("Wrong request");
-            // TODO Call logger service
+                    "Response Status Code is wrong. Expected : ACCEPTED, Given : " + response.getStatusCode());
+
+        } catch (final RestClientException e) {
+            loggerService.endBuildByError(build, e);
         }
     }
 }

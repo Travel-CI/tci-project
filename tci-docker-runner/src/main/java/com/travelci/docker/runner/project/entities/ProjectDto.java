@@ -1,5 +1,6 @@
-package com.travelci.docker.runner.input.entities;
+package com.travelci.docker.runner.project.entities;
 
+import com.travelci.docker.runner.logger.entities.BuildDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,17 +8,21 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DockerCommandsProject {
+public class ProjectDto {
 
     @NotNull
-    private ProjectDto project;
+    private Long id;
 
     @NotNull @NotEmpty
-    private List<CommandDto> commands;
+    private String name;
+
+    private String dockerfileLocation;
+
+    @NotNull
+    private BuildDto currentBuild;
 }
