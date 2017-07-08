@@ -65,7 +65,7 @@ public class LoggerServiceImpl implements LoggerService {
             final ResponseEntity<BuildDto> response = restTemplate.postForEntity(
                 loggerServiceUrl + url, buildToSend, BuildDto.class);
 
-            if (!attemptedStatus.equals(response.getStatusCode()))
+            if (attemptedStatus != response.getStatusCode())
                 throw new RestClientException(
                     "Response Status Code is wrong. Expected : OK, Given : " + response.getStatusCode());
 
