@@ -28,6 +28,12 @@ export class ProjectService {
       .catch((err: Error) => this.handleError(err));
   }
 
+  getProjectById(id: string): Promise<Project> {
+    return this.http.get('/api/projects/' + id).toPromise()
+      .then((res: Response) => res.json() as Project)
+      .catch((err: Error) => this.handleError(err));
+  }
+
   handleError(err: Error): Promise<Project[]> {
 
     if(environment.enableDebug)
