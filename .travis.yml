@@ -64,6 +64,9 @@ after_success:
     docker build -t travelci/tci-docker-runner:latest ./tci-docker-runner;
     docker push travelci/tci-docker-runner;
 
+    docker build -t travelci/tci-logger:latest ./tci-logger;
+    docker push travelci/tci-logger;
+
     docker build -t travelci/tci-webapp:latest ./tci-webapp;
     docker push travelci/tci-webapp;
     fi
