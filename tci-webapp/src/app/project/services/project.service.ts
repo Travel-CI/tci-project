@@ -45,6 +45,17 @@ export class ProjectService {
       .catch((err: Error) => this.handleError(err));
   }
 
+  deleteProjectById(projectId: number): Promise<number> {
+
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete('/api/projects/' + projectId, options)
+      .toPromise()
+      .then((res: Response) => res.json() as number)
+      .catch((err: Error) => this.handleError(err));
+  }
+
   handleError(err: Error): Promise<Project[]> {
 
     if(environment.enableDebug)
