@@ -14,7 +14,7 @@ public class StepAdapter {
                 .status(stepDto.getStatus())
                 .stepStart(stepDto.getStepStart())
                 .stepEnd(stepDto.getStepEnd())
-                .buildRoot(stepDto.getBuildRoot())
+                .buildId(stepDto.getBuildId())
                 .build()
             : null;
     }
@@ -28,7 +28,7 @@ public class StepAdapter {
                 .status(step.getStatus())
                 .stepStart(step.getStepStart())
                 .stepEnd(step.getStepEnd())
-                .buildRoot(step.getBuildRoot())
+                .buildId(step.getBuildId())
                 .build()
             : null;
     }

@@ -27,5 +27,5 @@ public class StepDto {
 
     private Timestamp stepEnd;
 
-    private BuildDto buildRoot;
+    private Long buildId;
 }

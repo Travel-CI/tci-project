@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 @RestController
 @RequestMapping("/steps")
 public class StepController {
@@ -20,6 +22,7 @@ public class StepController {
     }
 
     @PostMapping
+    @ResponseStatus(CREATED)
     public StepDto createNewStep(@Valid @RequestBody final StepDto step,
                                  final BindingResult bindingResult) {
 
@@ -51,6 +54,6 @@ public class StepController {
 
     @GetMapping("{buildId}")
     public List<StepDto> getAllStepsForBuild(@PathVariable("buildId") final Long buildId) {
-        return stepService.getStepsByBuild(buildId);
+        return stepService.getStepsByBuildId(buildId);
     }
 }

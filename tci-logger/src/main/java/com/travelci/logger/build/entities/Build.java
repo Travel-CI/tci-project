@@ -1,6 +1,5 @@
-package com.travelci.logger.step.entities;
+package com.travelci.logger.build.entities;
 
-import com.travelci.logger.build.entities.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,31 +14,39 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "step")
-public class Step {
+@NoArgsConstructor
+@Table(name = "build")
+public class Build {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column
-    private String command;
+    private Long projectId;
 
     @Column
-    private String commandResult;
+    private Timestamp buildStart;
+
+    @Column
+    private Timestamp buildEnd;
+
+    @Column
+    private String startBy;
+
+    @Column
+    private String commitHash;
+
+    @Column
+    private String commitMessage;
+
+    @Column
+    private String branch;
+
+    @Column
+    private String error;
 
     @Column
     @Enumerated(STRING)
     private Status status;
-
-    @Column
-    private Timestamp stepStart;
-
-    @Column
-    private Timestamp stepEnd;
-
-    @Column
-    private Long buildId;
 }

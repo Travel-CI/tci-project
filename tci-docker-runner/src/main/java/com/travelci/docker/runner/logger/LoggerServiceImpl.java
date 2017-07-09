@@ -7,6 +7,7 @@ import com.travelci.docker.runner.logger.exceptions.LoggerException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -14,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
 
+import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -25,7 +28,7 @@ public class LoggerServiceImpl implements LoggerService {
     private final String loggerServiceUrl;
 
     public LoggerServiceImpl(final RestTemplate restTemplate,
-                             @Value("{info.services.logger}")
+                             @Value("${info.services.logger}")
                              final String loggerServiceUrl) {
         this.restTemplate = restTemplate;
         this.loggerServiceUrl = loggerServiceUrl;
@@ -37,10 +40,22 @@ public class LoggerServiceImpl implements LoggerService {
         final StepDto step = StepDto.builder()
             .stepStart(new Timestamp(System.currentTimeMillis()))
             .command(command.getCommand())
-            .buildRoot(build)
+            .buildId(build.getId())
             .build();
 
-        return sendStepToLogger(step, "/steps", "Error while step creation");
+        try {
+            final ResponseEntity<StepDto> response = restTemplate.postForEntity(
+                loggerServiceUrl + "/steps", step, StepDto.class);
+
+            if (!CREATED.equals(response.getStatusCode()))
+                throw new RestClientException(
+                    "Response Status Code is wrong. Expected : CREATED, Given : " + response.getStatusCode());
+
+            return response.getBody();
+        } catch(final RestClientException e) {
+            log.error(e.getLocalizedMessage(), e.getCause());
+            throw new LoggerException("Error while step creation");
+        }
     }
 
     @Override
@@ -71,15 +86,16 @@ public class LoggerServiceImpl implements LoggerService {
     public BuildDto endBuildBySuccess(final BuildDto build) {
 
         build.setBuildEnd(new Timestamp(System.currentTimeMillis()));
-        return sendBuildToLogger(build, "/builds/error", "Error while sending build success");
+        return sendBuildToLogger(build, "/builds/success", "Error while sending build success");
     }
 
     private StepDto sendStepToLogger(final StepDto stepToSend, final String url,
                                      final String errorMessage) {
 
         try {
-            final ResponseEntity<StepDto> response = restTemplate.postForEntity(
-                loggerServiceUrl + url, stepToSend, StepDto.class);
+            final HttpEntity<StepDto> entity = new HttpEntity<>(stepToSend);
+            final ResponseEntity<StepDto> response = restTemplate.exchange(
+                loggerServiceUrl + url, PUT, entity, StepDto.class);
 
             if (!OK.equals(response.getStatusCode()))
                 throw new RestClientException(
@@ -97,8 +113,9 @@ public class LoggerServiceImpl implements LoggerService {
                                        final String errorMessage) {
 
         try {
-            final ResponseEntity<BuildDto> response = restTemplate.postForEntity(
-                loggerServiceUrl + url, buildToSend, BuildDto.class);
+            final HttpEntity<BuildDto> entity = new HttpEntity<>(buildToSend);
+            final ResponseEntity<BuildDto> response = restTemplate.exchange(
+                loggerServiceUrl + url, PUT, entity, BuildDto.class);
 
             if (!OK.equals(response.getStatusCode()))
                 throw new RestClientException(

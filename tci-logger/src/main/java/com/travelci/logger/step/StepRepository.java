@@ -10,5 +10,5 @@ interface StepRepository extends JpaRepository<Step, Long> {
 
     Optional<Step> findById(Long id);
 
-    List<Step> findByBuildRoot(Long buildId);
+    List<Step> findByBuildId(Long buildId);
 }
