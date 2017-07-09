@@ -52,54 +52,54 @@ class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public CommandDto create(final CommandDto commandDto) {
+    public CommandDto create(final CommandDto command) {
 
         if (commandRepository.findByProjectIdAndCommandOrder(
-            commandDto.getProjectId(), commandDto.getCommandOrder()).isPresent())
+            command.getProjectId(), command.getCommandOrder()).isPresent())
             throw new InvalidCommandException("CommandOrder already exist for this project");
 
         return commandAdapter.toCommandDto(
-            commandRepository.save(commandAdapter.toCommand(commandDto))
+            commandRepository.save(commandAdapter.toCommand(command))
         );
     }
 
     @Override
-    public CommandDto update(final CommandDto commandDto) {
+    public CommandDto update(final CommandDto command) {
 
-        commandRepository.findById(commandDto.getId())
+        commandRepository.findById(command.getId())
             .orElseThrow(NotFoundCommandException::new);
 
         return commandAdapter.toCommandDto(
-            commandRepository.save(commandAdapter.toCommand(commandDto))
+            commandRepository.save(commandAdapter.toCommand(command))
         );
     }
 
     @Override
-    public void delete(final CommandDto commandDto) {
+    public void delete(final CommandDto command) {
 
-        commandRepository.findById(commandDto.getId())
+        commandRepository.findById(command.getId())
             .orElseThrow(NotFoundCommandException::new);
 
-        commandRepository.delete(commandAdapter.toCommand(commandDto));
+        commandRepository.delete(commandAdapter.toCommand(command));
     }
 
     @Override
-    public void startCommandsEngine(final ProjectDto projectDto) {
+    public void startCommandsEngine(final ProjectDto project) {
 
         final List<CommandDto> commands = commandRepository
-            .findByProjectIdAndEnabledIsTrueOrderByCommandOrderAsc(projectDto.getId())
+            .findByProjectIdAndEnabledIsTrueOrderByCommandOrderAsc(project.getId())
             .stream()
             .map(commandAdapter::toCommandDto)
             .collect(Collectors.toList());
 
         if (commands.isEmpty()) {
             final RuntimeException e = new NotFoundCommandException("There is no command to execute");
-            loggerService.endBuildByError(projectDto.getCurrentBuild(), e);
+            loggerService.endBuildByError(project.getCurrentBuild(), e);
             throw e;
         }
 
         final DockerCommandsProject dockerCommandsProject = DockerCommandsProject.builder()
-            .project(projectDto)
+            .project(project)
             .commands(commands)
             .build();
 
@@ -112,8 +112,8 @@ class CommandServiceImpl implements CommandService {
             if (!ACCEPTED.equals(response.getStatusCode()))
                 throw new RestClientException(
                     "Response Status Code is wrong. Expected : ACCEPTED, Given : " + response.getStatusCode());
-        } catch (RestClientException e) {
-            loggerService.endBuildByError(projectDto.getCurrentBuild(), e);
+        } catch (final RestClientException e) {
+            loggerService.endBuildByError(project.getCurrentBuild(), e);
         }
     }
 }

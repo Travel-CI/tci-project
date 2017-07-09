@@ -29,33 +29,33 @@ public class ProjectController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public ProjectDto createNewProject(@Valid @RequestBody final ProjectDto projectDto,
+    public ProjectDto createNewProject(@Valid @RequestBody final ProjectDto project,
                                        final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidProjectException();
 
-        return projectService.create(projectDto);
+        return projectService.create(project);
     }
 
     @PutMapping
-    public ProjectDto updateProject(@Valid @RequestBody final ProjectDto projectDto,
+    public ProjectDto updateProject(@Valid @RequestBody final ProjectDto project,
                                     final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidProjectException();
 
-        return projectService.update(projectDto);
+        return projectService.update(project);
     }
 
     @DeleteMapping
-    public void deleteProject(@Valid @RequestBody final ProjectDto projectDto,
+    public void deleteProject(@Valid @RequestBody final ProjectDto project,
                               final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidProjectException();
 
-        projectService.delete(projectDto);
+        projectService.delete(project);
     }
 
     @GetMapping("{projectId}")

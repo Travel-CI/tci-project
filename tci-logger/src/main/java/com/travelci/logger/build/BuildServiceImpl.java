@@ -25,12 +25,12 @@ class BuildServiceImpl implements BuildService {
     }
 
     @Override
-    public BuildDto create(final BuildDto buildDto) {
+    public BuildDto create(final BuildDto build) {
 
-        buildDto.setStatus(IN_PROGRESS);
+        build.setStatus(IN_PROGRESS);
 
         return buildAdapter.toBuildDto(
-            buildRepository.save(buildAdapter.toBuild(buildDto))
+            buildRepository.save(buildAdapter.toBuild(build))
         );
     }
 
@@ -57,6 +57,7 @@ class BuildServiceImpl implements BuildService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BuildDto> getBuildsByProjectId(final Long projectId) {
         return buildRepository.findByProjectId(projectId)
             .stream()

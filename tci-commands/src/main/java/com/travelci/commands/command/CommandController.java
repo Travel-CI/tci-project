@@ -29,43 +29,43 @@ public class CommandController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public CommandDto createNewCommand(@Valid @RequestBody final CommandDto commandDto,
+    public CommandDto createNewCommand(@Valid @RequestBody final CommandDto command,
                                        final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidCommandException();
 
-        return commandService.create(commandDto);
+        return commandService.create(command);
     }
 
     @PutMapping
-    public CommandDto updateCommand(@Valid @RequestBody final CommandDto commandDto,
+    public CommandDto updateCommand(@Valid @RequestBody final CommandDto command,
                                     final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidCommandException();
 
-        return commandService.update(commandDto);
+        return commandService.update(command);
     }
 
     @DeleteMapping
-    public void deleteCommand(@Valid @RequestBody final CommandDto commandDto,
+    public void deleteCommand(@Valid @RequestBody final CommandDto command,
                               final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidCommandException();
 
-        commandService.delete(commandDto);
+        commandService.delete(command);
     }
 
     @PostMapping("/project")
     @ResponseStatus(ACCEPTED)
-    public void getCommandsAndSendToDockerRunner(@Valid @RequestBody final ProjectDto projectDto,
+    public void getCommandsAndSendToDockerRunner(@Valid @RequestBody final ProjectDto project,
                                                  final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidCommandException();
 
-        commandService.startCommandsEngine(projectDto);
+        commandService.startCommandsEngine(project);
     }
 }

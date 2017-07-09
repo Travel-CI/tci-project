@@ -52,7 +52,7 @@ public class LoggerServiceImpl implements LoggerService {
                     "Response Status Code is wrong. Expected : CREATED, Given : " + response.getStatusCode());
 
             return response.getBody();
-        } catch(final RestClientException e) {
+        } catch (final RestClientException e) {
             log.error(e.getLocalizedMessage(), e.getCause());
             throw new LoggerException("Error while step creation");
         }
@@ -102,7 +102,7 @@ public class LoggerServiceImpl implements LoggerService {
                     "Response Status Code is wrong. Expected : OK, Given : " + response.getStatusCode());
 
             return response.getBody();
-        } catch(final RestClientException e) {
+        } catch (final RestClientException e) {
             log.error(e.getLocalizedMessage(), e.getCause());
             throw new LoggerException(errorMessage);
         }
@@ -122,7 +122,7 @@ public class LoggerServiceImpl implements LoggerService {
                     "Response Status Code is wrong. Expected : OK, Given : " + response.getStatusCode());
 
             return response.getBody();
-        } catch(final RestClientException e) {
+        } catch (final RestClientException e) {
             log.error(e.getLocalizedMessage(), e.getCause());
             throw new LoggerException(errorMessage);
         }

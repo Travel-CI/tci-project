@@ -22,33 +22,33 @@ public class BuildController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public BuildDto createNewBuild(@Valid @RequestBody final BuildDto buildDto,
+    public BuildDto createNewBuild(@Valid @RequestBody final BuildDto build,
                                final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidBuildException();
 
-        return buildService.create(buildDto);
+        return buildService.create(build);
     }
 
     @PutMapping("success")
-    public BuildDto endBuildBySuccess(@Valid @RequestBody final BuildDto buildDto,
+    public BuildDto endBuildBySuccess(@Valid @RequestBody final BuildDto build,
                                       final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidBuildException();
 
-        return buildService.endBySuccess(buildDto);
+        return buildService.endBySuccess(build);
     }
 
     @PutMapping("error")
-    public BuildDto endBuildByError(@Valid @RequestBody final BuildDto buildDto,
+    public BuildDto endBuildByError(@Valid @RequestBody final BuildDto build,
                                       final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             throw new InvalidBuildException();
 
-        return buildService.endByError(buildDto);
+        return buildService.endByError(build);
     }
 
     @GetMapping("{projectId}")

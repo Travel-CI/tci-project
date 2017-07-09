@@ -66,36 +66,36 @@ class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto create(final ProjectDto projectDto) {
+    public ProjectDto create(final ProjectDto project) {
 
-        projectDto.setCreated(new Timestamp(System.currentTimeMillis()));
-        projectDto.setUpdated(projectDto.getCreated());
+        project.setCreated(new Timestamp(System.currentTimeMillis()));
+        project.setUpdated(project.getCreated());
 
         return projectAdapter.toProjectDto(
-            projectRepository.save(projectAdapter.toProject(projectDto))
+            projectRepository.save(projectAdapter.toProject(project))
         );
     }
 
     @Override
-    public ProjectDto update(final ProjectDto projectDto) {
+    public ProjectDto update(final ProjectDto project) {
 
-        if (projectRepository.findOne(projectDto.getId()) == null)
+        if (projectRepository.findOne(project.getId()) == null)
             throw new NotFoundProjectException();
 
-        projectDto.setUpdated(new Timestamp(System.currentTimeMillis()));
+        project.setUpdated(new Timestamp(System.currentTimeMillis()));
 
         return projectAdapter.toProjectDto(
-            projectRepository.save(projectAdapter.toProject(projectDto))
+            projectRepository.save(projectAdapter.toProject(project))
         );
     }
 
     @Override
-    public void delete(final ProjectDto projectDto) {
+    public void delete(final ProjectDto project) {
 
-        if (projectRepository.findOne(projectDto.getId()) == null)
+        if (projectRepository.findOne(project.getId()) == null)
             throw new NotFoundProjectException();
 
-        projectRepository.delete(projectAdapter.toProject(projectDto));
+        projectRepository.delete(projectAdapter.toProject(project));
     }
 
     @Override

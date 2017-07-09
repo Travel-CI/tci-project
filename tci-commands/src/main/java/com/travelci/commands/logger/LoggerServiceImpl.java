@@ -48,7 +48,7 @@ public class LoggerServiceImpl implements LoggerService {
                     "Response Status Code is wrong. Expected : OK, Given : " + response.getStatusCode());
 
             return response.getBody();
-        } catch(final RestClientException e) {
+        } catch (final RestClientException e) {
             log.error(e.getLocalizedMessage(), e.getCause());
             throw new LoggerException("Error while sending build error");
         }

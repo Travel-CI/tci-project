@@ -9,11 +9,11 @@ interface ProjectService {
 
     List<ProjectDto> getProjectsList();
 
-    ProjectDto create(ProjectDto projectDto);
+    ProjectDto create(ProjectDto project);
 
-    ProjectDto update(ProjectDto projectDto);
+    ProjectDto update(ProjectDto project);
 
-    void delete(ProjectDto projectDto);
+    void delete(ProjectDto project);
 
     ProjectDto getProjectById(Long projectId);
 

@@ -60,6 +60,7 @@ class StepServiceImpl implements StepService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<StepDto> getStepsByBuildId(final Long buildId) {
         return stepRepository.findByBuildId(buildId)
             .stream()
