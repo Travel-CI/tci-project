@@ -3,11 +3,8 @@ eureka:
     enabled: false
 
 info:
+  services:
+    logger: http://localhost:8003
   docker:
-    windows:
-      uri: https://192.168.99.100:2376
-      cert: "C:\\Users\\Julien\\.docker\\machine\\certs"
-    unix:
-      uri: http://localhost:2375
-    projectsRootFolderInHost: /tmp/travel-ci
+    uri: http://localhost:2375
     projectFolderInContainer: /app

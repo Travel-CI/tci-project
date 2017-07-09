@@ -58,4 +58,3 @@ export class NavDropdownToggleDirective {
 }
 
 export const NAV_DROPDOWN_DIRECTIVES = [NavDropdownDirective, NavDropdownToggleDirective];
-// export const NGB_DROPDOWN_DIRECTIVES = [NgbDropdownToggle, NgbDropdown];

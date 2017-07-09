@@ -1,0 +1,76 @@
+sudo: required
+
+services:
+  - docker
+
+language: java
+jdk: oraclejdk8
+
+env:
+  - TRAVIS_NODE_VERSION="6.11.0"
+
+before_install:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce
+  - sudo service docker stop
+  - sudo sed -i "s/ExecStart=\/usr\/bin\/dockerd -H fd:\/\//ExecStart=\/usr\/bin\/dockerd -H fd:\/\/ -H tcp:\/\/0.0.0.0:2375 -H unix:\/\/\/var\/run\/docker.sock/g"  /lib/systemd/system/docker.service
+  - sudo service docker start
+  - chmod +x gradlew
+  - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
+  - npm install -g @angular/cli
+
+script:
+  - ./gradlew jacocoTestReport --stacktrace
+  - ./gradlew sonarqube
+  - cd tci-webapp && npm install
+  - npm run build
+  - cd ..
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" -a "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+
+    docker build -t travelci/tci-database ./tci-database;
+    docker push travelci/tci-database;
+
+    docker build -t travelci/tci-config ./tci-config;
+    docker push travelci/tci-config;
+
+    docker build -t travelci/tci-eureka:latest ./tci-eureka;
+    docker push travelci/tci-eureka;
+
+    docker build -t travelci/tci-zuul:latest ./tci-zuul;
+    docker push travelci/tci-zuul;
+
+    docker build -t travelci/tci-webhook:latest ./tci-webhook;
+    docker push travelci/tci-webhook;
+
+    docker build -t travelci/tci-projects:latest ./tci-projects;
+    docker push travelci/tci-projects;
+
+    docker build -t travelci/tci-commands:latest ./tci-commands;
+    docker push travelci/tci-commands;
+
+    docker build -t travelci/tci-docker-runner:latest ./tci-docker-runner;
+    docker push travelci/tci-docker-runner;
+
+    docker build -t travelci/tci-logger:latest ./tci-logger;
+    docker push travelci/tci-logger;
+
+    docker build -t travelci/tci-webapp:latest ./tci-webapp;
+    docker push travelci/tci-webapp;
+    fi
+
+notifications:
+  slack:
+    secure: ixnUFMOCYTpr2gL9lb7UB9f9bwI7tHspIdBABmu9s8kPSuTqCy0c5QOsuPun0ztOrDufWJ4cE5mkXrw5P4r+NvgV+dfWZn7WSEyLA70nUdHRhJ9b83D+H7FitrLiWGm4cXVtMXEiFkfnCfR3dOrXLxyQg842GEkJTvL4jHMTBbZIl8VLV7dBkMRhXWluTu0oVn4juAx00yNGJRelqVef21Qb+QYdp423C6wuZk7aVodda/zvx+zNYQ5WQa+/8i3PV54jVSK2pnhi1Z4xC3uDF3HPSKlRtrvpfLQT2DHFIHzeG/WKrA8fiePx8inWP7SPbrfyy6Q1gZHEC8qNg+3YlG1BmvQT2GWo8IAxNFm9IL1PhQoAwD2iHqqkxmpq7/yZMVqXmKW9PLZHJCBMeVkxAS+Cx1KRinkEvrRQTFt9EYt4x4sVWFzpu+yJoyuvserPVbOoXfnaJ2xxwcj1ikwo7lBZkRcCiFpb36HampTOaNIftsCY0zNMI+7gIKyJZ3bsCA6SVCk1nXP6OqfWmwn9mLauYfSLPG98hSPMBa1USSsGr2XMtjeARzQuWHpuQia+Shn2VGZPe8M3KXYeYG2rRtZA1O29D0tX7sgpaIJXLdu6lbIvoc3JPD+4T4HFyMYtnW3PTwFapRkGds+PXNx7vJCUh/AAvz96bG9uqFaSZFI=

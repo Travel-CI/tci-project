@@ -1,10 +1,10 @@
-import { MaestroToolsPage } from './app.po';
+import { TravelCIPage } from './app.po';
 
-describe('maestro-tools App', () => {
-  let page: MaestroToolsPage;
+describe('travel-ci App', () => {
+  let page: TravelCIPage;
 
   beforeEach(() => {
-    page = new MaestroToolsPage();
+    page = new TravelCIPage();
   });
 
   it('should display message saying app works', () => {

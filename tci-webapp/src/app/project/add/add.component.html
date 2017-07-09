@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header" *ngIf="!isEdited">
+        <i class="fa fa-plus"></i> New Project
+      </div>
+      <div class="card-header" *ngIf="isEdited">
+        <i class="fa fa-pencil"></i> Edit Project
+      </div>
+      <div class="card-block">
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="name">Name</label>
+          <div class="col-md-9">
+            <input type="text" id="name" class="form-control" placeholder="Project Name" [(ngModel)]="project.name"/>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="description">Description</label>
+          <div class="col-md-9">
+            <textarea type="text" id="description" class="form-control" placeholder="Description" [(ngModel)]="project.description"></textarea>
+          </div>
+        </div>
+        
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label">Enable</label>
+          <div class="col-md-9">
+            <label class="radio-inline" for="enable">
+              <input id="enable" name="enable" type="radio" [(ngModel)]="project.enable" [value]="true"> Yes
+            </label>
+            <span style="display: inline-block; width: 2%;"></span>
+            <label class="radio-inline" for="notenable">
+              <input id="notenable" name="enable" type="radio" [(ngModel)]="project.enable" [value]="false"> No
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="repositoryUrl">Repository URL</label>
+          <div class="col-md-9">
+            <input type="text" id="repositoryUrl" class="form-control" placeholder="ex: https://github.com/Travel-CI/tci-project" [(ngModel)]="project.repositoryUrl"/>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-md-3 form-control-label" for="branches">Branches</label>
+          <div class="col-md-9">
+            <input type="text" id="branches" class="form-control" placeholder="ex: master; dev; another_branch_to_build" [(ngModel)]="project.branches"/>
+          </div>
+        </div>
+
+      <button type="submit" *ngIf="isEdited" class="btn btn-primary"><i class="fa fa-dot-circle-o"></i> Edit</button>
+      <button type="submit" *ngIf="!isEdited" (click)="createProject()" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
+      <button type="reset" *ngIf="!isEdited" (click)="clearFields()" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<toaster-container [toasterconfig]="toasterConfig"></toaster-container>

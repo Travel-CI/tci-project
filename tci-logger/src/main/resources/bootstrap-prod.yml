@@ -1,0 +1,6 @@
+spring:
+  application:
+     name: tci-logger
+  cloud:
+    config:
+      uri: http://travelci-config:8888

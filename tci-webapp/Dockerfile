@@ -1,6 +1,7 @@
 FROM nginx:latest
 
-# Dossier cible static html files à chercher
-COPY dist/ /usr/share/html/
+COPY nginx.conf /etc/nginx/conf.d/nginx.conf
+
+COPY dist/ /usr/app/
 
 EXPOSE 80
