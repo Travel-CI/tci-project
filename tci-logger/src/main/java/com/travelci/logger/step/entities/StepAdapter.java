@@ -1,9 +1,16 @@
 package com.travelci.logger.step.entities;
 
+import com.travelci.logger.build.entities.BuildAdapter;
 import org.springframework.stereotype.Component;
 
 @Component
 public class StepAdapter {
+
+    private final BuildAdapter buildAdapter;
+
+    public StepAdapter() {
+        this.buildAdapter = new BuildAdapter(null);
+    }
 
     public Step toStep(final StepDto stepDto) {
         return stepDto != null ?
@@ -14,7 +21,9 @@ public class StepAdapter {
                 .status(stepDto.getStatus())
                 .stepStart(stepDto.getStepStart())
                 .stepEnd(stepDto.getStepEnd())
-                .buildRoot(stepDto.getBuildRoot())
+                .buildRoot(
+                    buildAdapter.toBuild(stepDto.getBuildRoot())
+                )
                 .build()
             : null;
     }
@@ -28,7 +37,7 @@ public class StepAdapter {
                 .status(step.getStatus())
                 .stepStart(step.getStepStart())
                 .stepEnd(step.getStepEnd())
-                .buildRoot(step.getBuildRoot())
+                .buildRoot(buildAdapter.toBuildDto(step.getBuildRoot()))
                 .build()
             : null;
     }

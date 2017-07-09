@@ -11,6 +11,8 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Builder
@@ -21,6 +23,7 @@ import static javax.persistence.EnumType.STRING;
 public class Step {
 
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @Column
@@ -39,6 +42,7 @@ public class Step {
     @Column
     private Timestamp stepEnd;
 
-    @OneToOne
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(nullable = false)
     private Build buildRoot;
 }
