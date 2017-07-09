@@ -158,7 +158,7 @@ public class DockerServiceIT {
         assertThat(containerId).isNotEmpty();
 
         final List<CommandDto> commandList = new ArrayList<>();
-        commandList.add(CommandDto.builder().command("pwd").build());
+        commandList.add(CommandDto.builder().command("pwd").enableLogs(true).build());
 
         final Map<String, String> results = dockerRunnerService.executeCommandsInContainer(containerId, commandList, null);
         assertThat(results.isEmpty()).isFalse();

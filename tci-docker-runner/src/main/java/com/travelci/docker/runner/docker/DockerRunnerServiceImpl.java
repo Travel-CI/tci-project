@@ -129,40 +129,38 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
 
         final Map<String, String> commandResults = new LinkedHashMap<>();
 
+        final String[] stdoutStderrCommand = new String[] {
+            "sh", "-c", "cat ~/dockerOutput"
+        };
+
         for (final CommandDto command : commands) {
 
             final StepDto step = loggerService.startNewStep(command, currentBuild);
 
             try {
 
-                final String[] executedCommand = new String[] {
+                final String[] realCommand = new String[] {
                     "sh", "-c", command.getCommand() + " 2>&1 1>~/dockerOutput | tee -a ~/dockerOutput"
                 };
 
-                final String[] stdoutStderrCommand = new String[] {
-                    "sh", "-c", "cat ~/dockerOutput"
-                };
-
                 // Execute command, return stderr (if stderr string is not empty, there is a mistake with the command)
-                final ExecCreation commandCreation = docker.execCreate(
-                    containerId, executedCommand,
-                    attachStdout(), attachStderr());
-
-                final LogStream commandLs = docker.execStart(commandCreation.id());
-                final String stderrOutput = commandLs.readFully();
+                final String stderrOutput = executeCommandInContainer(containerId, realCommand);
 
                 // Execute command to get the stdout / stderr of the previous command
-                final ExecCreation stdoutStderrCommandCreation = docker.execCreate(
-                    containerId, stdoutStderrCommand,
-                    attachStdout(), attachStderr());
+                String stdoutStderOutput = executeCommandInContainer(containerId, stdoutStderrCommand);
 
-                final LogStream stdoutStderrLs = docker.execStart(stdoutStderrCommandCreation.id());
-                final String stdoutStderOutput = stdoutStderrLs.readFully();
+                final Boolean commandSuccess = stderrOutput.isEmpty();
 
-                if (!stderrOutput.isEmpty()) {
-                    log.error("Command " + command.getCommand() + " has failed");
+                if (!command.getEnableLogs())
+                    stdoutStderOutput = (commandSuccess) ? "Command successfully executed." : "Command failed.";
+
+                if (!commandSuccess) {
+                    log.error("Command " + command.getCommand() + " failed for build "
+                        + currentBuild.getId() + " in project " + currentBuild.getProjectId());
+
                     loggerService.endStepByError(step, stdoutStderOutput);
                     loggerService.endBuildByError(currentBuild, "step failed : " + command.getCommand());
+
                     return commandResults;
                 }
                 else
@@ -189,5 +187,16 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
         } catch (final DockerException | InterruptedException e) {
             throw new DockerStopContainerException(e.getMessage(), e.getCause());
         }
+    }
+
+    private String executeCommandInContainer(final String containerId, final String[] command)
+        throws DockerException, InterruptedException {
+
+        final ExecCreation commandCreation = docker.execCreate(
+            containerId, command,
+            attachStdout(), attachStderr());
+
+        final LogStream commandLs = docker.execStart(commandCreation.id());
+        return commandLs.readFully();
     }
 }
