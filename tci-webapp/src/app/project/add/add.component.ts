@@ -4,6 +4,7 @@ import {ToasterConfig, ToasterService} from "angular2-toaster";
 import {Project} from "../models/project";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Command} from "app/project/models/command";
+import {CommandService} from "../services/command.service";
 
 @Component({
   templateUrl: './add.component.html'
@@ -25,6 +26,7 @@ export class AddComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private toasterService: ToasterService,
+    private commandService: CommandService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -37,8 +39,16 @@ export class AddComponent implements OnInit {
     this.project.branches = this.project.branches.replace(" ", "").split(";");
     this.projectService.create(this.project)
       .then((res: Project) => {
-        this.toasterService.pop('success', 'Project Successfully Created', 'Your Project has been created.');
-        this.clearFields();
+        for(let i = 0; i < this.commands.length; i++) {
+          this.commands[i].projectId = res.id;
+          this.commandService.addNewCommand(this.commands[i])
+            .then((res: Command) => {
+              if(i == this.commands.length - 1) {
+                this.toasterService.pop('success', 'Project Successfully Created', 'Your Project has been created.');
+                this.clearFields();
+              }
+            })
+        }
       })
       .catch((res: any) => {
         this.toasterService.pop('error', 'Creation Failed', res);
@@ -78,7 +88,7 @@ export class AddComponent implements OnInit {
   addNewCommand() {
     let commands = [...this.commands];
     commands.push(
-      {command: "", commandOrder: this.commandsCounter++, enable: true, enableLogs: true}
+      {command: "", commandOrder: this.commandsCounter++, enable: false, enableLogs: true}
     );
     this.commands = commands;
   }

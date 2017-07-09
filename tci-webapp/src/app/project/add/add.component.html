@@ -66,13 +66,30 @@
           </p-column>
           <p-column field="command" header="Command">
             <ng-template pTemplate="edit" let-col let-data="rowData">
-              <input type="text" placeholder="Command" [(ngModel)]="data[col.field]"/>
+              <input type="text" class="form-control" placeholder="Command" [(ngModel)]="data[col.field]"/>
             </ng-template>
           </p-column>
+
           <p-column field="enable" header="Enable">
+            <ng-template pTemplate="body" let-col let-data="rowData">
+              <label class="switch switch-text switch-success">
+              <input class="switch-input" type="checkbox" [(ngModel)]="data[col.field]">
+              <span class="switch-label" data-off="No" data-on="Yes"></span>
+              <span class="switch-handle"></span>
+            </label>
+            </ng-template>
           </p-column>
+
           <p-column field="enableLogs" header="Logs">
+            <ng-template pTemplate="body" let-col let-data="rowData">
+              <label class="switch switch-text switch-success">
+              <input class="switch-input" type="checkbox" [(ngModel)]="data[col.field]">
+              <span class="switch-label" data-off="No" data-on="Yes"></span>
+              <span class="switch-handle"></span>
+            </label>
+            </ng-template>
           </p-column>
+
           <p-column header="Action" [style]="{'width': '60px'}">
             <ng-template let-command="rowData" pTemplate="body">
               <div class="text-center">
@@ -80,6 +97,7 @@
               </div>
             </ng-template>
           </p-column>
+
           <p-footer>
             <div class="ui-helper-clearfix">
               <button type="button" class="btn btn-primary" (click)="addNewCommand()" style="float: left;"><i class="fa fa-plus"></i> Add</button>
