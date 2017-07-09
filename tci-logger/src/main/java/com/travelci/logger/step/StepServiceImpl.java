@@ -5,6 +5,7 @@ import com.travelci.logger.step.entities.StepDto;
 import com.travelci.logger.step.exceptions.InvalidStepException;
 import com.travelci.logger.step.exceptions.NotFoundStepException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import static com.travelci.logger.build.entities.Status.IN_PROGRESS;
 import static com.travelci.logger.build.entities.Status.SUCCESS;
 
 @Service
+@Transactional
 class StepServiceImpl implements StepService {
 
     private final StepRepository stepRepository;
