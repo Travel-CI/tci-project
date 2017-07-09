@@ -100,6 +100,21 @@ class ProjectServiceImpl implements ProjectService {
 
     @Override
     @Transactional(readOnly = true)
+    public void manualStartProjectEngine(final Long projectId, final String branchName) {
+
+        final ProjectDto project = getProjectById(projectId);
+        final PayLoad payLoad = PayLoad.builder()
+            .repositoryUrl(project.getRepositoryUrl())
+            .branchName(branchName)
+            .commitAuthor("Travel-CI")
+            .commitMessage("Started by Travel-CI website")
+            .build();
+
+        startProjectEngine(payLoad);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public void startProjectEngine(final PayLoad webHookPayLoad) {
 
         // Check incoming webhook with project list

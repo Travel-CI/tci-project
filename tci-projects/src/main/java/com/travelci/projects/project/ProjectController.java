@@ -63,6 +63,12 @@ public class ProjectController {
         return projectService.getProjectById(projectId);
     }
 
+    @GetMapping("/start/{projectId}/{branchName}")
+    public void manualStartEngine(@PathVariable final Long projectId,
+                                  @PathVariable final String branchName) {
+        projectService.manualStartProjectEngine(projectId, branchName);
+    }
+
     @PostMapping("webhook")
     @ResponseStatus(ACCEPTED)
     public void checkPayLoadAndStartEngine(@Valid @RequestBody final PayLoad webHookPayLoad,

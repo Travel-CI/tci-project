@@ -66,6 +66,7 @@ class BuildServiceImpl implements BuildService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BuildDto getLastBuildByProjectId(final Long projectId) {
         return buildAdapter.toBuildDto(
             buildRepository.findLastBuild(projectId)

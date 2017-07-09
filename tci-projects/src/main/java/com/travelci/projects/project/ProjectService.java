@@ -17,5 +17,7 @@ interface ProjectService {
 
     ProjectDto getProjectById(Long projectId);
 
+    void manualStartProjectEngine(Long projectId, String branchName);
+
     void startProjectEngine(PayLoad webHookPayLoad);
 }
