@@ -3,6 +3,7 @@ import {ProjectService} from '../services/project.service';
 import {ToasterConfig, ToasterService} from "angular2-toaster";
 import {Project} from "../models/project";
 import {ActivatedRoute, Router} from "@angular/router";
+import {Command} from "app/project/models/command";
 
 @Component({
   templateUrl: './add.component.html'
@@ -10,7 +11,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class AddComponent implements OnInit {
 
   private project: any = {};
+  private commands: any = [];
   private isEdited: Boolean = false;
+  private commandsCounter: number = 1;
 
   public toasterConfig: ToasterConfig = new ToasterConfig({
     tapToDismiss: true,
@@ -72,7 +75,27 @@ export class AddComponent implements OnInit {
     });
   }
 
+  addNewCommand() {
+    let commands = [...this.commands];
+    commands.push(
+      {command: "", commandOrder: this.commandsCounter++, enable: true, enableLogs: true}
+    );
+    this.commands = commands;
+  }
+
+  deleteCommand(command: Command) {
+    let commands = [...this.commands];
+    let index = this.commands.indexOf(command);
+    for(let i = index + 1; i < this.commands.length; i++) {
+      commands[i].commandOrder--;
+    }
+    commands.splice(index, 1);
+    this.commands = commands;
+    this.commandsCounter--;
+  }
+
   clearFields() {
     this.project = {};
+    this.commands = [];
   }
 }

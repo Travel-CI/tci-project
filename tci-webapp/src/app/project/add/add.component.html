@@ -21,7 +21,7 @@
             <textarea type="text" id="description" class="form-control" placeholder="Description" [(ngModel)]="project.description"></textarea>
           </div>
         </div>
-        
+
         <div class="form-group row">
           <label class="col-md-3 form-control-label">Enable</label>
           <div class="col-md-9">
@@ -48,14 +48,53 @@
             <input type="text" id="branches" class="form-control" placeholder="ex: master; dev; another_branch_to_build" [(ngModel)]="project.branches"/>
           </div>
         </div>
-
-      <button type="submit" *ngIf="isEdited" (click)="updateProject()" class="btn btn-primary"><i class="fa fa-dot-circle-o"></i> Edit Project</button>
-      <button type="submit" *ngIf="!isEdited" (click)="createProject()" class="btn btn-primary"><i class="fa fa-plus"></i> Add Project</button>
-      <button type="reset" *ngIf="!isEdited" (click)="clearFields()" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</button>
-
       </div>
     </div>
   </div>
+
+  <div class="col-md-12" style="height: 100%;width: 100%;">
+    <div class="card">
+      <div class="card-header">
+        <i class="fa fa-cog"></i> Commands
+      </div>
+      <div class="card-block">
+        <p-dataTable [value]="commands"
+                     [responsive]="true"
+                     scrollable="true"
+                     scrollHeight="350px">
+          <p-column field="commandOrder" header="Order" [sortable]="true">
+          </p-column>
+          <p-column field="command" header="Command">
+            <ng-template pTemplate="edit" let-col let-data="rowData">
+              <input type="text" placeholder="Command" [(ngModel)]="data[col.field]"/>
+            </ng-template>
+          </p-column>
+          <p-column field="enable" header="Enable">
+          </p-column>
+          <p-column field="enableLogs" header="Logs">
+          </p-column>
+          <p-column header="Action" [style]="{'width': '60px'}">
+            <ng-template let-command="rowData" pTemplate="body">
+              <div class="text-center">
+                <button class="btn btn-danger btn-sm" type="button" (click)="deleteCommand(command)"><i class="fa fa-trash"></i></button>
+              </div>
+            </ng-template>
+          </p-column>
+          <p-footer>
+            <div class="ui-helper-clearfix">
+              <button type="button" class="btn btn-primary" (click)="addNewCommand()" style="float: left;"><i class="fa fa-plus"></i> Add</button>
+            </div>
+          </p-footer>
+        </p-dataTable>
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" *ngIf="isEdited" (click)="updateProject()" class="btn btn-primary"><i class="fa fa-dot-circle-o"></i> Edit Project</button>
+  <button type="submit" *ngIf="!isEdited" (click)="createProject()" class="btn btn-primary"><i class="fa fa-plus"></i> Add Project</button>
+  &nbsp;
+  <button type="reset" *ngIf="!isEdited" (click)="clearFields()" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</button>
+
 </div>
 
 <toaster-container [toasterconfig]="toasterConfig"></toaster-container>
