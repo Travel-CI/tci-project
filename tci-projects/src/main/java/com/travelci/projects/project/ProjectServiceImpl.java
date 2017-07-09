@@ -100,8 +100,8 @@ class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Long deleteProjectById(final Long projectId) {
-
-        return projectId;
+        final ProjectDto projectDto = getProjectById(projectId);
+        return projectRepository.deleteById(projectDto.getId());
     }
 
     @Override
