@@ -1,7 +1,7 @@
 package com.travelci.docker.runner.docker;
 
-import com.travelci.docker.runner.input.entities.DockerCommandsProject;
-import com.travelci.docker.runner.input.exceptions.WrongFormatInputException;
+import com.travelci.docker.runner.command.entities.DockerCommandsProject;
+import com.travelci.docker.runner.command.exceptions.WrongFormatException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,7 @@ public class DockerRunnerController {
                                final BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
-            throw new WrongFormatInputException();
+            throw new WrongFormatException();
 
         dockerRunnerService.startDockerRunnerEngine(dockerCommandsProject);
     }

@@ -13,7 +13,7 @@ class DockerClientConfig {
     private String dockerSocketUri;
 
     @Bean
-    public DockerClient getDockerClientForUnix() {
+    public DockerClient getDockerClient() {
         return new DefaultDockerClient(dockerSocketUri);
     }
 }

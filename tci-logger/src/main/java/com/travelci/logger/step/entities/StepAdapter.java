@@ -11,10 +11,10 @@ public class StepAdapter {
                 .id(stepDto.getId())
                 .command(stepDto.getCommand())
                 .commandResult(stepDto.getCommandResult())
-                .stepStatus(stepDto.getStepStatus())
+                .status(stepDto.getStatus())
                 .stepStart(stepDto.getStepStart())
                 .stepEnd(stepDto.getStepEnd())
-                .buildRoot(stepDto.getBuildRoot())
+                .buildId(stepDto.getBuildId())
                 .build()
             : null;
     }
@@ -25,10 +25,10 @@ public class StepAdapter {
                 .id(step.getId())
                 .command(step.getCommand())
                 .commandResult(step.getCommandResult())
-                .stepStatus(step.getStepStatus())
+                .status(step.getStatus())
                 .stepStart(step.getStepStart())
                 .stepEnd(step.getStepEnd())
-                .buildRoot(step.getBuildRoot())
+                .buildId(step.getBuildId())
                 .build()
             : null;
     }

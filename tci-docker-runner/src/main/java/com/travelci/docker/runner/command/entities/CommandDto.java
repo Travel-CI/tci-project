@@ -1,4 +1,4 @@
-package com.travelci.docker.runner.input.entities;
+package com.travelci.docker.runner.command.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

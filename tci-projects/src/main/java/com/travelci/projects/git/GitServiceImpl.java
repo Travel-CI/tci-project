@@ -26,22 +26,14 @@ Async
 https://spring.io/guides/gs/async-method/
 http://callistaenterprise.se/blogg/teknik/2014/04/22/c10k-developing-non-blocking-rest-services-with-spring-mvc/
  */
-
-/**
- * GitServiceImpl
- *
- * Git Engine to Clone and Pull Repositories
- *
- * ! Package Rights !
- * Only used by another service
- */
 @Service
 @RefreshScope
 class GitServiceImpl implements GitService {
 
     private final String rootRepositoriesLocation;
 
-    GitServiceImpl(@Value("${info.repositories.location}") final String rootRepositoriesLocation) {
+    GitServiceImpl(@Value("${info.repositories.location}")
+                   final String rootRepositoriesLocation) {
         this.rootRepositoriesLocation = rootRepositoriesLocation;
     }
 

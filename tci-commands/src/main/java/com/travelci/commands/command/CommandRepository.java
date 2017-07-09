@@ -15,4 +15,6 @@ interface CommandRepository extends JpaRepository<Command, Long> {
     Optional<Command> findByProjectIdAndCommandOrder(Long projectId, Integer commandOrder);
 
     List<Command> findByProjectIdOrderByCommandOrderAsc(Long projectId);
+
+    List<Command> findByProjectIdAndEnabledIsTrueOrderByCommandOrderAsc(Long projectId);
 }
