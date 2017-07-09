@@ -66,6 +66,14 @@ class BuildServiceImpl implements BuildService {
     }
 
     @Override
+    public BuildDto getLastBuildByProjectId(final Long projectId) {
+        return buildAdapter.toBuildDto(
+            buildRepository.findLastBuild(projectId)
+                .orElseThrow(NotFoundBuildException::new)
+        );
+    }
+
+    @Override
     public Long deleteAllBuildsByProjectId(final Long projectId) {
         return buildRepository.deleteByProjectId(projectId);
     }

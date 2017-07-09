@@ -14,5 +14,7 @@ interface BuildService {
 
     List<BuildDto> getBuildsByProjectId(Long projectId);
 
+    BuildDto getLastBuildByProjectId(Long projectId);
+
     Long deleteAllBuildsByProjectId(Long projectId);
 }
