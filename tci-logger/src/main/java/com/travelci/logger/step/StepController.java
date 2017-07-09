@@ -54,6 +54,6 @@ public class StepController {
 
     @GetMapping("{buildId}")
     public List<StepDto> getAllStepsForBuild(@PathVariable("buildId") final Long buildId) {
-        return stepService.getStepsByBuild(buildId);
+        return stepService.getStepsByBuildId(buildId);
     }
 }

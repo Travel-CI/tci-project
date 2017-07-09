@@ -12,5 +12,5 @@ interface StepService {
 
     StepDto endByError(StepDto step);
 
-    List<StepDto> getStepsByBuild(Long buildId);
+    List<StepDto> getStepsByBuildId(Long buildId);
 }

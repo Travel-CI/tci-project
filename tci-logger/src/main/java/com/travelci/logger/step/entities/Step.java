@@ -1,6 +1,5 @@
 package com.travelci.logger.step.entities;
 
-import com.travelci.logger.build.entities.Build;
 import com.travelci.logger.build.entities.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +10,6 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 import static javax.persistence.EnumType.STRING;
-import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -42,7 +40,6 @@ public class Step {
     @Column
     private Timestamp stepEnd;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(nullable = false)
-    private Build buildRoot;
+    @Column
+    private Long buildId;
 }

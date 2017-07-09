@@ -13,6 +13,7 @@ import com.travelci.docker.runner.logger.LoggerService;
 import com.travelci.docker.runner.logger.entities.BuildDto;
 import com.travelci.docker.runner.logger.entities.StepDto;
 import com.travelci.docker.runner.project.entities.ProjectDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import static com.spotify.docker.client.DockerClient.ExecCreateParam.attachStder
 import static com.spotify.docker.client.DockerClient.ExecCreateParam.attachStdout;
 
 @Service
+@Slf4j
 @RefreshScope
 class DockerRunnerServiceImpl implements DockerRunnerService {
 
@@ -71,6 +73,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
             executeCommandsInContainer(containerId, commands, project.getCurrentBuild());
             stopContainer(containerId);
         } catch (DockerRunnerException e) {
+            log.error("Error while executing Docker Engine", e);
             loggerService.endBuildByError(project.getCurrentBuild(), e.getLocalizedMessage());
             throw e;
         }
@@ -156,6 +159,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
                 final String stdoutStderOutput = stdoutStderrLs.readFully();
 
                 if (!stderrOutput.isEmpty()) {
+                    log.error("Command " + command.getCommand() + " has failed");
                     loggerService.endStepByError(step, stdoutStderOutput);
                     loggerService.endBuildByError(currentBuild, "step failed : " + command.getCommand());
                     return commandResults;

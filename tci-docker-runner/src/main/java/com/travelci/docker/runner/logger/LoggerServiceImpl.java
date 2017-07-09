@@ -40,7 +40,7 @@ public class LoggerServiceImpl implements LoggerService {
         final StepDto step = StepDto.builder()
             .stepStart(new Timestamp(System.currentTimeMillis()))
             .command(command.getCommand())
-            .buildRoot(build)
+            .buildId(build.getId())
             .build();
 
         try {
@@ -86,7 +86,7 @@ public class LoggerServiceImpl implements LoggerService {
     public BuildDto endBuildBySuccess(final BuildDto build) {
 
         build.setBuildEnd(new Timestamp(System.currentTimeMillis()));
-        return sendBuildToLogger(build, "/builds/error", "Error while sending build success");
+        return sendBuildToLogger(build, "/builds/success", "Error while sending build success");
     }
 
     private StepDto sendStepToLogger(final StepDto stepToSend, final String url,

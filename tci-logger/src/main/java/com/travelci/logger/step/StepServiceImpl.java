@@ -58,8 +58,8 @@ class StepServiceImpl implements StepService {
     }
 
     @Override
-    public List<StepDto> getStepsByBuild(final Long buildId) {
-        return stepRepository.findByBuildRoot(buildId)
+    public List<StepDto> getStepsByBuildId(final Long buildId) {
+        return stepRepository.findByBuildId(buildId)
             .stream()
             .map(stepAdapter::toStepDto)
             .collect(Collectors.toList());
