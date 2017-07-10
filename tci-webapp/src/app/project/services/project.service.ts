@@ -59,7 +59,6 @@ export class ProjectService {
   }
 
   startBuildForProject(projectId: number, branch: string): Promise<string> {
-    console.log(projectId + " " + branch);
 
     return this.http.get('/api/projects/start/' + projectId + '/' + branch)
       .toPromise()

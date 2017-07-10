@@ -10,12 +10,12 @@ import {ToasterConfig, ToasterService} from 'angular2-toaster';
 
 export class ProjectComponent implements OnInit {
 
+  private projects: Project[];
   private loading: Boolean = false;
+
   private dialogEnabled: Boolean = false;
   private dialogBranches: any = [];
   private selectedBranch: any = null;
-
-  private projects: Project[];
 
   public toasterConfig: ToasterConfig = new ToasterConfig({
     tapToDismiss: true,
@@ -76,6 +76,7 @@ export class ProjectComponent implements OnInit {
     if (this.selectedBranch != null) {
       this.projectService.startBuildForProject(this.selectedBranch.project.id, this.selectedBranch.branch);
       this.toasterService.pop('success', 'Build Started', 'Your build is running');
+
       this.dialogEnabled = false;
       this.dialogBranches = [];
       this.selectedBranch = null;

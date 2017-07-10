@@ -13,7 +13,9 @@ export class AddComponent implements OnInit {
 
   private project: any = {};
   private commands: any = [];
+
   private isEdited: Boolean = false;
+
   private commandsCounter: number = 1;
 
   public toasterConfig: ToasterConfig = new ToasterConfig({
@@ -36,6 +38,12 @@ export class AddComponent implements OnInit {
   }
 
   createProject() {
+
+    if (this.validateCommands() == false) {
+      this.toasterService.pop('error', 'Creation Failed', 'Invalid Commands Fields');
+      return;
+    }
+
     this.project.branches = this.project.branches.toString().replace(" ", "").split(",");
 
     this.projectService.create(this.project)
@@ -59,6 +67,10 @@ export class AddComponent implements OnInit {
               this.toasterService.pop('error', 'Commands Creation Failed', res);
             });
         }
+        else {
+          this.toasterService.pop('success', 'Project Successfully Created', 'Your Project has been created.');
+          this.clearFields();
+        }
       })
       .catch((res: any) => {
         this.toasterService.pop('error', 'Creation Failed', res);
@@ -66,6 +78,11 @@ export class AddComponent implements OnInit {
   }
 
   updateProject() {
+
+    if (this.validateCommands() == false) {
+      this.toasterService.pop('error', 'Creation Failed', 'Invalid Commands Fields');
+      return;
+    }
 
     this.project.branches = this.project.branches.toString().replace(" ", "").split(",");
 
@@ -126,34 +143,53 @@ export class AddComponent implements OnInit {
 
         })
         .catch((err: any) => {
-          this.router.navigate(['/project'])
+          this.router.navigate(['/project']);
         });
     });
   }
 
   addNewCommand() {
     let commands = [...this.commands];
-    commands.push(
-      { command: "", commandOrder: this.commandsCounter++, enabled: true, enableLogs: true }
-    );
+    commands.push({
+      command: "",
+      commandOrder: this.commandsCounter++,
+      enabled: true,
+      enableLogs: true
+    });
+
     this.commands = commands;
   }
 
   deleteCommand(command: Command) {
+
     let commands = [...this.commands];
     let index = this.commands.indexOf(command);
 
     for (let i = index + 1; i < this.commands.length; i++) {
       commands[i].commandOrder--;
     }
-
     commands.splice(index, 1);
+
     this.commands = commands;
     this.commandsCounter--;
   }
 
+  validateCommands(): Boolean {
+
+    for (let i = 0; i < this.commands.length; i++) {
+      if (this.commands[i].command == "")
+        return false;
+    }
+
+    return true;
+  }
+
   clearFields() {
-    this.project = {};
+
+    if (this.isEdited)
+      this.router.navigate(['/project']);
+
+    this.project = { enable: true };
     this.commands = [];
   }
 }
