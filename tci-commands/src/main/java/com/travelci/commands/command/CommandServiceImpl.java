@@ -107,15 +107,6 @@ class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public void delete(final CommandDto command) {
-
-        commandRepository.findById(command.getId())
-            .orElseThrow(NotFoundCommandException::new);
-
-        commandRepository.delete(commandAdapter.toCommand(command));
-    }
-
-    @Override
     public void startCommandsEngine(final ProjectDto project) {
 
         final List<CommandDto> commands = commandRepository
