@@ -1,5 +1,7 @@
 package com.travelci.commands.command;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jayway.restassured.RestAssured;
 import com.travelci.commands.command.entities.CommandDto;
 import org.junit.Before;
@@ -142,6 +144,7 @@ public class CommandControllerIT {
     public void shouldThrowExceptionWhenAddUnformattedCommand() {
 
         final List<CommandDto> commandsList = new ArrayList<>();
+        final Gson gson = new GsonBuilder().create();
 
         CommandDto unformattedCommand = CommandDto.builder()
             .command("docker build -t test .").commandOrder(1)
@@ -152,7 +155,7 @@ public class CommandControllerIT {
 
         given()
             .contentType(JSON)
-            .body(commandsList)
+            .body(gson.toJson(commandsList))
         .when()
             .post(COMMANDS_ENDPOINT)
         .then()
@@ -169,7 +172,7 @@ public class CommandControllerIT {
 
         given()
             .contentType(JSON)
-            .body(commandsList)
+            .body(gson.toJson(commandsList))
         .when()
             .post(COMMANDS_ENDPOINT)
         .then()
@@ -186,7 +189,7 @@ public class CommandControllerIT {
 
         given()
             .contentType(JSON)
-            .body(commandsList)
+            .body(gson.toJson(commandsList))
         .when()
             .post(COMMANDS_ENDPOINT)
         .then()
@@ -196,7 +199,9 @@ public class CommandControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldUpdateCommandWhenPutFormattedAndExistingCommand() {
+    public void shouldUpdateCommandWhenPutFormattedAndDeleteOtherCommands() {
+
+        final List<CommandDto> commands = new ArrayList<>();
 
         final CommandDto updatedCommand = CommandDto.builder()
             .id(1L)
@@ -204,52 +209,46 @@ public class CommandControllerIT {
             .commandOrder(1).enabled(false).enableLogs(false)
             .build();
 
+        commands.add(updatedCommand);
+        final Gson gson = new GsonBuilder().create();
+        final String jsonCommands = gson.toJson(commands);
+
         given()
             .contentType(JSON)
-            .body(updatedCommand)
+            .body(jsonCommands)
         .when()
-            .put(COMMANDS_ENDPOINT)
+            .put(COMMANDS_ENDPOINT + "/{projectId}", 1)
         .then()
             .log().all()
             .statusCode(OK.value())
-            .body("enabled", equalTo(false));
+            .body("[0].enabled", equalTo(false));
 
         when()
             .get(COMMANDS_ENDPOINT + "/{projectId}", 1)
         .then()
             .log().all()
             .statusCode(OK.value())
-            .body("$", hasSize(3));
+            .body("$", hasSize(1));
     }
 
     @Test
     @DirtiesContext
     public void shouldThrowExceptionWhenUpdateAnUnformattedCommand() {
 
+        final List<CommandDto> commands = new ArrayList<>();
+
         CommandDto unformattedCommand = CommandDto.builder()
-            .command("docker build -t test .").projectId(1L)
-            .commandOrder(1).enabled(false).enableLogs(false)
-            .build();
-
-        given()
-            .contentType(JSON)
-            .body(unformattedCommand)
-        .when()
-            .put(COMMANDS_ENDPOINT)
-        .then()
-            .log().all()
-            .statusCode(NOT_FOUND.value());
-
-        unformattedCommand = CommandDto.builder().id(1L)
             .projectId(1L)
             .commandOrder(1).enabled(false).enableLogs(false)
             .build();
 
+        commands.add(unformattedCommand);
+
         given()
             .contentType(JSON)
-            .body(unformattedCommand)
+            .body(commands)
         .when()
-            .put(COMMANDS_ENDPOINT)
+            .put(COMMANDS_ENDPOINT + "/{projectId}", 1)
         .then()
             .log().all()
             .statusCode(BAD_REQUEST.value());
@@ -259,34 +258,34 @@ public class CommandControllerIT {
             .commandOrder(1).enabled(false).enableLogs(false)
             .build();
 
+        commands.clear();
+        commands.add(unformattedCommand);
+
         given()
             .contentType(JSON)
             .body(unformattedCommand)
         .when()
-            .put(COMMANDS_ENDPOINT)
+            .put(COMMANDS_ENDPOINT + "/{projectId}", 1)
         .then()
             .log().all()
             .statusCode(BAD_REQUEST.value());
-    }
 
-    @Test
-    @DirtiesContext
-    public void shouldThrowExceptionWhenUpdateAnUnknownCommand() {
-
-        final CommandDto unknownCommand = CommandDto.builder()
-            .id(6L)
-            .command("docker build -t test .").projectId(1L)
-            .commandOrder(1).enabled(false).enableLogs(false)
+        unformattedCommand = CommandDto.builder().id(1L)
+            .command("docker build -t test .")
+            .commandOrder(1).enableLogs(false)
             .build();
+
+        commands.clear();
+        commands.add(unformattedCommand);
 
         given()
             .contentType(JSON)
-            .body(unknownCommand)
+            .body(unformattedCommand)
         .when()
-            .put(COMMANDS_ENDPOINT)
+            .put(COMMANDS_ENDPOINT + "/{projectId}", 1)
         .then()
             .log().all()
-            .statusCode(NOT_FOUND.value());
+            .statusCode(BAD_REQUEST.value());
     }
 
     @Test

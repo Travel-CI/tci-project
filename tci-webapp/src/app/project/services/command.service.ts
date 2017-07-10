@@ -20,6 +20,25 @@ export class CommandService {
       .catch((err: Error) => this.handleError(err));
   }
 
+  getCommandsByProjectId(id: number): Promise<Command[]> {
+
+    return this.http.get('/api/commands/' + id)
+      .toPromise()
+      .then((res: Response) => res.json() as Command[])
+      .catch((err: Error) => this.handleError(err));
+  }
+
+  updateCommandsByProjectId(id: number, commands: Command[]): Promise<Command[]> {
+
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.put('/api/commands/' + id, commands, options)
+      .toPromise()
+      .then((res: Response) => res.json() as Command[])
+      .catch((err: Error) => this.handleError(err));
+  }
+
   handleError(err: Error): Promise<Command[]> {
 
     if(environment.enableDebug)

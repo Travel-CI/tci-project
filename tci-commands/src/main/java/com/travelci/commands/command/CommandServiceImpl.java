@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,14 +73,37 @@ class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public CommandDto update(final CommandDto command) {
+    public List<CommandDto> update(final List<CommandDto> updatedCommands, final Long projectId) {
 
-        commandRepository.findById(command.getId())
-            .orElseThrow(NotFoundCommandException::new);
+        final List<Command> existingCommands = commandRepository.findByProjectIdOrderByCommandOrderAsc(projectId);
 
-        return commandAdapter.toCommandDto(
-            commandRepository.save(commandAdapter.toCommand(command))
-        );
+        if (updatedCommands.isEmpty()) {
+            commandRepository.delete(existingCommands);
+            return new ArrayList<>();
+        }
+
+        for (final Command existingCommand : existingCommands) {
+            Boolean found = false;
+
+            for (final CommandDto updatedCommand : updatedCommands) {
+                if (existingCommand.getId().equals(updatedCommand.getId())) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found)
+                commandRepository.delete(existingCommand);
+        }
+
+        final List<Command> commands = updatedCommands.stream()
+            .map(commandAdapter::toCommand)
+            .collect(Collectors.toList());
+
+        return commandRepository.save(commands)
+            .stream()
+            .map(commandAdapter::toCommandDto)
+            .collect(Collectors.toList());
     }
 
     @Override

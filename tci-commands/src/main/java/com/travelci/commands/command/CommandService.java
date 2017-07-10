@@ -11,7 +11,7 @@ interface CommandService {
 
     List<CommandDto> create(List<CommandDto> commands);
 
-    CommandDto update(CommandDto command);
+    List<CommandDto> update(List<CommandDto> commands, Long projectId);
 
     void delete(CommandDto command);
 

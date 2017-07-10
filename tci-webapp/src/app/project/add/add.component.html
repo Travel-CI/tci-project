@@ -25,12 +25,10 @@
         <div class="form-group row">
           <label class="col-md-3 form-control-label">Enable</label>
           <div class="col-md-9">
-            <label class="radio-inline" for="enable">
-              <input id="enable" name="enable" type="radio" [(ngModel)]="project.enable" [value]="true"> Yes
-            </label>
-            <span style="display: inline-block; width: 2%;"></span>
-            <label class="radio-inline" for="notenable">
-              <input id="notenable" name="enable" type="radio" [(ngModel)]="project.enable" [value]="false"> No
+            <label class="switch switch-text switch-success">
+              <input class="switch-input" type="checkbox" [(ngModel)]="project.enable" checked="(project.enable)?'':null">
+              <span class="switch-label" data-off="No" data-on="Yes"></span>
+              <span class="switch-handle"></span>
             </label>
           </div>
         </div>

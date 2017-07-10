@@ -34,10 +34,9 @@ public class CommandController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public List<CommandDto> createNewCommands(@Valid @RequestBody final List<CommandDto> commands,
-                                       final BindingResult bindingResult) {
+    public List<CommandDto> createNewCommands(@RequestBody final List<CommandDto> commands) {
 
-        if (bindingResult.hasErrors() || commands.isEmpty())
+        if (commands.isEmpty())
             throw new InvalidCommandException();
 
         // Custom Validator for Command inside List
@@ -51,14 +50,17 @@ public class CommandController {
         return commandService.create(commands);
     }
 
-    @PutMapping
-    public CommandDto updateCommand(@Valid @RequestBody final CommandDto command,
-                                    final BindingResult bindingResult) {
+    @PutMapping("{projectId}")
+    public List<CommandDto> updateCommand(@RequestBody final List<CommandDto> commands,
+                                          @PathVariable final Long projectId) {
 
-        if (bindingResult.hasErrors())
-            throw new InvalidCommandException();
+        for (final CommandDto command : commands) {
+            final Set<ConstraintViolation<CommandDto>> constraintViolations = validator.validate(command);
+            if (!constraintViolations.isEmpty())
+                throw new InvalidCommandException();
+        }
 
-        return commandService.update(command);
+        return commandService.update(commands, projectId);
     }
 
     @DeleteMapping
