@@ -35,4 +35,8 @@ export class ProjectComponent implements OnInit {
   redirectToEditPage(project: Project){
     this.router.navigate(['/project/edit', project.id]);
   }
+
+  redirectToBuildsPage(project: Project){
+    this.router.navigate(['/project/builds', project.id]);
+  }
 }
