@@ -30,7 +30,7 @@ public class ProjectDto {
 
     @NotNull @NotEmpty
     @Pattern(
-        regexp = "((git|ssh|http(s)?)|(git@[\\w.]+))(:(//)?)([\\w.@:/\\-~]+)(\\.git)?(/)?",
+        regexp = "((git|ssh|http(s)?)|(git@[\\w\\.]+))(:(//)?)([\\w\\.@\\:/\\-~]+)(\\.git)?(/)?",
         message = "Repository Url has wrong format"
     )
     private String repositoryUrl;
