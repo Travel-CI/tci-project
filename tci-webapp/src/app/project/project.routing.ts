@@ -2,7 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import {AddComponent} from "./add/add.component";
 import {ProjectComponent} from './project.component';
-import {LoggerComponent} from "../logger/logger.component";
+import {LoggerComponent} from "./logger/logger.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'projects', pathMatch: 'full' },

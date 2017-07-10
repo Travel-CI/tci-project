@@ -11,4 +11,14 @@ export class LoggerComponent implements OnInit {
   ngOnInit() {
   }
 
+  cardClassDependingOnStatus(): string {
+    switch(1) {
+      case 1:
+        //success
+        //warning
+        //danger
+        return 'card-success';
+    }
+  }
+
 }
