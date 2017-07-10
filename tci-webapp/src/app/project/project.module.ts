@@ -13,6 +13,7 @@ import { LoggerComponent } from './logger/logger.component';
 import {CommandService} from "./services/command.service";
 import {DialogModule} from 'primeng/primeng';
 import {DropdownModule} from 'primeng/primeng';
+import {LoggerService} from "app/project/services/logger.service";
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import {DropdownModule} from 'primeng/primeng';
   ],
   providers: [
     ProjectService,
-    CommandService
+    CommandService,
+    LoggerService
   ]
 })
 export class ProjectModule { }
