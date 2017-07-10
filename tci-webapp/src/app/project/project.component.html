@@ -19,13 +19,19 @@
 
           <p-column field="id" header="Status" [sortable]="true" [style]="{'width': '80px'}"></p-column>
           <p-column field="name" header="Project Name" [sortable]="true"></p-column>
-          <p-column field="lastStart" header="Last Start"></p-column>
 
+          <p-column  header="Last Start">
+            <ng-template let-project="rowData" pTemplate="body">
+              {{ project.lastStart | date:'medium' }}
+            </ng-template>
+          </p-column>
 
           <p-column header="Actions" [style]="{'width': '145px'}">
-            <ng-template let-project="rowData" pTemplate="body">
+            <ng-template let-col let-project="rowData" pTemplate="body">
               <button class="btn btn-secondary btn-sm" type="button"><i class="fa fa-info-circle"></i></button>
-              <button class="btn btn-success btn-sm" type="button"><i class="fa fa-play"></i></button>
+
+              <button class="btn btn-success btn-sm" type="button" *ngIf="project.enable" (click)="showDialog(project)"><i class="fa fa-play"></i></button>
+
               <button class="btn btn-primary btn-sm" type="button" (click)="redirectToEditPage(project)"><i class="fa fa-pencil"></i></button>
               <button class="btn btn-danger btn-sm" type="button" (click)="deleteProject(project)"><i class="fa fa-trash"></i></button>
             </ng-template>
@@ -35,3 +41,22 @@
     </div>
   </div>
 </div>
+
+
+<p-dialog appendTo="body" header="Select Branch" [(visible)]="dialogEnabled" modal="modal" width="300" [draggable]=false>
+
+  <div class="form-group row">
+    <label class="col-md-3 form-control-label">Branch</label>
+    <div class="col-md-9">
+      <p-dropdown placeholder="Choose a Branch" [style]="{'width':'100%'}" [options]="dialogBranches" [(ngModel)]="selectedBranch"></p-dropdown>
+    </div>
+  </div>
+  <div class="col-xs-12" style="height:50px;"></div>
+
+  <p-footer>
+    <button type="button" class="btn btn-success" (click)="startManualBuild()"><i class="fa fa-dot-circle-o"></i> Start Build</button>
+    <button type="button" class="btn btn-danger" (click)="hideDialog()"><i class="fa fa-ban"></i> Cancel</button>
+  </p-footer>
+</p-dialog>
+
+<toaster-container [toasterconfig]="toasterConfig"></toaster-container>

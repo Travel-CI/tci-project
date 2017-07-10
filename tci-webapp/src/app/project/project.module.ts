@@ -10,6 +10,8 @@ import {ProjectService} from './services/project.service';
 import {ProjectComponent} from './project.component';
 import {ToasterModule} from "angular2-toaster";
 import {CommandService} from "./services/command.service";
+import {DialogModule} from 'primeng/primeng';
+import {DropdownModule} from 'primeng/primeng';
 
 @NgModule({
   imports: [
@@ -17,6 +19,8 @@ import {CommandService} from "./services/command.service";
     CommonModule,
     ProjectRoutingModule,
     DataTableModule,
+    DialogModule,
+    DropdownModule,
     SelectModule,
     ToasterModule,
     TranslateModule.forChild()
