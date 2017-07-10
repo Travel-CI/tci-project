@@ -3,6 +3,6 @@ export interface Command {
   command: string;
   projectId: number;
   commandOrder: number;
-  enable: boolean;
+  enabled: boolean;
   enableLogs: boolean;
 }

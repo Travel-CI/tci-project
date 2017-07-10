@@ -9,18 +9,18 @@ export class CommandService {
 
   constructor(private http: Http) {}
 
-  addNewCommand(command: Command): Promise<Command> {
+  addNewCommands(commands: Command[]): Promise<Command[]> {
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.post('/api/commands', command, options)
+    return this.http.post('/api/commands', commands, options)
       .toPromise()
-      .then((res : Response) => res.json() as Command)
+      .then((res : Response) => res.json() as Command[])
       .catch((err: Error) => this.handleError(err));
   }
 
-  handleError(err: Error): Promise<Command> {
+  handleError(err: Error): Promise<Command[]> {
 
     if(environment.enableDebug)
       console.error(err);

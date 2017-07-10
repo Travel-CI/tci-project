@@ -15,9 +15,9 @@ export class ProjectService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post('/api/projects', project, options)
-    .toPromise()
-    .then((res: Response) => res.json() as Project)
-    .catch((err: Error) => this.handleError(err));
+      .toPromise()
+      .then((res: Response) => res.json() as Project)
+      .catch((err: Error) => this.handleError(err));
   }
 
   update(project: Project): Promise<Project> {
@@ -28,7 +28,7 @@ export class ProjectService {
     return this.http.put('/api/projects', project, options)
       .toPromise()
       .then((res: Response) => res.json() as Project)
-    .catch((err: Error) => this.handleError(err));
+      .catch((err: Error) => this.handleError(err));
   }
 
   getAllProjects(): Promise<Project[]> {
@@ -40,7 +40,9 @@ export class ProjectService {
   }
 
   getProjectById(id: string): Promise<Project> {
-    return this.http.get('/api/projects/' + id).toPromise()
+
+    return this.http.get('/api/projects/' + id)
+      .toPromise()
       .then((res: Response) => res.json() as Project)
       .catch((err: Error) => this.handleError(err));
   }

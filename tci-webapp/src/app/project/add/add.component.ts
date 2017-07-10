@@ -37,17 +37,25 @@ export class AddComponent implements OnInit {
 
   createProject() {
     this.project.branches = this.project.branches.replace(" ", "").split(";");
+
     this.projectService.create(this.project)
       .then((res: Project) => {
-        for(let i = 0; i < this.commands.length; i++) {
-          this.commands[i].projectId = res.id;
-          this.commandService.addNewCommand(this.commands[i])
-            .then((res: Command) => {
-              if(i == this.commands.length - 1) {
+
+        if (this.commands.length > 0) {
+          for (let i = 0; i < this.commands.length; i++) {
+            this.commands[i].projectId = res.id;
+          }
+
+          this.commandService.addNewCommands(this.commands)
+            .then((res: Command[]) => {
+              if (res.length > 0) {
                 this.toasterService.pop('success', 'Project Successfully Created', 'Your Project has been created.');
                 this.clearFields();
               }
             })
+            .catch((res: any) => {
+              this.toasterService.pop('error', 'Commands Creation Failed', res);
+            });
         }
       })
       .catch((res: any) => {
@@ -57,6 +65,7 @@ export class AddComponent implements OnInit {
 
   updateProject() {
     this.project.branches = this.project.branches.replace(" ", "").split(";");
+
     this.projectService.update(this.project)
       .then((res: Project) => {
         this.toasterService.pop('success', 'Project Successfully Updated', 'Your Project has been updated.');
@@ -88,7 +97,7 @@ export class AddComponent implements OnInit {
   addNewCommand() {
     let commands = [...this.commands];
     commands.push(
-      {command: "", commandOrder: this.commandsCounter++, enable: false, enableLogs: true}
+      { command: "", commandOrder: this.commandsCounter++, enable: false, enableLogs: true }
     );
     this.commands = commands;
   }
@@ -96,9 +105,11 @@ export class AddComponent implements OnInit {
   deleteCommand(command: Command) {
     let commands = [...this.commands];
     let index = this.commands.indexOf(command);
+
     for(let i = index + 1; i < this.commands.length; i++) {
       commands[i].commandOrder--;
     }
+
     commands.splice(index, 1);
     this.commands = commands;
     this.commandsCounter--;

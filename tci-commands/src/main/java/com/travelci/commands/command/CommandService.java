@@ -9,7 +9,7 @@ interface CommandService {
 
     List<CommandDto> getCommandsByProjectId(Long projectId);
 
-    CommandDto create(CommandDto command);
+    List<CommandDto> create(List<CommandDto> commands);
 
     CommandDto update(CommandDto command);
 

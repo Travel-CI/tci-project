@@ -13,6 +13,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
 import static com.jayway.restassured.http.ContentType.JSON;
@@ -86,16 +89,20 @@ public class CommandControllerIT {
             .enableLogs(true)
             .build();
 
+        final List<CommandDto> commandsList = new ArrayList<>();
+        commandsList.add(newCommand);
+
         given()
             .contentType(JSON)
-            .body(newCommand)
+            .body(commandsList)
         .when()
             .post(COMMANDS_ENDPOINT)
         .then()
             .log().all()
             .statusCode(CREATED.value())
-            .body("id", equalTo(6))
-            .body("projectId", equalTo(3));
+            .body("$", hasSize(1))
+            .body("[0].id", equalTo(6))
+            .body("[0].projectId", equalTo(3));
 
         when()
             .get(COMMANDS_ENDPOINT + "/{projectId}", 3)
@@ -117,9 +124,12 @@ public class CommandControllerIT {
             .enableLogs(true)
             .build();
 
+        final List<CommandDto> commandsList = new ArrayList<>();
+        commandsList.add(alreadyExistCommand);
+
         given()
             .contentType(JSON)
-            .body(alreadyExistCommand)
+            .body(commandsList)
         .when()
             .post(COMMANDS_ENDPOINT)
         .then()
@@ -131,14 +141,18 @@ public class CommandControllerIT {
     @DirtiesContext
     public void shouldThrowExceptionWhenAddUnformattedCommand() {
 
+        final List<CommandDto> commandsList = new ArrayList<>();
+
         CommandDto unformattedCommand = CommandDto.builder()
             .command("docker build -t test .").commandOrder(1)
             .enabled(true).enableLogs(true)
             .build();
 
+        commandsList.add(unformattedCommand);
+
         given()
             .contentType(JSON)
-            .body(unformattedCommand)
+            .body(commandsList)
         .when()
             .post(COMMANDS_ENDPOINT)
         .then()
@@ -150,9 +164,12 @@ public class CommandControllerIT {
             .enabled(true).enableLogs(true)
             .build();
 
+        commandsList.clear();
+        commandsList.add(unformattedCommand);
+
         given()
             .contentType(JSON)
-            .body(unformattedCommand)
+            .body(commandsList)
         .when()
             .post(COMMANDS_ENDPOINT)
         .then()
@@ -164,9 +181,12 @@ public class CommandControllerIT {
             .enabled(true).enableLogs(true)
             .build();
 
+        commandsList.clear();
+        commandsList.add(unformattedCommand);
+
         given()
             .contentType(JSON)
-            .body(unformattedCommand)
+            .body(commandsList)
         .when()
             .post(COMMANDS_ENDPOINT)
         .then()

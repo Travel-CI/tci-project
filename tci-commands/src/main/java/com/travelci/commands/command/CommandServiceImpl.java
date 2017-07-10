@@ -1,12 +1,13 @@
 package com.travelci.commands.command;
 
+import com.travelci.commands.command.entities.Command;
 import com.travelci.commands.command.entities.CommandAdapter;
 import com.travelci.commands.command.entities.CommandDto;
+import com.travelci.commands.command.exceptions.InvalidCommandException;
+import com.travelci.commands.command.exceptions.NotFoundCommandException;
 import com.travelci.commands.docker.entities.DockerCommandsProject;
 import com.travelci.commands.logger.LoggerService;
 import com.travelci.commands.project.entities.ProjectDto;
-import com.travelci.commands.command.exceptions.InvalidCommandException;
-import com.travelci.commands.command.exceptions.NotFoundCommandException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
@@ -52,15 +53,22 @@ class CommandServiceImpl implements CommandService {
     }
 
     @Override
-    public CommandDto create(final CommandDto command) {
+    public List<CommandDto> create(final List<CommandDto> commands) {
 
-        if (commandRepository.findByProjectIdAndCommandOrder(
-            command.getProjectId(), command.getCommandOrder()).isPresent())
-            throw new InvalidCommandException("CommandOrder already exist for this project");
+        final List<Command> commandList = commands
+            .stream()
+            .map(commandAdapter::toCommand)
+            .collect(Collectors.toList());
 
-        return commandAdapter.toCommandDto(
-            commandRepository.save(commandAdapter.toCommand(command))
-        );
+        for (Command command : commandList)
+            if (commandRepository.findByProjectIdAndCommandOrder(
+                command.getProjectId(), command.getCommandOrder()).isPresent())
+                throw new InvalidCommandException("CommandOrder already exist for this project");
+
+        return commandRepository.save(commandList)
+            .stream()
+            .map(commandAdapter::toCommandDto)
+            .collect(Collectors.toList());
     }
 
     @Override
