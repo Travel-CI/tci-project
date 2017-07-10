@@ -38,9 +38,14 @@ export class AddComponent implements OnInit {
   }
 
   createProject() {
+
+    if (this.validateCommands() == false) {
+      this.toasterService.pop('error', 'Creation Failed', 'Invalid Commands Fields');
+      return;
+    }
+
     this.project.branches = this.project.branches.toString().replace(" ", "").split(",");
 
-    console.log(this.project);
     this.projectService.create(this.project)
       .then((res: Project) => {
         this.project = res;
@@ -73,6 +78,11 @@ export class AddComponent implements OnInit {
   }
 
   updateProject() {
+
+    if (this.validateCommands() == false) {
+      this.toasterService.pop('error', 'Creation Failed', 'Invalid Commands Fields');
+      return;
+    }
 
     this.project.branches = this.project.branches.toString().replace(" ", "").split(",");
 
@@ -162,6 +172,16 @@ export class AddComponent implements OnInit {
 
     this.commands = commands;
     this.commandsCounter--;
+  }
+
+  validateCommands(): Boolean {
+
+    for (let i = 0; i < this.commands.length; i++) {
+      if (this.commands[i].command == "")
+        return false;
+    }
+
+    return true;
   }
 
   clearFields() {

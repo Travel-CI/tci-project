@@ -70,7 +70,6 @@
       <div class="card-footer">
         <button type="submit" class="btn btn-primary" *ngIf="isEdited" (click)="updateProject()" [disabled]="!f.form.valid"><i class="fa fa-dot-circle-o"></i> Edit Project</button>
         <button type="submit" class="btn btn-primary" *ngIf="!isEdited" (click)="createProject()" [disabled]="!f.form.valid"><i class="fa fa-plus"></i> Add Project</button>
-        &nbsp;
         <button type="reset" (click)="clearFields()" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</button>
       </div>
     </div>
