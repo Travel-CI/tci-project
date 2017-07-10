@@ -9,6 +9,7 @@ import {FormsModule} from '@angular/forms';
 import {ProjectService} from './services/project.service';
 import {ProjectComponent} from './project.component';
 import {ToasterModule} from "angular2-toaster";
+import { LoggerComponent } from './logger/logger/logger.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import {ToasterModule} from "angular2-toaster";
   ],
   declarations: [
     ProjectComponent,
-    AddComponent
+    AddComponent,
+    LoggerComponent
   ],
   providers: [
     ProjectService
