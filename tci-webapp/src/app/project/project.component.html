@@ -19,14 +19,18 @@
 
           <p-column field="id" header="Status" [sortable]="true" [style]="{'width': '80px'}"></p-column>
           <p-column field="name" header="Project Name" [sortable]="true"></p-column>
-          <p-column field="lastStart" header="Last Start"></p-column>
 
+          <p-column  header="Last Start">
+            <ng-template let-project="rowData" pTemplate="body">
+              {{ project.lastStart | date:'medium' }}
+            </ng-template>
+          </p-column>
 
           <p-column header="Actions" [style]="{'width': '145px'}">
             <ng-template let-col let-project="rowData" pTemplate="body">
               <button class="btn btn-secondary btn-sm" type="button"><i class="fa fa-info-circle"></i></button>
 
-              <button class="btn btn-success btn-sm" type="button" (click)="showDialog(project)"><i class="fa fa-play"></i></button>
+              <button class="btn btn-success btn-sm" type="button" *ngIf="project.enable" (click)="showDialog(project)"><i class="fa fa-play"></i></button>
 
               <button class="btn btn-primary btn-sm" type="button" (click)="redirectToEditPage(project)"><i class="fa fa-pencil"></i></button>
               <button class="btn btn-danger btn-sm" type="button" (click)="deleteProject(project)"><i class="fa fa-trash"></i></button>
