@@ -64,7 +64,7 @@ public abstract class AbstractExtractor {
                 throw new ValidatorException(constraintViolations);
 
             return payLoad;
-        } catch (IOException | ValidatorException e) {
+        } catch (final IOException | ValidatorException e) {
             throw new ExtractorWrongFormatException(e.getMessage());
         }
     }

@@ -9,7 +9,7 @@ import {FormsModule} from '@angular/forms';
 import {ProjectService} from './services/project.service';
 import {ProjectComponent} from './project.component';
 import {ToasterModule} from "angular2-toaster";
-import { LoggerComponent } from '../logger/logger.component';
+import {CommandService} from "./services/command.service";
 
 @NgModule({
   imports: [
@@ -23,11 +23,11 @@ import { LoggerComponent } from '../logger/logger.component';
   ],
   declarations: [
     ProjectComponent,
-    AddComponent,
-    LoggerComponent
+    AddComponent
   ],
   providers: [
-    ProjectService
+    ProjectService,
+    CommandService
   ]
 })
 export class ProjectModule { }

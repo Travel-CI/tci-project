@@ -36,7 +36,14 @@ export class ProjectComponent implements OnInit {
     this.router.navigate(['/project/edit', project.id]);
   }
 
-  redirectToBuildsPage(project: Project){
-    this.router.navigate(['/project/builds', project.id]);
+  deleteProject(project: Project){
+    this.projectService.deleteProjectById(project.id)
+      .then((res: number) => {
+        if(res == 1) {
+          let projects = [...this.projects];
+          projects.splice(this.projects.indexOf(project), 1);
+          this.projects = projects;
+        }
+      });
   }
 }

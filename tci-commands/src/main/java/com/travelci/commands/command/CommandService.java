@@ -9,11 +9,11 @@ interface CommandService {
 
     List<CommandDto> getCommandsByProjectId(Long projectId);
 
-    CommandDto create(CommandDto commandDto);
+    List<CommandDto> create(List<CommandDto> commands);
 
-    CommandDto update(CommandDto commandDto);
+    List<CommandDto> update(List<CommandDto> commands, Long projectId);
 
-    void delete(CommandDto commandDto);
+    void delete(CommandDto command);
 
-    void startCommandsEngine(ProjectDto projectDto);
+    void startCommandsEngine(ProjectDto project);
 }
