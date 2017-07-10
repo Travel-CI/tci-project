@@ -49,9 +49,8 @@ class WebhookServiceImpl implements WebhookService {
 
             if (!ACCEPTED.equals(response.getStatusCode()))
                 throw new RestClientException(
-                    "Response Status Code is wrong. Expected : ACCEPTED, Given : " + response.getStatusCode()
-                );
-        } catch (RestClientException e) {
+                    "Response Status Code is wrong. Expected : ACCEPTED, Given : " + response.getStatusCode());
+        } catch (final RestClientException e) {
             throw new BadRequestException();
         }
     }
@@ -73,7 +72,7 @@ class WebhookServiceImpl implements WebhookService {
 
         try {
             return extractor.transformJsonToPayload(jsonPayLoad);
-        } catch (ExtractorWrongFormatException e) {
+        } catch (final ExtractorWrongFormatException e) {
             throw new BadRequestException();
         }
     }
