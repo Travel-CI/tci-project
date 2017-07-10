@@ -5,11 +5,11 @@ export interface Project {
   enable: boolean;
   repositoryUrl: string;
   branches: string[];
-  userName: string;
-  userPassword: string;
-  repositoryToken: string;
-  dockerfileLocation: string;
-  lastStart: Date;
+  userName?: string;
+  userPassword?: string;
+  repositoryToken?: string;
+  dockerfileLocation?: string;
+  lastStart?: number;
   created: number;
   updated: number;
 }

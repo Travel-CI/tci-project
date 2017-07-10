@@ -13,7 +13,9 @@
         <p-dataTable [value]="projects"
                      [globalFilter]="filter"
                      [responsive]="true"
-                     [loading]="loading"
+                     [loading]="id"
+                     sortField="id"
+                     sortOrder="1"
                      scrollable="true"
                      scrollHeight="500px">
 
