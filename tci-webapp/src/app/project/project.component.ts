@@ -41,7 +41,10 @@ export class ProjectComponent implements OnInit {
       .then((res: Project[]) => {
         this.projects = res;
         this.loading = false;
-      });
+      })
+      .catch((err: any) => {
+        this.toasterService.pop('error', 'Projects List', 'Unable to load Projects List.');
+    });
   }
 
   redirectToEditPage(project: Project){
