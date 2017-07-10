@@ -9,7 +9,7 @@ export interface Project {
   userPassword: [string];
   repositoryToken: [string];
   dockerfileLocation: [string];
-  lastStart: [Date];
+  lastStart: [number];
   created: [number];
   updated: [number];
 }

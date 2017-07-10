@@ -108,6 +108,7 @@ class ProjectServiceImpl implements ProjectService {
             .branchName(branchName)
             .commitAuthor("Travel-CI")
             .commitMessage("Started by Travel-CI website")
+            .commitHash("manual build")
             .build();
 
         startProjectEngine(payLoad);
