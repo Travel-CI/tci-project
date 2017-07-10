@@ -4,13 +4,12 @@ export interface Project {
   description: string;
   enable: boolean;
   repositoryUrl: string;
-  branches: [string];
-  userName: [string];
-  userPassword: [string];
-  repositoryToken: [string];
-  dockerfileLocation: [string];
-  lastStart: [Date];
-  created: [number];
-  updated: [number];
-
+  branches: string[];
+  userName?: string;
+  userPassword?: string;
+  repositoryToken?: string;
+  dockerfileLocation?: string;
+  lastStart?: number;
+  created: number;
+  updated: number;
 }

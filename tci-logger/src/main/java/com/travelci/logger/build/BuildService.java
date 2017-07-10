@@ -6,13 +6,15 @@ import java.util.List;
 
 interface BuildService {
 
-    BuildDto create(BuildDto buildDto);
+    BuildDto create(BuildDto build);
 
-    BuildDto endBySuccess(BuildDto buildDto);
+    BuildDto endBySuccess(BuildDto build);
 
-    BuildDto endByError(BuildDto buildDto);
+    BuildDto endByError(BuildDto build);
 
     List<BuildDto> getBuildsByProjectId(Long projectId);
+
+    BuildDto getLastBuildByProjectId(Long projectId);
 
     Long deleteAllBuildsByProjectId(Long projectId);
 }

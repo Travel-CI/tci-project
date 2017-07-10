@@ -52,6 +52,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
         final ProjectDto project = dockerCommandsProject.getProject();
         final List<CommandDto> commands = dockerCommandsProject.getCommands();
 
+        // Get project Folder Location and Dockerfile Location
         final String projectLocation = project.getName();
 
         final String customDockerfileLocation = project.getDockerfileLocation() != null
@@ -72,7 +73,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
             final String containerId = startContainer(imageId, projectLocation);
             executeCommandsInContainer(containerId, commands, project.getCurrentBuild());
             stopContainer(containerId);
-        } catch (DockerRunnerException e) {
+        } catch (final DockerRunnerException e) {
             log.error("Error while executing Docker Engine", e);
             loggerService.endBuildByError(project.getCurrentBuild(), e.getLocalizedMessage());
             throw e;
@@ -94,7 +95,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
             else
                 throw new DockerException("Error in Docker Image for the dockerfile " + dockerfileLocation);
 
-        } catch (DockerException | InterruptedException | IOException e) {
+        } catch (final DockerException | InterruptedException | IOException e) {
             throw new DockerBuildImageException(e.getMessage(), e.getCause());
         }
     }
@@ -116,7 +117,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
                 docker.copyToContainer(Paths.get(projectFolder), container.id(), projectFolderInContainer);
 
             return container.id();
-        } catch (DockerException | InterruptedException | IOException e) {
+        } catch (final DockerException | InterruptedException | IOException e) {
             throw new DockerStartContainerException(e.getMessage(), e.getCause());
         }
     }
@@ -128,47 +129,45 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
 
         final Map<String, String> commandResults = new LinkedHashMap<>();
 
+        final String[] stdoutStderrCommand = new String[] {
+            "sh", "-c", "cat ~/dockerOutput"
+        };
+
         for (final CommandDto command : commands) {
 
             final StepDto step = loggerService.startNewStep(command, currentBuild);
 
             try {
 
-                final String[] executedCommand = new String[] {
+                final String[] realCommand = new String[] {
                     "sh", "-c", command.getCommand() + " 2>&1 1>~/dockerOutput | tee -a ~/dockerOutput"
                 };
 
-                final String[] stdoutStderrCommand = new String[] {
-                    "sh", "-c", "cat ~/dockerOutput"
-                };
-
                 // Execute command, return stderr (if stderr string is not empty, there is a mistake with the command)
-                final ExecCreation commandCreation = docker.execCreate(
-                    containerId, executedCommand,
-                    attachStdout(), attachStderr());
+                final String stderrOutput = executeCommandInContainer(containerId, realCommand);
 
-                final LogStream commandLs = docker.execStart(commandCreation.id());
-                final String stderrOutput = commandLs.readFully();
+                // Execute command to get the stdout / stderr of the previous command
+                String stdoutStderOutput = executeCommandInContainer(containerId, stdoutStderrCommand);
 
-                // Execute command to get the stdout / stderr of previous command
-                final ExecCreation stdoutStderrCommandCreation = docker.execCreate(
-                    containerId, stdoutStderrCommand,
-                    attachStdout(), attachStderr());
+                final Boolean commandSuccess = stderrOutput.isEmpty();
 
-                final LogStream stdoutStderrLs = docker.execStart(stdoutStderrCommandCreation.id());
-                final String stdoutStderOutput = stdoutStderrLs.readFully();
+                if (!command.getEnableLogs())
+                    stdoutStderOutput = (commandSuccess) ? "Command successfully executed." : "Command failed.";
 
-                if (!stderrOutput.isEmpty()) {
-                    log.error("Command " + command.getCommand() + " has failed");
+                if (!commandSuccess) {
+                    log.error("Command " + command.getCommand() + " failed for build "
+                        + currentBuild.getId() + " in project " + currentBuild.getProjectId());
+
                     loggerService.endStepByError(step, stdoutStderOutput);
                     loggerService.endBuildByError(currentBuild, "step failed : " + command.getCommand());
+
                     return commandResults;
                 }
                 else
                     loggerService.endStepBySuccess(step, stdoutStderOutput);
 
                 commandResults.put(command.getCommand(), stdoutStderOutput);
-            } catch (DockerException | InterruptedException e) {
+            } catch (final DockerException | InterruptedException e) {
                 loggerService.endStepByError(step, e.getLocalizedMessage());
                 throw new DockerExecuteCommandException(e.getMessage(), e.getCause());
             }
@@ -185,8 +184,19 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
         try {
             docker.stopContainer(containerId, 2);
             docker.removeContainer(containerId);
-        } catch (DockerException | InterruptedException e) {
+        } catch (final DockerException | InterruptedException e) {
             throw new DockerStopContainerException(e.getMessage(), e.getCause());
         }
+    }
+
+    private String executeCommandInContainer(final String containerId, final String[] command)
+        throws DockerException, InterruptedException {
+
+        final ExecCreation commandCreation = docker.execCreate(
+            containerId, command,
+            attachStdout(), attachStderr());
+
+        final LogStream commandLs = docker.execStart(commandCreation.id());
+        return commandLs.readFully();
     }
 }

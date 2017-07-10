@@ -10,7 +10,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 @Builder
@@ -47,7 +46,7 @@ public class ProjectDto {
 
     private String dockerfileLocation;
 
-    private Date lastStart;
+    private Timestamp lastStart;
 
     private Timestamp created;
 

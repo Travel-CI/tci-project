@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-6">
     <div class="card">
       <div class="card-header" *ngIf="!isEdited">
         <i class="fa fa-plus"></i> New Project
@@ -7,52 +7,130 @@
       <div class="card-header" *ngIf="isEdited">
         <i class="fa fa-pencil"></i> Edit Project
       </div>
+
       <div class="card-block">
-        <div class="form-group row">
-          <label class="col-md-3 form-control-label" for="name">Name</label>
-          <div class="col-md-9">
-            <input type="text" id="name" class="form-control" placeholder="Project Name" [(ngModel)]="project.name"/>
-          </div>
-        </div>
 
-        <div class="form-group row">
-          <label class="col-md-3 form-control-label" for="description">Description</label>
-          <div class="col-md-9">
-            <textarea type="text" id="description" class="form-control" placeholder="Description" [(ngModel)]="project.description"></textarea>
+        <form #f="ngForm">
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="name">Name</label>
+            <div class="col-md-9">
+              <input type="text" id="name" name="name" class="form-control"
+                     required
+                     placeholder="Project Name"
+                     [(ngModel)]="project.name" />
+            </div>
           </div>
-        </div>
-        
-        <div class="form-group row">
-          <label class="col-md-3 form-control-label">Enable</label>
-          <div class="col-md-9">
-            <label class="radio-inline" for="enable">
-              <input id="enable" name="enable" type="radio" [(ngModel)]="project.enable" [value]="true"> Yes
-            </label>
-            <span style="display: inline-block; width: 2%;"></span>
-            <label class="radio-inline" for="notenable">
-              <input id="notenable" name="enable" type="radio" [(ngModel)]="project.enable" [value]="false"> No
-            </label>
+
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="description">Description</label>
+            <div class="col-md-9">
+              <textarea type="text" id="description" class="form-control" name="description"
+                        required
+                        placeholder="Description"
+                        [(ngModel)]="project.description">
+              </textarea>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row">
-          <label class="col-md-3 form-control-label" for="repositoryUrl">Repository URL</label>
-          <div class="col-md-9">
-            <input type="text" id="repositoryUrl" class="form-control" placeholder="ex: https://github.com/Travel-CI/tci-project" [(ngModel)]="project.repositoryUrl"/>
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label">Enable</label>
+            <div class="col-md-9">
+              <label class="switch switch-text switch-success">
+                <input class="switch-input" type="checkbox" name="enable" [(ngModel)]="project.enable" checked="(project.enable)?'':null">
+                <span class="switch-label" data-off="No" data-on="Yes"></span>
+                <span class="switch-handle"></span>
+              </label>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row">
-          <label class="col-md-3 form-control-label" for="branches">Branches</label>
-          <div class="col-md-9">
-            <input type="text" id="branches" class="form-control" placeholder="ex: master; dev; another_branch_to_build" [(ngModel)]="project.branches"/>
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="repositoryUrl">Repository URL</label>
+            <div class="col-md-9">
+              <input type="text" id="repositoryUrl" class="form-control" name="repositoryUrl"
+                     required
+                     pattern="((git|ssh|http(s)?)|(git@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(\.git)?(/)?"
+                     placeholder="ex: https://github.com/Travel-CI/tci-project"
+                     [(ngModel)]="project.repositoryUrl" />
+            </div>
           </div>
-        </div>
 
-      <button type="submit" *ngIf="isEdited" class="btn btn-primary"><i class="fa fa-dot-circle-o"></i> Edit</button>
-      <button type="submit" *ngIf="!isEdited" (click)="createProject()" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
-      <button type="reset" *ngIf="!isEdited" (click)="clearFields()" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</button>
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="branches">Branches</label>
+            <div class="col-md-9">
+              <input type="text" id="branches" class="form-control" name="branches"
+                     required
+                     pattern="[a-zA-Z0-9 ,-\/]*"
+                     placeholder="ex: master, dev, another_branch_to_build"
+                     [(ngModel)]="project.branches" />
+            </div>
+          </div>
+        </form>
+      </div>
 
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary" *ngIf="isEdited" (click)="updateProject()" [disabled]="!f.form.valid"><i class="fa fa-dot-circle-o"></i> Edit Project</button>
+        <button type="submit" class="btn btn-primary" *ngIf="!isEdited" (click)="createProject()" [disabled]="!f.form.valid"><i class="fa fa-plus"></i> Add Project</button>
+        <button type="reset" (click)="clearFields()" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6" style="height: 100%;width: 100%;">
+    <div class="card">
+      <div class="card-header">
+        <i class="fa fa-cog"></i> Commands
+      </div>
+      <div class="card-block">
+        <p-dataTable [value]="commands"
+                     [responsive]="true"
+                     scrollable="true"
+                     scrollHeight="350px">
+          <p-column field="commandOrder" header="Order" [sortable]="true">
+          </p-column>
+          <p-column field="command" header="Command">
+            <ng-template pTemplate="edit" let-col let-data="rowData">
+              <input type="text" class="form-control" placeholder="Command" [(ngModel)]="data[col.field]"/>
+            </ng-template>
+          </p-column>
+
+          <p-column field="enabled" header="Enable">
+            <ng-template pTemplate="body" let-col let-data="rowData">
+              <div class="text-center">
+                <label class="switch switch-text switch-success">
+                  <input class="switch-input" type="checkbox" [(ngModel)]="data[col.field]">
+                  <span class="switch-label" data-off="No" data-on="Yes"></span>
+                  <span class="switch-handle"></span>
+                </label>
+              </div>
+            </ng-template>
+          </p-column>
+
+          <p-column field="enableLogs" header="Logs">
+            <ng-template pTemplate="body" let-col let-data="rowData">
+              <div class="text-center">
+                <label class="switch switch-text switch-success">
+                  <input class="switch-input" type="checkbox" [(ngModel)]="data[col.field]">
+                  <span class="switch-label" data-off="No" data-on="Yes"></span>
+                  <span class="switch-handle"></span>
+                </label>
+              </div>
+            </ng-template>
+          </p-column>
+
+          <p-column header="Action" [style]="{'width': '60px'}">
+            <ng-template let-command="rowData" pTemplate="body">
+              <div class="text-center">
+                <button class="btn btn-danger btn-sm" type="button" (click)="deleteCommand(command)"><i class="fa fa-trash"></i></button>
+              </div>
+            </ng-template>
+          </p-column>
+
+          <p-footer>
+            <div class="ui-helper-clearfix">
+              <button type="button" class="btn btn-primary" (click)="addNewCommand()" style="float: left;"><i class="fa fa-plus"></i> Add</button>
+            </div>
+          </p-footer>
+        </p-dataTable>
       </div>
     </div>
   </div>

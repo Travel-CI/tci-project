@@ -37,11 +37,11 @@ class GitServiceImpl implements GitService {
         this.rootRepositoriesLocation = rootRepositoriesLocation;
     }
 
-    public Git pullProjectRepository(final ProjectDto projectDto,
+    public Git pullProjectRepository(final ProjectDto project,
                                      final PayLoad webHookPayLoad) {
 
         final File repositoryFolder = new File(formatRepositoryFolderName(
-            projectDto.getName(),
+            project.getName(),
             webHookPayLoad.getBranchName()
         ));
 
@@ -51,14 +51,14 @@ class GitServiceImpl implements GitService {
             repositoryFolder.list().length == 0)) {
 
             return cloneRepositoryBranch(repositoryFolder,
-                projectDto.getRepositoryUrl(),
+                project.getRepositoryUrl(),
                 webHookPayLoad.getBranchName()
             );
         } else if (repositoryFolder.exists() &&
             repositoryFolder.isDirectory()) {
 
             return pullRepositoryBranch(repositoryFolder,
-                projectDto.getRepositoryUrl(),
+                project.getRepositoryUrl(),
                 webHookPayLoad.getBranchName()
             );
         }
@@ -79,7 +79,7 @@ class GitServiceImpl implements GitService {
                 .setBranch(remoteBranch)
                 .call();
 
-        } catch (GitAPIException e) {
+        } catch (final GitAPIException e) {
             throw new GitException("Failed to clone " + branch + " from " + repositoryUrl, e);
         }
     }
@@ -94,10 +94,9 @@ class GitServiceImpl implements GitService {
             repository.reset().setMode(HARD).call();
             repository.pull().call();
             return repository;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new GitException("Fail to open " + repositoryFolder, e);
-        } catch (GitAPIException e) {
-
+        } catch (final GitAPIException e) {
             // Delete all files in folder
             deleteRepository(repository, repositoryFolder);
 

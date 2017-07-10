@@ -1,13 +1,13 @@
 package com.travelci.projects.project;
 
 import com.travelci.projects.git.GitService;
+import com.travelci.projects.git.exceptions.GitException;
 import com.travelci.projects.logger.LoggerService;
 import com.travelci.projects.logger.entities.BuildDto;
-import com.travelci.projects.webhook.entities.PayLoad;
 import com.travelci.projects.project.entities.ProjectAdapter;
 import com.travelci.projects.project.entities.ProjectDto;
-import com.travelci.projects.git.exceptions.GitException;
 import com.travelci.projects.project.exceptions.NotFoundProjectException;
+import com.travelci.projects.webhook.entities.PayLoad;
 import org.eclipse.jgit.api.Git;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -66,40 +66,60 @@ class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto create(final ProjectDto projectDto) {
+    public ProjectDto create(final ProjectDto project) {
 
-        projectDto.setCreated(new Timestamp(System.currentTimeMillis()));
-        projectDto.setUpdated(projectDto.getCreated());
+        project.setCreated(new Timestamp(System.currentTimeMillis()));
+        project.setUpdated(project.getCreated());
 
         return projectAdapter.toProjectDto(
-            projectRepository.save(projectAdapter.toProject(projectDto))
+            projectRepository.save(projectAdapter.toProject(project))
         );
     }
 
     @Override
-    public ProjectDto update(final ProjectDto projectDto) {
+    public ProjectDto update(final ProjectDto project) {
 
-        if (projectRepository.findOne(projectDto.getId()) == null)
+        if (projectRepository.findOne(project.getId()) == null)
             throw new NotFoundProjectException();
 
-        projectDto.setUpdated(new Timestamp(System.currentTimeMillis()));
+        project.setUpdated(new Timestamp(System.currentTimeMillis()));
 
         return projectAdapter.toProjectDto(
-            projectRepository.save(projectAdapter.toProject(projectDto))
+            projectRepository.save(projectAdapter.toProject(project))
         );
     }
 
     @Override
-    public void delete(final ProjectDto projectDto) {
+    public void delete(final ProjectDto project) {
 
-        if (projectRepository.findOne(projectDto.getId()) == null)
+        if (projectRepository.findOne(project.getId()) == null)
             throw new NotFoundProjectException();
 
-        projectRepository.delete(projectAdapter.toProject(projectDto));
+        projectRepository.delete(projectAdapter.toProject(project));
     }
 
     @Override
-    @Transactional(readOnly = true)
+    public void manualStartProjectEngine(final Long projectId, final String branchName) {
+
+        final ProjectDto project = getProjectById(projectId);
+        final PayLoad payLoad = PayLoad.builder()
+            .repositoryUrl(project.getRepositoryUrl())
+            .branchName(branchName)
+            .commitAuthor("Travel-CI")
+            .commitMessage("Started by Travel-CI website")
+            .commitHash("manual build")
+            .build();
+
+        startProjectEngine(payLoad);
+    }
+
+    @Override
+    public Long deleteProjectById(final Long projectId) {
+        final ProjectDto projectDto = getProjectById(projectId);
+        return projectRepository.deleteById(projectDto.getId());
+    }
+
+    @Override
     public void startProjectEngine(final PayLoad webHookPayLoad) {
 
         // Check incoming webhook with project list

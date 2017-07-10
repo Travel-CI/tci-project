@@ -60,7 +60,8 @@ public class LoggerServiceImpl implements LoggerService {
     }
 
     @SuppressWarnings("all")
-    private BuildDto sendBuildToLogger(final BuildDto buildToSend, final String url, final HttpStatus expectedStatus,
+    private BuildDto sendBuildToLogger(final BuildDto buildToSend, final String url,
+                                       final HttpStatus expectedStatus,
                                        final Boolean isPut, final String errorMessage) {
 
         try {
@@ -77,10 +78,10 @@ public class LoggerServiceImpl implements LoggerService {
 
             if (!expectedStatus.equals(response.getStatusCode()))
                 throw new RestClientException(
-                    "Response Status Code is wrong. Expected : OK, Given : " + response.getStatusCode());
+                    "Response Status Code is wrong. Expected : "+ expectedStatus + ", Given : " + response.getStatusCode());
 
             return response.getBody();
-        } catch(final RestClientException e) {
+        } catch (final RestClientException e) {
             log.error(e.getLocalizedMessage(), e.getCause());
             throw new LoggerException(errorMessage);
         }
