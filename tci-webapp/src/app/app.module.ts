@@ -12,7 +12,6 @@ import {NAV_DROPDOWN_DIRECTIVES} from "./shared/nav-dropdown.directive";
 import {SidebarComponent} from "./shared/sidebar/sidebar.component";
 import {TopbarComponent} from "./shared/topbar/topbar.component";
 import {FooterComponent} from "./shared/footer/footer.component";
-import {DashboardComponent} from "./dashboard/dashboard.component";
 import {SidebarService} from "./shared/sidebar/sidebar.service";
 import {BaImageLoaderService, BaMenuService, BaThemePreloader, BaThemeSpinner} from "./services";
 import {GlobalState} from "./global.state";
@@ -39,8 +38,7 @@ const NGA_COMPONENTS = [
   FooterComponent,
   NAV_DROPDOWN_DIRECTIVES,
   SIDEBAR_TOGGLE_DIRECTIVES,
-  LayoutComponent,
-  DashboardComponent
+  LayoutComponent
 ];
 
 const APP_PROVIDERS = [
