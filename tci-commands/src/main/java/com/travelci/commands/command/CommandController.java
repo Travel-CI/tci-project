@@ -63,16 +63,6 @@ public class CommandController {
         return commandService.update(commands, projectId);
     }
 
-    @DeleteMapping
-    public void deleteCommand(@Valid @RequestBody final CommandDto command,
-                              final BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors())
-            throw new InvalidCommandException();
-
-        commandService.delete(command);
-    }
-
     @PostMapping("/project")
     @ResponseStatus(ACCEPTED)
     public void getCommandsAndSendToDockerRunner(@Valid @RequestBody final ProjectDto project,

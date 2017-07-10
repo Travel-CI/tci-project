@@ -13,7 +13,5 @@ interface CommandService {
 
     List<CommandDto> update(List<CommandDto> commands, Long projectId);
 
-    void delete(CommandDto command);
-
     void startCommandsEngine(ProjectDto project);
 }
