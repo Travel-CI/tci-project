@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -53,7 +52,7 @@ public class Project {
     private String dockerfileLocation;
 
     @Column
-    private Date lastStart;
+    private Timestamp lastStart;
 
     @Column
     private Timestamp created;

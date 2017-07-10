@@ -1,13 +1,13 @@
 package com.travelci.projects.project;
 
 import com.travelci.projects.git.GitService;
+import com.travelci.projects.git.exceptions.GitException;
 import com.travelci.projects.logger.LoggerService;
 import com.travelci.projects.logger.entities.BuildDto;
-import com.travelci.projects.webhook.entities.PayLoad;
 import com.travelci.projects.project.entities.ProjectAdapter;
 import com.travelci.projects.project.entities.ProjectDto;
-import com.travelci.projects.git.exceptions.GitException;
 import com.travelci.projects.project.exceptions.NotFoundProjectException;
+import com.travelci.projects.webhook.entities.PayLoad;
 import org.eclipse.jgit.api.Git;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -99,7 +99,6 @@ class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public void manualStartProjectEngine(final Long projectId, final String branchName) {
 
         final ProjectDto project = getProjectById(projectId);
@@ -108,6 +107,7 @@ class ProjectServiceImpl implements ProjectService {
             .branchName(branchName)
             .commitAuthor("Travel-CI")
             .commitMessage("Started by Travel-CI website")
+            .commitHash("manual build")
             .build();
 
         startProjectEngine(payLoad);
@@ -120,7 +120,6 @@ class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public void startProjectEngine(final PayLoad webHookPayLoad) {
 
         // Check incoming webhook with project list

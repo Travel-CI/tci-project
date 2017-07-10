@@ -58,6 +58,15 @@ export class ProjectService {
       .catch((err: Error) => this.handleError(err));
   }
 
+  startBuildForProject(projectId: number, branch: string): Promise<string> {
+    console.log(projectId + " " + branch);
+
+    return this.http.get('/api/projects/start/' + projectId + '/' + branch)
+      .toPromise()
+      .then((res: Response) => res.json() as string)
+      .catch((err: Error) => this.handleError(err));
+  }
+
   handleError(err: Error): Promise<Project[]> {
 
     if(environment.enableDebug)
