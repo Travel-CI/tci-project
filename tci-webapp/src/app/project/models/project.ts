@@ -12,5 +12,4 @@ export interface Project {
   lastStart: [Date];
   created: [number];
   updated: [number];
-
 }

@@ -9,13 +9,17 @@ interface ProjectService {
 
     List<ProjectDto> getProjectsList();
 
-    ProjectDto create(ProjectDto projectDto);
+    ProjectDto create(ProjectDto project);
 
-    ProjectDto update(ProjectDto projectDto);
+    ProjectDto update(ProjectDto project);
 
-    void delete(ProjectDto projectDto);
+    void delete(ProjectDto project);
+
+    Long deleteProjectById(Long projectId);
 
     ProjectDto getProjectById(Long projectId);
+
+    void manualStartProjectEngine(Long projectId, String branchName);
 
     void startProjectEngine(PayLoad webHookPayLoad);
 }

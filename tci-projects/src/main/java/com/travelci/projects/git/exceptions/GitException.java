@@ -7,10 +7,6 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @ResponseStatus(BAD_REQUEST)
 public class GitException extends RuntimeException {
 
-    public GitException() {
-        super();
-    }
-
     public GitException(final String message) {
         super(message);
     }

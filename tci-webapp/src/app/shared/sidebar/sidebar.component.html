@@ -3,18 +3,12 @@
   <nav class="sidebar-nav">
     <ul class="nav">
 
-      <li class="nav-title" translate>{{ 'dashboard.title'}}</li>
+      <li class="nav-title">Tools</li>
       <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']" translate >
-          <i class="fa fa-tachometer"></i> {{ 'dashboard.title' }}
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/project']" translate >
+          <i class="fa fa-puzzle-piece"></i> Project
         </a>
       </li>
-
-      <ng-template ngFor let-item [ngForOf]="sidebarItems">
-        <li class="divider"></li>
-        <li class="nav-title" translate >{{ item.title }}</li>
-        <app-sidebar-child [childrenItems]="item.children"></app-sidebar-child>
-      </ng-template>
 
       <li class="nav-item">
         <a class="nav-link" routerLinkActive="active" [routerLink]="['/project/add']" translate >

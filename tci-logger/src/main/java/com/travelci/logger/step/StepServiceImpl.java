@@ -14,6 +14,13 @@ import static com.travelci.logger.build.entities.Status.ERROR;
 import static com.travelci.logger.build.entities.Status.IN_PROGRESS;
 import static com.travelci.logger.build.entities.Status.SUCCESS;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.travelci.logger.build.entities.Status.ERROR;
+import static com.travelci.logger.build.entities.Status.IN_PROGRESS;
+import static com.travelci.logger.build.entities.Status.SUCCESS;
+
 @Service
 @Transactional
 class StepServiceImpl implements StepService {
@@ -60,6 +67,7 @@ class StepServiceImpl implements StepService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<StepDto> getStepsByBuildId(final Long buildId) {
         return stepRepository.findByBuildId(buildId)
             .stream()
