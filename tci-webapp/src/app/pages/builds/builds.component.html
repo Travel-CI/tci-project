@@ -31,7 +31,7 @@
 
 <ng-template ngFor let-build [ngForOf]="projectBuilds">
   <ng-container>
-    <div class="row" (click)="redirectToStepPage(build)" [ngClass]="build.hidden ? 'remove-build': ''">
+    <div class="row" [ngClass]="build.hidden ? 'remove-build': ''">
       <div class="col-md-12">
         <div class="card text-center" [ngClass]="classDependingOnStatus(build, false)">
           <div class="card-header">
@@ -39,7 +39,21 @@
             Build Number : <u>#{{ build.id }}</u> / Branch Name : <u>{{ build.branch }}</u>
             <i class="fa fa-times float-right" *ngIf="build.status != 'IN_PROGRESS'" (click)="showDeleteBuildDialog(build)"></i>
           </div>
-          <div class="card-block">
+          <div class="card-block" (click)="redirectToStepPage(build)">
+
+            <table align="center" width="100%" style="text-align: left;">
+              <tr>
+                <td width="25%"><b>Start by : </b>{{ build.startBy }}</td>
+                <td style="text-align: center;">{{ build.commitMessage }}</td>
+                <td width="25%" style="text-align: right;">{{ build.commitHash }}</td>
+              </tr>
+              <br/>
+              <tr>
+                <td width="25%"><b>StartAt : </b>{{ build.buildStart | date: 'medium' }}</td>
+                <td style="text-align: center;"><b>EndAt : </b>{{ build.buildEnd | date: 'medium' }}</td>
+                <td width="25%" style="text-align: right;"><b>Time : </b> time_to_add</td>
+              </tr>
+            </table>
 
           </div>
         </div>
@@ -53,7 +67,7 @@
   Are you sure to delete build #{{ confirmDeleteBuild.id }} ?
   <div class="col-xs-12" style="height:50px;"></div>
   <p-footer>
-    <button type="button" class="btn btn-success" (click)="deleteBuild()"><i class="fa fa-cogs"></i> Yes</button>
+    <button type="button" class="btn btn-success" (click)="deleteBuild()"><i class="fa fa-check"></i> Yes</button>
     <button type="button" class="btn btn-danger" (click)="hideDeleteBuildDialog()"><i class="fa fa-ban"></i> No</button>
   </p-footer>
 </p-dialog>
