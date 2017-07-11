@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {ProjectService} from '../services/project.service';
+import {ProjectService} from '../../services/project.service';
 import {ToasterConfig, ToasterService} from "angular2-toaster";
-import {Project} from "../models/project";
+import {Project} from "../../models/project";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Command} from "app/project/models/command";
-import {CommandService} from "../services/command.service";
+import {Command} from "app/models/command";
+import {CommandService} from "../../services/command.service";
 
 @Component({
   templateUrl: './add.component.html'
@@ -143,7 +143,7 @@ export class AddComponent implements OnInit {
 
         })
         .catch((err: any) => {
-          this.router.navigate(['/project']);
+          this.router.navigate(['/projects']);
         });
     });
   }
@@ -187,7 +187,7 @@ export class AddComponent implements OnInit {
   clearFields() {
 
     if (this.isEdited)
-      this.router.navigate(['/project']);
+      this.router.navigate(['/projects']);
 
     this.project = { enable: true };
     this.commands = [];
