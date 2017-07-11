@@ -30,13 +30,13 @@
 </div>
 
 <ng-template ngFor let-build [ngForOf]="projectBuilds">
-  <div class="row">
+  <div class="row" [ngClass]="build.hidden ? 'remove-build': ''">
     <div class="col-md-12">
       <div class="card text-center" [ngClass]="classDependingOnStatus(build, false)">
         <div class="card-header">
           <span class="badge float-left" [ngClass]="classDependingOnStatus(build, true)">{{ build.status }}</span>
           Build Number : <u>#{{ build.id }}</u> / Branch Name : <u>{{ build.branch }}</u>
-          <i class="fa fa-times float-right" (click)="deleteBuild()"></i>
+          <i class="fa fa-times float-right" (click)="showDeleteBuildDialog(build)"></i>
         </div>
         <div class="card-block">
 
@@ -45,3 +45,15 @@
     </div>
   </div>
 </ng-template>
+
+<p-dialog appendTo="body" header="Delete Build" [(visible)]="dialogDeleteBuildVisible" modal="modal" width="300" [draggable]=false (onHide)="hideDeleteBuildDialog()">
+
+  Are you sure to delete build #{{ confirmDeleteBuild.id }} ?
+  <div class="col-xs-12" style="height:50px;"></div>
+  <p-footer>
+    <button type="button" class="btn btn-success" (click)="deleteBuild()"><i class="fa fa-cogs"></i> Yes</button>
+    <button type="button" class="btn btn-danger" (click)="hideDeleteBuildDialog()"><i class="fa fa-ban"></i> No</button>
+  </p-footer>
+</p-dialog>
+
+<toaster-container [toasterconfig]="toasterConfig"></toaster-container>
