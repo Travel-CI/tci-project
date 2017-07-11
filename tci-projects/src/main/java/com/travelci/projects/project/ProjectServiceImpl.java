@@ -71,6 +71,9 @@ class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDto create(final ProjectDto project) {
 
+        if (projectRepository.findByRepositoryUrl(project.getRepositoryUrl()).isPresent())
+            throw new InvalidProjectException("Repository Url already exist.");
+
         project.setCreated(new Timestamp(System.currentTimeMillis()));
         project.setUpdated(project.getCreated());
 
@@ -107,7 +110,7 @@ class ProjectServiceImpl implements ProjectService {
         String branchName;
 
         try {
-            byte[] bytes = DatatypeConverter.parseHexBinary(branchHexaName);
+            final byte[] bytes = DatatypeConverter.parseHexBinary(branchHexaName);
             branchName = new String(bytes, "UTF-8");
         } catch (final UnsupportedEncodingException e) {
             throw new InvalidProjectException();
