@@ -30,20 +30,22 @@
 </div>
 
 <ng-template ngFor let-build [ngForOf]="projectBuilds">
-  <div class="row" [ngClass]="build.hidden ? 'remove-build': ''">
-    <div class="col-md-12">
-      <div class="card text-center" [ngClass]="classDependingOnStatus(build, false)">
-        <div class="card-header">
-          <span class="badge float-left" [ngClass]="classDependingOnStatus(build, true)">{{ build.status }}</span>
-          Build Number : <u>#{{ build.id }}</u> / Branch Name : <u>{{ build.branch }}</u>
-          <i class="fa fa-times float-right" (click)="showDeleteBuildDialog(build)"></i>
-        </div>
-        <div class="card-block">
+  <ng-container>
+    <div class="row" [ngClass]="build.hidden ? 'remove-build': ''">
+      <div class="col-md-12">
+        <div class="card text-center" [ngClass]="classDependingOnStatus(build, false)">
+          <div class="card-header">
+            <span class="badge float-left" [ngClass]="classDependingOnStatus(build, true)">{{ build.status }}</span>
+            Build Number : <u>#{{ build.id }}</u> / Branch Name : <u>{{ build.branch }}</u>
+            <i class="fa fa-times float-right" (click)="showDeleteBuildDialog(build)"></i>
+          </div>
+          <div class="card-block">
 
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 </ng-template>
 
 <p-dialog appendTo="body" header="Delete Build" [(visible)]="dialogDeleteBuildVisible" modal="modal" width="300" [draggable]=false (onHide)="hideDeleteBuildDialog()">
