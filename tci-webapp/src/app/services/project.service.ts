@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Project} from '../models/project';
 import {Http, Headers, RequestOptions, Response} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {environment} from "../../../environments/environment";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class ProjectService {
@@ -60,7 +60,7 @@ export class ProjectService {
 
   startBuildForProject(projectId: number, branch: string): Promise<string> {
 
-    return this.http.get('/api/projects/start/' + projectId + '/' + branch)
+    return this.http.get('/api/projects/start/' + projectId + '/' + this.stringToHexa(branch))
       .toPromise()
       .then((res: Response) => res.json() as string)
       .catch((err: Error) => this.handleError(err));
@@ -72,5 +72,15 @@ export class ProjectService {
       console.error(err);
 
     return Promise.reject(err.message || err);
+  }
+
+  stringToHexa(tmp: string): string {
+    var str = '';
+
+    for(let i = 0; i < tmp.length; i++) {
+      str += tmp[i].charCodeAt(0).toString(16);
+    }
+
+    return str;
   }
 }

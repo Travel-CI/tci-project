@@ -59,7 +59,7 @@ class BuildServiceImpl implements BuildService {
     @Override
     @Transactional(readOnly = true)
     public List<BuildDto> getBuildsByProjectId(final Long projectId) {
-        return buildRepository.findByProjectId(projectId)
+        return buildRepository.findByProjectIdOrderByIdDesc(projectId)
             .stream()
             .map(buildAdapter::toBuildDto)
             .collect(Collectors.toList());
@@ -75,8 +75,8 @@ class BuildServiceImpl implements BuildService {
     }
 
     @Override
-    public Long deleteAllBuildsByProjectId(final Long projectId) {
-        return buildRepository.deleteByProjectId(projectId);
+    public Long deleteBuildByProjectId(final Long projectId, final Long buildId) {
+        return buildRepository.deleteByIdAndProjectId(buildId, projectId);
     }
 
     private void checkBuild(final BuildDto build) {

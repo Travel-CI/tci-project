@@ -3,15 +3,15 @@
   <nav class="sidebar-nav">
     <ul class="nav">
 
-      <li class="nav-title">Tools</li>
+      <li class="nav-title">Actions</li>
       <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/project']" translate >
-          <i class="fa fa-puzzle-piece"></i> Project
+        <a class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/projects']" translate >
+          <i class="fa fa-puzzle-piece"></i> Projects
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" [routerLink]="['/project/add']" translate >
+        <a class="nav-link" routerLinkActive="active" [routerLink]="['/projects/add']" translate >
           <i class="fa fa-plus"></i> Add Project
         </a>
       </li>

@@ -61,8 +61,9 @@ public class BuildController {
         return buildService.getLastBuildByProjectId(projectId);
     }
 
-    @DeleteMapping("{projectId}")
-    public Long deleteBuildsForProject(@PathVariable("projectId") final Long projectId) {
-        return buildService.deleteAllBuildsByProjectId(projectId);
+    @DeleteMapping("{projectId}/{buildId}")
+    public Long deleteBuildForProject(@PathVariable("projectId") final Long projectId,
+                                       @PathVariable("buildId") final Long buildId) {
+        return buildService.deleteBuildByProjectId(projectId, buildId);
     }
 }

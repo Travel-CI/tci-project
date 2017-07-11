@@ -1,10 +1,10 @@
 import {BrowserModule} from "@angular/platform-browser";
 import {NgModule} from "@angular/core";
-import {LocationStrategy, PathLocationStrategy} from "@angular/common";
+import {CommonModule, LocationStrategy, PathLocationStrategy} from "@angular/common";
 import {AppRoutingModule} from "./app.routing";
 import {HttpModule} from "@angular/http";
 import {AppComponent} from "./app.component";
-import {LayoutComponent} from "./layout/layout.component";
+import {LayoutComponent} from "./pages/layout/layout.component";
 import {BsDropdownModule} from "ngx-bootstrap/dropdown";
 import {TabsModule} from "ngx-bootstrap";
 import {SIDEBAR_TOGGLE_DIRECTIVES} from "./shared/sidebar/sidebar.directive";
@@ -13,21 +13,31 @@ import {SidebarComponent} from "./shared/sidebar/sidebar.component";
 import {TopbarComponent} from "./shared/topbar/topbar.component";
 import {FooterComponent} from "./shared/footer/footer.component";
 import {SidebarService} from "./shared/sidebar/sidebar.service";
-import {BaImageLoaderService, BaMenuService, BaThemePreloader, BaThemeSpinner} from "./services";
+import {BaImageLoaderService, BaMenuService, BaThemePreloader, BaThemeSpinner} from "./shared/services";
 import {GlobalState} from "./global.state";
 import {SidebarChildComponent} from "./shared/sidebar/menu/sidebar-child.component";
 import {AppTranslationModule} from "./app.translation.module";
 import {FormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { ProjectComponent } from './project/project.component';
-import { DataTableModule } from 'primeng/primeng';
+import { ProjectsComponent } from './pages/projects/projects.component';
+import {DataTableModule, DialogModule, DropdownModule} from 'primeng/primeng';
+import {AddComponent} from './pages/add/add.component';
+import {BuildsComponent} from './pages/builds/builds.component';
+import {ProjectService} from "app/services/project.service";
+import {CommandService} from './services/command.service';
+import {LoggerService} from "app/services/logger.service";
+import {SelectModule} from "ng2-select-compat";
+import {ToasterModule} from 'angular2-toaster';
 
 const NGA_SERVICES = [
   BaImageLoaderService,
   BaThemePreloader,
   BaThemeSpinner,
   BaMenuService,
-  SidebarService
+  SidebarService,
+  ProjectService,
+  CommandService,
+  LoggerService
 ];
 
 const NGA_COMPONENTS = [
@@ -38,7 +48,10 @@ const NGA_COMPONENTS = [
   FooterComponent,
   NAV_DROPDOWN_DIRECTIVES,
   SIDEBAR_TOGGLE_DIRECTIVES,
-  LayoutComponent
+  LayoutComponent,
+  ProjectsComponent,
+  AddComponent,
+  BuildsComponent
 ];
 
 const APP_PROVIDERS = [
@@ -48,9 +61,14 @@ const APP_PROVIDERS = [
 @NgModule({
   imports: [
     FormsModule,
+    CommonModule,
+    DataTableModule,
+    DialogModule,
+    DropdownModule,
+    SelectModule,
+    ToasterModule,
     BrowserModule,
     BrowserAnimationsModule,
-    DataTableModule,
     AppRoutingModule,
     HttpModule,
     AppTranslationModule,

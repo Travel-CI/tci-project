@@ -97,7 +97,7 @@ public class ProjectControllerIT {
             .name("Project 3")
             .description("Well formated project")
             .enable(true)
-            .repositoryUrl("https://github.com/Popoll/popoll-project.git")
+            .repositoryUrl("https://github.com/Popoll/popoll-project2.git")
             .branches(Arrays.asList("master", "dev"))
             .build();
 
@@ -161,7 +161,7 @@ public class ProjectControllerIT {
             .name("Project")
             .description("Well formated project")
             .enable(true)
-            .repositoryUrl("https://github.com/Popoll/popoll-project.git")
+            .repositoryUrl("https://github.com/Popoll/popoll-project2.git")
             .branches(Arrays.asList("master", "dev"))
             .build();
 
@@ -175,7 +175,7 @@ public class ProjectControllerIT {
             .statusCode(CREATED.value())
             .body("id", equalTo(3));
 
-        newProject.setRepositoryUrl("http://github.com/Popoll/popoll-project.git");
+        newProject.setRepositoryUrl("http://github.com/Popoll/popoll-project3.git");
 
         given()
             .contentType(JSON)

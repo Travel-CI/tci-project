@@ -64,6 +64,15 @@
                      [(ngModel)]="project.branches" />
             </div>
           </div>
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="dockerfile">Dockerfile Location</label>
+            <div class="col-md-9">
+              <input type="text" id="dockerfile" class="form-control" name="dockerfile"
+                     pattern="[a-zA-Z0-9 -\/]*"
+                     placeholder="Empty if root folder"
+                     [(ngModel)]="project.dockerfileLocation" />
+            </div>
+          </div>
         </form>
       </div>
 

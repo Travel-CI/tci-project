@@ -14,10 +14,10 @@ interface BuildRepository extends JpaRepository<Build, Long> {
 
     Optional<Build> findById(Long id);
 
-    List<Build> findByProjectId(Long projectId);
+    List<Build> findByProjectIdOrderByIdDesc(Long projectId);
 
     @Query(value = "select * from build where project_id = :projectId order by id desc limit 1", nativeQuery = true)
     Optional<Build> findLastBuild(@Param("projectId") Long projectId);
 
-    Long deleteByProjectId(Long projectId);
+    Long deleteByIdAndProjectId(Long id, Long projectId);
 }
