@@ -16,7 +16,7 @@ import {SidebarService} from "./shared/sidebar/sidebar.service";
 import {BaImageLoaderService, BaMenuService, BaThemePreloader, BaThemeSpinner} from "./shared/services";
 import {GlobalState} from "./global.state";
 import {SidebarChildComponent} from "./shared/sidebar/menu/sidebar-child.component";
-import {AppTranslationModule} from "./app.translation.module";
+import {AppTranslationModule} from "./shared/translation/app.translation.module";
 import {FormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ProjectsComponent } from './pages/projects/projects.component';
@@ -28,6 +28,8 @@ import {CommandService} from './services/command.service';
 import {LoggerService} from "app/services/logger.service";
 import {SelectModule} from "ng2-select-compat";
 import {ToasterModule} from 'angular2-toaster';
+import { StepComponent } from './pages/step/step.component';
+import {AccordionModule} from 'primeng/primeng';
 
 const NGA_SERVICES = [
   BaImageLoaderService,
@@ -66,6 +68,7 @@ const APP_PROVIDERS = [
     DialogModule,
     DropdownModule,
     SelectModule,
+    AccordionModule,
     ToasterModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -76,7 +79,8 @@ const APP_PROVIDERS = [
     TabsModule.forRoot()
   ],
   declarations: [
-    NGA_COMPONENTS
+    NGA_COMPONENTS,
+    StepComponent
   ],
   providers: [{
     provide: LocationStrategy,

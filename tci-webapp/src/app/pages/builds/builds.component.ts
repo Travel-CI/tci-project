@@ -93,4 +93,8 @@ export class BuildsComponent implements OnInit {
         this.hideDeleteBuildDialog();
       });
   }
+
+  redirectToStepPage(build: Build) {
+    this.router.navigate(['projects', 'builds', build.id, 'steps']);
+  }
 }
