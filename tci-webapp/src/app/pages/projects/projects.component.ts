@@ -13,9 +13,13 @@ export class ProjectsComponent implements OnInit {
   private projects: Project[];
   private loading: Boolean = false;
 
-  private dialogEnabled: Boolean = false;
+  private dialogBranchesVisible: Boolean = false;
   private dialogBranches: any = [];
   private selectedBranch: any = null;
+
+  private dialogDeleteProjectVisible: Boolean = false;
+  private confirmDeleteProject: any = {};
+
 
   public toasterConfig: ToasterConfig = new ToasterConfig({
     tapToDismiss: true,
@@ -55,19 +59,8 @@ export class ProjectsComponent implements OnInit {
     this.router.navigate(['/projects/builds', project.id]);
   }
 
-  deleteProject(project: Project) {
-    this.projectService.deleteProjectById(project.id)
-      .then((res: number) => {
-        if(res == 1) {
-          let projects = [...this.projects];
-          projects.splice(this.projects.indexOf(project), 1);
-          this.projects = projects;
-        }
-      });
-  }
-
-  showDialog(project: Project) {
-    this.dialogEnabled = true;
+  showStartDialog(project: Project) {
+    this.dialogBranchesVisible = true;
 
     for (let i = 0; i < project.branches.length; i++)
       this.dialogBranches.push({
@@ -78,8 +71,8 @@ export class ProjectsComponent implements OnInit {
       });
   }
 
-  hideDialog() {
-    this.dialogEnabled = false;
+  hideStartDialog() {
+    this.dialogBranchesVisible = false;
     this.dialogBranches = [];
     this.selectedBranch = null;
   }
@@ -88,7 +81,34 @@ export class ProjectsComponent implements OnInit {
     if (this.selectedBranch != null) {
       this.projectService.startBuildForProject(this.selectedBranch.project.id, this.selectedBranch.branch);
       this.toasterService.pop('success', 'Build Started', 'Your build is running');
-      this.hideDialog();
+      this.hideStartDialog();
     }
+  }
+
+  showDeleteProjectDialog(project: Project) {
+    this.dialogDeleteProjectVisible = true;
+    this.confirmDeleteProject = project;
+  }
+
+  hideDeleteProjectDialog() {
+    this.dialogDeleteProjectVisible = false;
+    this.confirmDeleteProject = {};
+  }
+
+  deleteProject() {
+
+    this.projectService.deleteProjectById(this.confirmDeleteProject.id)
+      .then((res: number) => {
+        if(res == 1) {
+          let projects = [...this.projects];
+          projects.splice(this.projects.indexOf(this.confirmDeleteProject), 1);
+          this.projects = projects;
+        }
+      })
+      .catch((err: any) => {
+        this.toasterService.pop('error', 'Delete failed', err);
+      });
+
+    this.hideDeleteProjectDialog();
   }
 }

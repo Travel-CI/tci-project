@@ -31,9 +31,9 @@
           <p-column header="Actions" [style]="{'width': '145px'}">
             <ng-template let-col let-project="rowData" pTemplate="body">
               <button class="btn btn-secondary btn-sm" type="button" (click)="redirectToBuildsPage(project)"><i class="fa fa-info-circle"></i></button>
-              <button class="btn btn-success btn-sm" type="button" *ngIf="project.enable" (click)="showDialog(project)"><i class="fa fa-play"></i></button>
+              <button class="btn btn-success btn-sm" type="button" *ngIf="project.enable" (click)="showStartDialog(project)"><i class="fa fa-play"></i></button>
               <button class="btn btn-primary btn-sm" type="button" (click)="redirectToEditPage(project)"><i class="fa fa-pencil"></i></button>
-              <button class="btn btn-danger btn-sm" type="button" (click)="deleteProject(project)"><i class="fa fa-trash"></i></button>
+              <button class="btn btn-danger btn-sm" type="button" (click)="showDeleteProjectDialog(project)"><i class="fa fa-trash"></i></button>
             </ng-template>
           </p-column>
         </p-dataTable>
@@ -43,7 +43,7 @@
 </div>
 
 
-<p-dialog appendTo="body" header="Select Branch" [(visible)]="dialogEnabled" modal="modal" width="300" [draggable]=false (onHide)="hideDialog()">
+<p-dialog appendTo="body" header="Select Branch" [(visible)]="dialogBranchesVisible" modal="modal" width="300" [draggable]=false (onHide)="hideStartDialog()">
 
   <div class="form-group row">
     <label class="col-md-3 form-control-label">Branch</label>
@@ -52,11 +52,21 @@
     </div>
   </div>
   <div class="col-xs-12" style="height:50px;"></div>
-
   <p-footer>
     <button type="button" class="btn btn-success" (click)="startManualBuild()" [disabled]="!selectedBranch"><i class="fa fa-cogs"></i> Start Build</button>
-    <button type="button" class="btn btn-danger" (click)="hideDialog()"><i class="fa fa-ban"></i> Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="hideStartDialog()"><i class="fa fa-ban"></i> Cancel</button>
   </p-footer>
 </p-dialog>
+
+<p-dialog appendTo="body" header="Delete Project" [(visible)]="dialogDeleteProjectVisible" modal="modal" width="300" [draggable]=false (onHide)="hideDeleteProjectDialog()">
+
+  Are you sure to delete project "{{ confirmDeleteProject.name }}" ?
+  <div class="col-xs-12" style="height:50px;"></div>
+  <p-footer>
+    <button type="button" class="btn btn-success" (click)="deleteProject()"><i class="fa fa-cogs"></i> Yes</button>
+    <button type="button" class="btn btn-danger" (click)="hideDeleteProjectDialog()"><i class="fa fa-ban"></i> No</button>
+  </p-footer>
+</p-dialog>
+
 
 <toaster-container [toasterconfig]="toasterConfig"></toaster-container>
