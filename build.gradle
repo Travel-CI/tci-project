@@ -2,7 +2,7 @@ buildscript {
 
 	ext {
 		projectGroupName 	= 'com.travelci'
-		projectVersion 		= '0.8-SNAPSHOT'
+		projectVersion 		= '0.8.1-SNAPSHOT'
 		projectName			= 'Travel CI'
 
 		sonarqubeUrl		= 'http://esgi.cloudapp.net:9092'
