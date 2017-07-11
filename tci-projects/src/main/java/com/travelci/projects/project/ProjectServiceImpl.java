@@ -6,6 +6,7 @@ import com.travelci.projects.logger.LoggerService;
 import com.travelci.projects.logger.entities.BuildDto;
 import com.travelci.projects.project.entities.ProjectAdapter;
 import com.travelci.projects.project.entities.ProjectDto;
+import com.travelci.projects.project.exceptions.InvalidProjectException;
 import com.travelci.projects.project.exceptions.NotFoundProjectException;
 import com.travelci.projects.webhook.entities.PayLoad;
 import org.eclipse.jgit.api.Git;
@@ -17,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -99,7 +102,16 @@ class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void manualStartProjectEngine(final Long projectId, final String branchName) {
+    public void manualStartProjectEngine(final Long projectId, final String branchHexaName) {
+
+        String branchName;
+
+        try {
+            byte[] bytes = DatatypeConverter.parseHexBinary(branchHexaName);
+            branchName = new String(bytes, "UTF-8");
+        } catch (final UnsupportedEncodingException e) {
+            throw new InvalidProjectException();
+        }
 
         final ProjectDto project = getProjectById(projectId);
         final PayLoad payLoad = PayLoad.builder()

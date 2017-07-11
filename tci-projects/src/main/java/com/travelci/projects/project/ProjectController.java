@@ -68,10 +68,10 @@ public class ProjectController {
         return projectService.getProjectById(projectId);
     }
 
-    @GetMapping("/start/{projectId}/{branchName}")
+    @GetMapping("/start/{projectId}/{branchHexaName}")
     public void manualStartEngine(@PathVariable final Long projectId,
-                                  @PathVariable final String branchName) {
-        projectService.manualStartProjectEngine(projectId, branchName);
+                                  @PathVariable final String branchHexaName) {
+        projectService.manualStartProjectEngine(projectId, branchHexaName);
     }
 
     @PostMapping("webhook")

@@ -14,6 +14,9 @@ class DockerClientConfig {
 
     @Bean
     public DockerClient getDockerClient() {
-        return new DefaultDockerClient(dockerSocketUri);
+        return DefaultDockerClient.builder()
+            .uri(dockerSocketUri)
+            .readTimeoutMillis(600000)
+            .build();
     }
 }
