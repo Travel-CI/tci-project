@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Project} from '../models/project';
 import {Http, Headers, RequestOptions, Response} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {environment} from "../../../environments/environment";
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class ProjectService {

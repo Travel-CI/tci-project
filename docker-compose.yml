@@ -22,8 +22,6 @@ services:
     image: travelci/tci-config:latest
     networks:
       - spring-cloud-network
-    ports:
-      - "${TCI_CONFIG_PORT}:8888"
 
   travelci-eureka:
     image: travelci/tci-eureka:latest

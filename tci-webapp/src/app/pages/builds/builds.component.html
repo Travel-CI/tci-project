@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <i class="fa fa-cogs"></i>{{ project.name }}
+      </div>
+      <div class="card-block">
+        <div class="col-md-9">
+          <ul>
+            <li>
+              {{ project.description }}
+            </li>
+            <br/>
+            <li>
+              <b>Repository URL :</b> {{ project.repositoryUrl }}
+            </li>
+            <br/>
+            <li>
+              <b>Branches :</b> {{ project.branches }}
+            </li>
+            <br/>
+            <li>
+              <b>Last Start :</b> {{ (!project.lastStart)? 'Project Never Built.' : project.lastStart | date: 'medium' }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template ngFor let-build [ngForOf]="projectBuilds">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card text-center" [ngClass]="classDependingOnStatus(build, false)">
+        <div class="card-header">
+          <span class="badge float-left" [ngClass]="classDependingOnStatus(build, true)">{{ build.status }}</span>
+          Build Number : <u>#{{ build.id }}</u> / Branch Name : <u>{{ build.branch }}</u>
+          <i class="fa fa-times float-right" (click)="deleteBuild()"></i>
+        </div>
+        <div class="card-block">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

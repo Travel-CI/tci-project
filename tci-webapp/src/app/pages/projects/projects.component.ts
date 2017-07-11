@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import {Project} from './models/project';
-import {ProjectService} from './services/project.service';
+import {Project} from '../../models/project';
+import {ProjectService} from '../../services/project.service';
 import {Router} from "@angular/router";
 import {ToasterConfig, ToasterService} from 'angular2-toaster';
 
 @Component({
-  templateUrl: './project.component.html'
+  templateUrl: './projects.component.html'
 })
 
-export class ProjectComponent implements OnInit {
+export class ProjectsComponent implements OnInit {
 
   private projects: Project[];
   private loading: Boolean = false;
@@ -47,15 +47,15 @@ export class ProjectComponent implements OnInit {
     });
   }
 
-  redirectToEditPage(project: Project){
-    this.router.navigate(['/project/edit', project.id]);
+  redirectToEditPage(project: Project) {
+    this.router.navigate(['/projects/edit', project.id]);
   }
 
-  redirectToBuildsPage(project: Project){
-    this.router.navigate(['/project/builds', project.id]);
+  redirectToBuildsPage(project: Project) {
+    this.router.navigate(['/projects/builds', project.id]);
   }
 
-  deleteProject(project: Project){
+  deleteProject(project: Project) {
     this.projectService.deleteProjectById(project.id)
       .then((res: number) => {
         if(res == 1) {
@@ -78,22 +78,17 @@ export class ProjectComponent implements OnInit {
       });
   }
 
-  startManualBuild() {
-
-    if (this.selectedBranch != null) {
-      this.projectService.startBuildForProject(this.selectedBranch.project.id, this.selectedBranch.branch);
-      this.toasterService.pop('success', 'Build Started', 'Your build is running');
-
-      this.dialogEnabled = false;
-      this.dialogBranches = [];
-      this.selectedBranch = null;
-    }
-    else
-      this.toasterService.pop('error', 'Branch', 'Select a branch to build');
-  }
-
   hideDialog() {
     this.dialogEnabled = false;
     this.dialogBranches = [];
+    this.selectedBranch = null;
+  }
+
+  startManualBuild() {
+    if (this.selectedBranch != null) {
+      this.projectService.startBuildForProject(this.selectedBranch.project.id, this.selectedBranch.branch);
+      this.toasterService.pop('success', 'Build Started', 'Your build is running');
+      this.hideDialog();
+    }
   }
 }

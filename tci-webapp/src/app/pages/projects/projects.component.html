@@ -43,7 +43,7 @@
 </div>
 
 
-<p-dialog appendTo="body" header="Select Branch" [(visible)]="dialogEnabled" modal="modal" width="300" [draggable]=false>
+<p-dialog appendTo="body" header="Select Branch" [(visible)]="dialogEnabled" modal="modal" width="300" [draggable]=false (onHide)="hideDialog()">
 
   <div class="form-group row">
     <label class="col-md-3 form-control-label">Branch</label>
@@ -54,7 +54,7 @@
   <div class="col-xs-12" style="height:50px;"></div>
 
   <p-footer>
-    <button type="button" class="btn btn-success" (click)="startManualBuild()"><i class="fa fa-cogs"></i> Start Build</button>
+    <button type="button" class="btn btn-success" (click)="startManualBuild()" [disabled]="!selectedBranch"><i class="fa fa-cogs"></i> Start Build</button>
     <button type="button" class="btn btn-danger" (click)="hideDialog()"><i class="fa fa-ban"></i> Cancel</button>
   </p-footer>
 </p-dialog>

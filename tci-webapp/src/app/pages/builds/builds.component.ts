@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import {ProjectService} from "../services/project.service";
-import {Project} from "../models/project";
+import {ProjectService} from "../../services/project.service";
+import {Project} from "../../models/project";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Build} from "../models/build";
-import {LoggerService} from "../services/logger.service";
+import {Build} from "../../models/build";
+import {LoggerService} from "../../services/logger.service";
 
 @Component({
-  selector: 'app-logger',
-  templateUrl: './logger.component.html'
+  templateUrl: './builds.component.html'
 })
-export class LoggerComponent implements OnInit {
+export class BuildsComponent implements OnInit {
 
   private project : any = {};
   private projectBuilds : Build[];
@@ -25,7 +24,7 @@ export class LoggerComponent implements OnInit {
     this.route.params.subscribe(params => {
 
       if (params['id'] == undefined) {
-        this.router.navigate(['/project']);
+        this.router.navigate(['/projects']);
         return;
       }
 
@@ -38,41 +37,27 @@ export class LoggerComponent implements OnInit {
             })
         })
         .catch((err: any) => {
-          this.router.navigate(['/project']);
+          this.router.navigate(['/projects']);
         });
     });
   }
 
   deleteBuild() {
-    this.router.navigate(['/project']);
+    this.router.navigate(['/projects']);
   }
 
-  cardClassDependingOnStatus(build : Build): string {
+  classDependingOnStatus(build : Build, isBadge: Boolean): string {
+
     switch(build.status) {
       case 'SUCCESS':
-        return 'card-accent-success';
+        return (isBadge) ? 'badge-success': 'card-accent-success';
 
       case 'ERROR':
-        return 'card-accent-danger';
+        return (isBadge) ? 'badge-danger' : 'card-accent-danger';
 
       case 'IN_PROGRESS':
-        return 'card-accent-primary';
+        return (isBadge) ? 'badge-primary' : 'card-accent-primary';
 
     }
   }
-
-  badgeDependingOnStatus(build : Build): string {
-    switch(build.status) {
-      case 'SUCCESS':
-        return 'badge-success';
-
-      case 'ERROR':
-        return 'badge-danger';
-
-      case 'IN_PROGRESS':
-        return 'badge-primary';
-
-    }
-  }
-
 }
