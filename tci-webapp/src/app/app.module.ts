@@ -29,6 +29,7 @@ import {LoggerService} from "app/services/logger.service";
 import {SelectModule} from "ng2-select-compat";
 import {ToasterModule} from 'angular2-toaster';
 import { StepComponent } from './pages/step/step.component';
+import {AccordionModule} from 'primeng/primeng';
 
 const NGA_SERVICES = [
   BaImageLoaderService,
@@ -67,6 +68,7 @@ const APP_PROVIDERS = [
     DialogModule,
     DropdownModule,
     SelectModule,
+    AccordionModule,
     ToasterModule,
     BrowserModule,
     BrowserAnimationsModule,
