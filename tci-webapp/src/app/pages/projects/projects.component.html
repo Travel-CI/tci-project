@@ -13,7 +13,7 @@
         <p-dataTable [value]="projects"
                      [globalFilter]="filter"
                      [responsive]="true"
-                     [loading]="id"
+                     [loading]="loading"
                      sortField="id"
                      sortOrder="1"
                      scrollable="true"
@@ -63,7 +63,7 @@
   Are you sure to delete project "{{ confirmDeleteProject.name }}" ?
   <div class="col-xs-12" style="height:50px;"></div>
   <p-footer>
-    <button type="button" class="btn btn-success" (click)="deleteProject()"><i class="fa fa-cogs"></i> Yes</button>
+    <button type="button" class="btn btn-success" (click)="deleteProject()"><i class="fa fa-check"></i> Yes</button>
     <button type="button" class="btn btn-danger" (click)="hideDeleteProjectDialog()"><i class="fa fa-ban"></i> No</button>
   </p-footer>
 </p-dialog>
