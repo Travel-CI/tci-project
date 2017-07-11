@@ -31,7 +31,7 @@
 
 <ng-template ngFor let-build [ngForOf]="projectBuilds">
   <ng-container>
-    <div class="row" [ngClass]="build.hidden ? 'remove-build': ''">
+    <div class="row" (click)="redirectToStepPage(build)" [ngClass]="build.hidden ? 'remove-build': ''">
       <div class="col-md-12">
         <div class="card text-center" [ngClass]="classDependingOnStatus(build, false)">
           <div class="card-header">
