@@ -71,6 +71,4 @@ public class BuildController {
                                        @PathVariable("buildId") final Long buildId) {
         return buildService.deleteBuildByProjectId(projectId, buildId);
     }
-
-
 }
