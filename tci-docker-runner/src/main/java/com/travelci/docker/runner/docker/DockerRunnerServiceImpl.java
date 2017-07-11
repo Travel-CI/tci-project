@@ -147,26 +147,26 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
                 final String stderrOutput = executeCommandInContainer(containerId, realCommand);
 
                 // Execute command to get the stdout / stderr of the previous command
-                String stdoutStderOutput = executeCommandInContainer(containerId, stdoutStderrCommand);
+                String stdoutStderrOutput = executeCommandInContainer(containerId, stdoutStderrCommand);
 
                 final Boolean commandSuccess = stderrOutput.isEmpty();
 
                 if (!command.getEnableLogs())
-                    stdoutStderOutput = (commandSuccess) ? "Command successfully executed." : "Command failed.";
+                    stdoutStderrOutput = (commandSuccess) ? "Command successfully executed." : "Command failed.";
 
                 if (!commandSuccess) {
                     log.error("Command " + command.getCommand() + " failed for build "
                         + currentBuild.getId() + " in project " + currentBuild.getProjectId());
 
-                    loggerService.endStepByError(step, stdoutStderOutput);
+                    loggerService.endStepByError(step, stdoutStderrOutput);
                     loggerService.endBuildByError(currentBuild, "step failed : " + command.getCommand());
 
                     return commandResults;
                 }
                 else
-                    loggerService.endStepBySuccess(step, stdoutStderOutput);
+                    loggerService.endStepBySuccess(step, stdoutStderrOutput);
 
-                commandResults.put(command.getCommand(), stdoutStderOutput);
+                commandResults.put(command.getCommand(), stdoutStderrOutput);
             } catch (final DockerException | InterruptedException e) {
                 loggerService.endStepByError(step, e.getLocalizedMessage());
                 throw new DockerExecuteCommandException(e.getMessage(), e.getCause());
