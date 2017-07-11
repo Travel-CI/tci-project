@@ -3,6 +3,7 @@ import {Http, Headers, RequestOptions, Response} from "@angular/http";
 import 'rxjs/add/operator/toPromise';
 import {Build} from "../models/build";
 import {environment} from "environments/environment";
+import {Step} from "app/models/step";
 
 @Injectable()
 export class LoggerService {
@@ -24,6 +25,20 @@ export class LoggerService {
     return this.http.delete('/api/builds/' + projectId + '/' + buildId, options)
       .toPromise()
       .then((res: Response) => res.json() as number)
+      .catch((err: Error) => this.handleError(err));
+  }
+
+  getBuildById(id: number) : Promise<Build> {
+    return this.http.get('/api/builds/id/' + id)
+      .toPromise()
+      .then((res: Response) => res.json() as Build)
+      .catch((err: Error) => this.handleError(err));
+  }
+
+  getAllStepsForBuild(id : number) : Promise<Step[]> {
+    return this.http.get('/api/steps/' + id)
+      .toPromise()
+      .then((res: Response) => res.json() as Step[])
       .catch((err: Error) => this.handleError(err));
   }
 

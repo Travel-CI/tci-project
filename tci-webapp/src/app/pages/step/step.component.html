@@ -1,3 +1,51 @@
-<p>
-  step works!
-</p>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <i class="fa fa-cogs"></i>{{ build.name }}
+      </div>
+      <div class="card-block">
+        <div class="col-md-9">
+          <ul>
+            <li>
+              <b>Start by : </b>{{ build.startBy }}
+            </li>
+            <br/>
+            <li>
+              <b>Commit Message : </b> {{ build.commitMessage }}
+            </li>
+            <br/>
+            <li>
+              <b>Commit Hash :</b> {{ build.commitHash }}
+            </li>
+            <br/>
+            <li>
+              <b>StartAt : </b>{{ build.buildStart | date: 'medium' }}
+            </li>
+            <br/>
+            <li>
+              <b>EndAt : </b>{{ build.buildEnd | date: 'medium' }}
+            </li>
+            <br/>
+            <li>
+              <b>Time : </b>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-accordion [multiple]="true">
+  <p-accordionTab header="Header 1">
+    Content 1
+  </p-accordionTab>
+  <br/>
+  <p-accordionTab header="Header 2">
+    Content 2
+  </p-accordionTab>
+  <p-accordionTab header="Header 3">
+    Content 3
+  </p-accordionTab>
+</p-accordion>
