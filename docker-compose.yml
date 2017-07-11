@@ -50,6 +50,14 @@ services:
     volumes:
       - tci-projects-volume:/usr/app/travel-ci
 
+  travelci-projects2:
+      image: travelci/tci-projects:latest
+      networks:
+        - spring-cloud-network
+        - bdd-network
+      volumes:
+        - tci-projects-volume:/usr/app/travel-ci
+
   travelci-commands:
     image: travelci/tci-commands:latest
     networks:
@@ -68,3 +76,8 @@ services:
     networks:
       - spring-cloud-network
       - bdd-network
+
+  travelci-webapp:
+    image: travelci/tci-webapp:latest
+    ports:
+      - "${TCI_WEBAPP_PORT}:80"

@@ -13,6 +13,8 @@ interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Optional<Project> findById(Long id);
 
+    Optional<Project> findByRepositoryUrl(String repositoryUrl);
+
     @Query("select p from Project p where p.enable = true and p.repositoryUrl = :repositoryUrl and p.branches like concat('%',:branch,'%')")
     Optional<Project> findFromPayLoad(@Param("repositoryUrl") String repositoryUrl, @Param("branch") String branch);
 

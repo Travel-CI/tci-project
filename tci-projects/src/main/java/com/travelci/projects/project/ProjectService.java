@@ -19,7 +19,7 @@ interface ProjectService {
 
     ProjectDto getProjectById(Long projectId);
 
-    void manualStartProjectEngine(Long projectId, String branchName);
+    void manualStartProjectEngine(Long projectId, String branchHexaName);
 
     void startProjectEngine(PayLoad webHookPayLoad);
 }
