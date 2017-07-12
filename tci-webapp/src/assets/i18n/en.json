@@ -70,5 +70,42 @@
         "action": "Action"
       }
     }
+  },
+  "builds": {
+    "back": "Back",
+    "project": {
+      "repository": "Repository URL : ",
+      "branches": "Branches : ",
+      "lastStart": "Last Start : "
+    },
+    "build": {
+      "id": "Build Number : ",
+      "branch": "Branch Name : ",
+      "start": "Started by : ",
+      "startedAt": "Started At : ",
+      "endAt": "Ended At : "
+    },
+    "dialog": {
+      "header": "Delete Build",
+      "body": "Are you sure to delete build ",
+      "yes": "Yes",
+      "no": "No"
+    }
+  },
+  "steps": {
+    "back": "Back",
+    "build": {
+      "label": "Build #",
+      "start": "Started by : ",
+      "commitMessage": "Commit Message : ",
+      "commitHash": "Commit Hash : ",
+      "startedAt": "Started At : ",
+      "endAt": "Ended At : ",
+      "time": "Time : "
+    },
+    "step": {
+      "start": "Started At : ",
+      "endAt": "Ended At : "
+    }
   }
 }

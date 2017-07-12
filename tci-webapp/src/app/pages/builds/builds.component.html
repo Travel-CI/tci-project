@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-1">
-    <button class="btn btn-secondary btn-sm btn-block" type="button" (click)="redirectToProjectPage()"><i class="fa fa-arrow-left"></i> Back</button>
+    <button class="btn btn-secondary btn-sm btn-block" type="button" (click)="redirectToProjectPage()" translate><i class="fa fa-arrow-left"></i> builds.back</button>
   </div>
 </div>
 
@@ -18,11 +18,11 @@
           <ul>
             <li>{{ project.description }}</li>
             <br/>
-            <li><b>Repository URL :</b> {{ project.repositoryUrl }}</li>
+            <li><b translate>builds.project.repository</b> {{ project.repositoryUrl }}</li>
             <br/>
-            <li><b>Branches :</b> {{ project.branches }}</li>
+            <li><b translate>builds.project.branches</b> {{ project.branches }}</li>
             <br/>
-            <li><b>Last Start :</b> {{ (!project.lastStart)? 'Project Never Built.' : project.lastStart | date: 'medium' }}</li>
+            <li><b translate>builds.project.lastStart</b> {{ (!project.lastStart)? 'Project Never Built.' : project.lastStart | date: 'medium' }}</li>
           </ul>
         </div>
       </div>
@@ -38,7 +38,7 @@
 
           <div class="card-header">
             <span class="badge float-left" [ngClass]="classDependingOnStatus(build, true)">{{ build.status }}</span>
-            Build Number : <u>#{{ build.id }}</u> / Branch Name : <u>{{ build.branch }}</u>
+            {{ 'builds.build.id' | translate }}<u>#{{ build.id }}</u> / {{ 'builds.build.branch' | translate }}<u>{{ build.branch }}</u>
             <i class="fa fa-times float-right" *ngIf="build.status != 'IN_PROGRESS'" (click)="showDeleteBuildDialog(build)"></i>
           </div>
 
@@ -46,14 +46,14 @@
 
             <table align="center" width="100%" style="text-align: left;">
               <tr>
-                <td width="25%"><b>Start by : </b>{{ build.startBy }}</td>
+                <td width="25%"><b translate>builds.build.start</b>{{ build.startBy }}</td>
                 <td style="text-align: center;">{{ build.commitMessage }}</td>
                 <td width="25%" style="text-align: right;">{{ build.commitHash }}</td>
               </tr><br/>
 
               <tr>
-                <td width="25%"><b>StartAt : </b>{{ build.buildStart | date: 'medium' }}</td>
-                <td style="text-align: center;"><b>EndAt : </b>{{ build.buildEnd | date: 'medium' }}</td>
+                <td width="25%"><b translate>builds.build.startedAt</b>{{ build.buildStart | date: 'medium' }}</td>
+                <td style="text-align: center;"><b translate>builds.build.endAt</b>{{ build.buildEnd | date: 'medium' }}</td>
                 <td width="25%" style="text-align: right;">
                   <b>Time : </b> {{
                     (!build.buildEnd)
@@ -74,13 +74,13 @@
   </ng-container>
 </ng-template>
 
-<p-dialog appendTo="body" header="Delete Build" [(visible)]="dialogDeleteBuildVisible" modal="modal" width="300" [draggable]=false (onHide)="hideDeleteBuildDialog()">
+<p-dialog appendTo="body" header="{{ 'builds.dialog.header' | translate }}" [(visible)]="dialogDeleteBuildVisible" modal="modal" width="300" [draggable]=false (onHide)="hideDeleteBuildDialog()">
 
-  Are you sure to delete build #{{ confirmDeleteBuild.id }} ?
+  {{ 'builds.dialog.body' | translate }} #{{ confirmDeleteBuild.id }} ?
   <div class="col-xs-12" style="height:50px;"></div>
   <p-footer>
-    <button type="button" class="btn btn-success" (click)="deleteBuild()"><i class="fa fa-check"></i> Yes</button>
-    <button type="button" class="btn btn-danger" (click)="hideDeleteBuildDialog()"><i class="fa fa-ban"></i> No</button>
+    <button type="button" class="btn btn-success" (click)="deleteBuild()" translate><i class="fa fa-check"></i> builds.dialog.yes</button>
+    <button type="button" class="btn btn-danger" (click)="hideDeleteBuildDialog()" translate><i class="fa fa-ban"></i> builds.dialog.no</button>
   </p-footer>
 </p-dialog>
 
