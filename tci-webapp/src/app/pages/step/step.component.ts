@@ -54,4 +54,8 @@ export class StepComponent implements OnInit {
     }
   }
 
+  redirectToBuildPage(build: Build) {
+    this.router.navigate(['/projects/builds', build.projectId]);
+  }
+
 }

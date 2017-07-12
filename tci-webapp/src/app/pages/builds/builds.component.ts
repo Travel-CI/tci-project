@@ -97,4 +97,8 @@ export class BuildsComponent implements OnInit {
   redirectToStepPage(build: Build) {
     this.router.navigate(['projects', 'builds', build.id, 'steps']);
   }
+
+  redirectToProjectPage() {
+    this.router.navigate(['projects']);
+  }
 }
