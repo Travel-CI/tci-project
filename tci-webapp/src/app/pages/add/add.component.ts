@@ -147,7 +147,7 @@ export class AddComponent implements OnInit {
 
         })
         .catch((err: any) => {
-          this.router.navigate(['/projects']);
+          this.router.navigate(['projects']);
         });
     });
   }
@@ -191,7 +191,7 @@ export class AddComponent implements OnInit {
   clearFields() {
 
     if (this.isEdited)
-      this.router.navigate(['/projects']);
+      this.router.navigate(['projects']);
 
     this.project = { enable: true };
     this.commands = [];

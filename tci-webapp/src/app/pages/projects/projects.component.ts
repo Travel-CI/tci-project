@@ -52,11 +52,11 @@ export class ProjectsComponent implements OnInit {
   }
 
   redirectToEditPage(project: Project) {
-    this.router.navigate(['/projects/edit', project.id]);
+    this.router.navigate(['projects', 'edit', project.id]);
   }
 
   redirectToBuildsPage(project: Project) {
-    this.router.navigate(['/projects/builds', project.id]);
+    this.router.navigate(['projects', 'builds', project.id]);
   }
 
   showStartDialog(project: Project) {

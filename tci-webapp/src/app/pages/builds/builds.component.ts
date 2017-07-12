@@ -42,7 +42,7 @@ export class BuildsComponent implements OnInit {
     this.route.params.subscribe(params => {
 
       if (params['id'] == undefined) {
-        this.router.navigate(['/projects']);
+        this.router.navigate(['projects']);
         return;
       }
 
@@ -57,7 +57,7 @@ export class BuildsComponent implements OnInit {
             });
         })
         .catch((err: any) => {
-          this.router.navigate(['/projects']);
+          this.router.navigate(['projects']);
         });
     });
   }

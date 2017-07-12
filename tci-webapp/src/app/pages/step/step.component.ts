@@ -10,7 +10,7 @@ import {Step} from "../../models/step";
 export class StepComponent implements OnInit {
 
   private build : any = {};
-  
+
   private steps : any  =[];
   private stepsLoading: any;
 
@@ -28,7 +28,7 @@ export class StepComponent implements OnInit {
     this.route.params.subscribe(params => {
 
       if (params['id'] == undefined) {
-        this.router.navigate(['/projects/builds']);
+        this.router.navigate(['projects', 'builds']);
         return;
       }
 
@@ -42,7 +42,7 @@ export class StepComponent implements OnInit {
             });
         })
         .catch((err: any) => {
-          this.router.navigate(['/projects/builds']);
+          this.router.navigate(['projects', 'builds']);
         });
     });
   }
@@ -61,7 +61,6 @@ export class StepComponent implements OnInit {
   }
 
   redirectToBuildPage(build: Build) {
-    this.router.navigate(['/projects/builds', build.projectId]);
+    this.router.navigate(['projects', 'builds', build.projectId]);
   }
-
 }
