@@ -3,6 +3,7 @@ import {LoggerService} from "../../services/logger.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Build} from "../../models/build";
 import {Step} from "../../models/step";
+import {ToasterConfig, ToasterService} from "angular2-toaster";
 
 @Component({
   templateUrl: './step.component.html'
@@ -14,8 +15,16 @@ export class StepComponent implements OnInit {
   private steps : any  =[];
   private stepsLoading: any;
 
+  public toasterConfig: ToasterConfig = new ToasterConfig({
+    tapToDismiss: true,
+    animation: 'fade',
+    positionClass: 'toast-custom-top-right',
+    timeout: 5000
+  });
+
   constructor(
     private loggerService : LoggerService,
+    private toasterService: ToasterService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -39,6 +48,9 @@ export class StepComponent implements OnInit {
           this.stepsLoading = this.loggerService.getAllStepsForBuild(params['id'])
             .then((res: Step[]) => {
               this.steps = res;
+            })
+            .catch((err: any) => {
+              this.toasterService.pop('error', 'Unable to retrieve Steps List', err);
             });
         })
         .catch((err: any) => {

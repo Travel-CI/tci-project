@@ -24,7 +24,16 @@
             <br/>
             <li><b translate>steps.build.endAt</b>{{ build.buildEnd | date: 'medium' }}</li>
             <br/>
-            <li><b translate>steps.build.time</b></li>
+            <li><b translate>steps.build.time</b>{{
+              (!build.buildEnd)
+              ? ((today | amDifference: build.buildStart  : 'minutes') == 0)
+              ? (today | amDifference: build.buildStart  : 'seconds') + " seconde(s)"
+              : (today | amDifference: build.buildStart  : 'minutes') + " minute(s)"
+              : ((build.buildEnd | amDifference: build.buildStart : 'minutes') == 0)
+              ? (build.buildEnd | amDifference: build.buildStart : 'seconds')  + " seconde(s)"
+              : (build.buildEnd | amDifference: build.buildStart : 'minutes') + " minute(s)"
+              }}
+            </li>
           </ul>
         </div>
       </div>
@@ -50,3 +59,5 @@
     </div>
   </ng-container>
 </ng-template>
+
+<toaster-container [toasterconfig]="toasterConfig"></toaster-container>
