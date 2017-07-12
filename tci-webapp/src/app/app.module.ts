@@ -30,6 +30,7 @@ import {SelectModule} from "ng2-select-compat";
 import {ToasterModule} from 'angular2-toaster';
 import { StepComponent } from './pages/step/step.component';
 import {AccordionModule} from 'primeng/primeng';
+import {BusyModule} from 'angular2-busy';
 
 const NGA_SERVICES = [
   BaImageLoaderService,
@@ -62,21 +63,29 @@ const APP_PROVIDERS = [
 
 @NgModule({
   imports: [
+    // Angular
     FormsModule,
     CommonModule,
+    HttpModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+
+    // PrimeNg
     DataTableModule,
     DialogModule,
     DropdownModule,
     SelectModule,
     AccordionModule,
-    ToasterModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    HttpModule,
-    AppTranslationModule,
+
+    // Bootstrap
     BsDropdownModule.forRoot(),
-    TabsModule.forRoot()
+    TabsModule.forRoot(),
+
+    ToasterModule,
+    BusyModule,
+    
+    AppRoutingModule,
+    AppTranslationModule
   ],
   declarations: [
     NGA_COMPONENTS,

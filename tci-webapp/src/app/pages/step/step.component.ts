@@ -10,7 +10,9 @@ import {Step} from "../../models/step";
 export class StepComponent implements OnInit {
 
   private build : any = {};
-  private buildSteps : any  =[];
+  
+  private steps : any  =[];
+  private stepsLoading: any;
 
   constructor(
     private loggerService : LoggerService,
@@ -29,11 +31,11 @@ export class StepComponent implements OnInit {
       this.loggerService.getBuildById(params['id'])
         .then((res: Build) => {
           this.build = res;
-          console.log(res);
-          this.loggerService.getAllStepsForBuild(params['id'])
+
+          this.stepsLoading = this.loggerService.getAllStepsForBuild(params['id'])
             .then((res: Step[]) => {
-              this.buildSteps = res;
-            })
+              this.steps = res;
+            });
         })
         .catch((err: any) => {
           this.router.navigate(['/projects/builds']);

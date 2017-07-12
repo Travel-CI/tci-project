@@ -12,7 +12,9 @@ import {ToasterConfig, ToasterService} from 'angular2-toaster';
 export class BuildsComponent implements OnInit {
 
   private project : any = {};
-  private projectBuilds : any;
+
+  private builds : any;
+  private buildsLoading: any;
 
   private dialogDeleteBuildVisible: Boolean = false;
   private confirmDeleteBuild: any = {};
@@ -42,11 +44,13 @@ export class BuildsComponent implements OnInit {
 
       this.projectService.getProjectById(params['id'])
         .then((res: Project) => {
+
           this.project = res;
-          this.loggerService.getAllBuildsForProject(params['id'])
+
+          this.buildsLoading = this.loggerService.getAllBuildsForProject(params['id'])
             .then((res: Build[]) => {
-              this.projectBuilds = res;
-            })
+              this.builds = res;
+            });
         })
         .catch((err: any) => {
           this.router.navigate(['/projects']);
@@ -83,8 +87,8 @@ export class BuildsComponent implements OnInit {
     this.loggerService.deleteBuildForProject(this.project.id, this.confirmDeleteBuild.id)
       .then((res: number) => {
         if (res == 1) {
-          let index = this.projectBuilds.indexOf(this.confirmDeleteBuild);
-          this.projectBuilds[index].hidden = true;
+          let index = this.builds.indexOf(this.confirmDeleteBuild);
+          this.builds[index].hidden = true;
           this.hideDeleteBuildDialog();
         }
       })

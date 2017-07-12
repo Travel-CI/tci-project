@@ -12,7 +12,9 @@ import {CommandService} from "../../services/command.service";
 export class AddComponent implements OnInit {
 
   private project: any = {};
+
   private commands: any = [];
+  private loading: Boolean = false;
 
   private isEdited: Boolean = false;
 
@@ -120,6 +122,7 @@ export class AddComponent implements OnInit {
 
       // In case of edit page
       this.isEdited = true;
+      this.loading = true;
 
       this.projectService.getProjectById(params['id'])
         .then((res: Project) => {
@@ -136,6 +139,7 @@ export class AddComponent implements OnInit {
 
               this.commands = commands;
               this.commandsCounter = res.length + 1;
+              this.loading = false;
             })
             .catch((err: any) => {
               this.toasterService.pop('error', 'Get Commands Failed', err);
