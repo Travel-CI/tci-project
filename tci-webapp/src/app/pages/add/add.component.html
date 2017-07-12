@@ -92,6 +92,7 @@
       <div class="card-block">
         <p-dataTable [value]="commands"
                      [responsive]="true"
+                     [loading]="loading"
                      scrollable="true"
                      scrollHeight="350px">
           <p-column field="commandOrder" header="Order" [sortable]="true">

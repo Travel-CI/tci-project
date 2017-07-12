@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<ng-template ngFor let-step [ngForOf]="buildSteps">
+<ng-template ngFor let-step [ngForOf]="steps" [ngBusy]="stepsLoading">
   <ng-container>
     <div class="card" [ngClass]="classDependingOnStepStatus(step)">
       <p-accordion [multiple]="true">
@@ -54,7 +54,7 @@
           <b>End at : </b>{{ step.stepEnd |  date: 'medium' }}
           <br/>
           <br/>
-          {{ step.commandResult }}
+          <span style="white-space: pre">{{ step.commandResult }}</span>
         </p-accordionTab>
         <br/>
       </p-accordion>
