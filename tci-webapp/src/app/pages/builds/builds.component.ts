@@ -1,20 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProjectService} from "../../services/project.service";
 import {Project} from "../../models/project";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Build} from "../../models/build";
 import {LoggerService} from "../../services/logger.service";
 import {ToasterConfig, ToasterService} from 'angular2-toaster';
+import {AnonymousSubscription, Subscription} from 'rxjs/Subscription';
+import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 
 @Component({
   templateUrl: './builds.component.html'
 })
-export class BuildsComponent implements OnInit {
+export class BuildsComponent implements OnInit, OnDestroy {
 
   private project : any = {};
 
   private builds : any;
-  private buildsLoading: any;
+  private buildsLoading: AnonymousSubscription;
+
+  private timerSubscription: AnonymousSubscription;
+  private buildsSubscription: AnonymousSubscription;
 
   private dialogDeleteBuildVisible: Boolean = false;
   private confirmDeleteBuild: any = {};
@@ -38,7 +43,18 @@ export class BuildsComponent implements OnInit {
     this.retrieveBuildsForProject();
   }
 
-  retrieveBuildsForProject() {
+  ngOnDestroy() {
+    if (this.timerSubscription)
+      this.timerSubscription.unsubscribe();
+
+    if (this.buildsSubscription)
+      this.buildsSubscription.unsubscribe();
+
+    if (this.buildsLoading)
+      this.buildsLoading.unsubscribe();
+  }
+
+  private retrieveBuildsForProject() {
     this.route.params.subscribe(params => {
 
       if (params['id'] == undefined) {
@@ -48,16 +64,9 @@ export class BuildsComponent implements OnInit {
 
       this.projectService.getProjectById(params['id'])
         .then((res: Project) => {
-
           this.project = res;
-
-          this.buildsLoading = this.loggerService.getAllBuildsForProject(params['id'])
-            .then((res: Build[]) => {
-              this.builds = res;
-            })
-            .catch((err: any) => {
-              this.toasterService.pop('error', 'Unable to retrieve Builds List', err);
-            });
+          this.buildsLoading = this.refreshBuilds(res.id);
+          this.subscribeToBuilds(res.id);
         })
         .catch((err: any) => {
           this.router.navigate(['projects']);
@@ -90,7 +99,6 @@ export class BuildsComponent implements OnInit {
   }
 
   deleteBuild() {
-
     this.loggerService.deleteBuildForProject(this.project.id, this.confirmDeleteBuild.id)
       .then((res: number) => {
         if (res == 1) {
@@ -111,5 +119,17 @@ export class BuildsComponent implements OnInit {
 
   redirectToProjectPage() {
     this.router.navigate(['projects']);
+  }
+
+  private refreshBuilds(id: number): Subscription {
+    return this.loggerService.getAllBuildsForProject(id).subscribe(
+      (res: Build[]) => this.builds = res
+    );
+  }
+
+  private subscribeToBuilds(id: number): void {
+    this.timerSubscription = IntervalObservable.create(5000).subscribe(
+      () => this.buildsSubscription = this.refreshBuilds(id)
+    );
   }
 }

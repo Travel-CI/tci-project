@@ -13,7 +13,7 @@ export class StepComponent implements OnInit, OnDestroy {
 
   private build : any = {};
 
-  private steps : any =[];
+  private steps : any = [];
   private stepsLoading: AnonymousSubscription;
 
   private timerSubscription: AnonymousSubscription;
@@ -41,6 +41,7 @@ export class StepComponent implements OnInit, OnDestroy {
   }
 
   private retrieveStepsForBuild() {
+
     this.route.params.subscribe(params => {
 
       if (params['id'] == undefined) {
@@ -48,19 +49,15 @@ export class StepComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.loggerService.getBuildById(params['id'])
-        .then((res: Build) => {
-          this.build = res;
+      this.refreshBuild(params['id'], (res: Build) => {
+        this.build = res;
 
-          this.stepsLoading = this.refreshSteps(res.id);
+        this.stepsLoading = this.refreshSteps(res.id);
 
-          // Update steps only if build is not end
-          if (res.status == 'IN_PROGRESS')
-            this.subscribeToData(res.id);
-        })
-        .catch((err: any) => {
-          this.router.navigate(['projects', 'builds']);
-        });
+        // Update steps only if build is not finished
+        if (res.status == 'IN_PROGRESS')
+          this.subscribeToSteps(res.id);
+      });
     });
   }
 
@@ -81,15 +78,24 @@ export class StepComponent implements OnInit, OnDestroy {
     this.router.navigate(['projects', 'builds', build.projectId]);
   }
 
+  private refreshBuild(id: number, callback: Function) {
+    this.loggerService.getBuildById(id)
+      .then((res: Build) => callback(res))
+      .catch((err: any) => this.router.navigate(['projects', 'builds']));
+  }
+
   private refreshSteps(id: number): Subscription {
     return this.loggerService.getAllStepsForBuild(id).subscribe((res: Step[]) => {
       this.steps = res;
+
+      if (this.steps.length != 0 && this.steps[this.steps.length - 1].status != 'IN_PROGRESS')
+        this.refreshBuild(id, (res: Build) => this.build = res);
     });
   }
 
-  private subscribeToData(id: number): void {
-    this.timerSubscription = IntervalObservable.create(5000).subscribe(() => {
-      this.stepsSubscription = this.refreshSteps(id);
-    });
+  private subscribeToSteps(id: number): void {
+    this.timerSubscription = IntervalObservable.create(5000).subscribe(
+      () => this.stepsSubscription = this.refreshSteps(id)
+    );
   }
 }
