@@ -52,11 +52,11 @@ export class ProjectsComponent implements OnInit {
   }
 
   redirectToEditPage(project: Project) {
-    this.router.navigate(['/projects/edit', project.id]);
+    this.router.navigate(['projects', 'edit', project.id]);
   }
 
   redirectToBuildsPage(project: Project) {
-    this.router.navigate(['/projects/builds', project.id]);
+    this.router.navigate(['projects', 'builds', project.id]);
   }
 
   showStartDialog(project: Project) {
@@ -64,7 +64,8 @@ export class ProjectsComponent implements OnInit {
 
     for (let i = 0; i < project.branches.length; i++)
       this.dialogBranches.push({
-        label: project.branches[i], value: {
+        label: project.branches[i],
+        value: {
           branch: project.branches[i],
           project: project
         }
@@ -105,9 +106,7 @@ export class ProjectsComponent implements OnInit {
           this.projects = projects;
         }
       })
-      .catch((err: any) => {
-        this.toasterService.pop('error', 'Delete failed', err);
-      });
+      .catch((err: any) => this.toasterService.pop('error', 'Delete failed', err));
 
     this.hideDeleteProjectDialog();
   }

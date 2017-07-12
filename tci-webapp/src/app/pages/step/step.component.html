@@ -1,35 +1,41 @@
 <div class="row">
+  <div class="col-sm-1">
+    <button class="btn btn-secondary btn-sm btn-block" type="button" (click)="redirectToBuildPage(build)" translate><i class="fa fa-arrow-left"></i> steps.back</button>
+  </div>
+</div>
+
+<br/>
+<div class="row">
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <i class="fa fa-cogs"></i>{{ build.name }}
+        <i class="fa fa-cogs"></i>{{ 'steps.build.label' | translate }}{{ build.id }}
       </div>
       <div class="card-block">
         <div class="col-md-9">
           <ul>
-            <li>
-              <b>Start by : </b>{{ build.startBy }}
+            <li><b translate>steps.build.start</b>{{ build.startBy }}</li>
+            <br/>
+            <li><b translate>steps.build.commitMessage</b> {{ build.commitMessage }}</li>
+            <br/>
+            <li><b translate>steps.build.commitHash</b> {{ build.commitHash }}</li>
+            <br/>
+            <li><b translate>steps.build.startedAt</b>{{ build.buildStart | date: 'medium' }}</li>
+            <br/>
+            <li><b translate>steps.build.endAt</b>{{ build.buildEnd | date: 'medium' }}</li>
+            <br/>
+            <li><b translate>steps.build.time</b>{{
+              (!build.buildEnd)
+              ? ((today | amDifference: build.buildStart  : 'minutes') == 0)
+                  ? (today | amDifference: build.buildStart  : 'seconds') + " seconde(s)"
+                  : (today | amDifference: build.buildStart  : 'minutes') + " minute(s)"
+              : ((build.buildEnd | amDifference: build.buildStart : 'minutes') == 0)
+                  ? (build.buildEnd | amDifference: build.buildStart : 'seconds')  + " seconde(s)"
+                  : (build.buildEnd | amDifference: build.buildStart : 'minutes') + " minute(s)"
+              }}
             </li>
             <br/>
-            <li>
-              <b>Commit Message : </b> {{ build.commitMessage }}
-            </li>
-            <br/>
-            <li>
-              <b>Commit Hash :</b> {{ build.commitHash }}
-            </li>
-            <br/>
-            <li>
-              <b>StartAt : </b>{{ build.buildStart | date: 'medium' }}
-            </li>
-            <br/>
-            <li>
-              <b>EndAt : </b>{{ build.buildEnd | date: 'medium' }}
-            </li>
-            <br/>
-            <li>
-              <b>Time : </b>
-            </li>
+            <li *ngIf="build.error"><b translate>steps.build.error</b>{{ build.error }}</li>
           </ul>
         </div>
       </div>
@@ -37,15 +43,21 @@
   </div>
 </div>
 
-<p-accordion [multiple]="true">
-  <p-accordionTab header="Header 1">
-    Content 1
-  </p-accordionTab>
-  <br/>
-  <p-accordionTab header="Header 2">
-    Content 2
-  </p-accordionTab>
-  <p-accordionTab header="Header 3">
-    Content 3
-  </p-accordionTab>
-</p-accordion>
+<ng-template ngFor let-step [ngForOf]="steps" [ngBusy]="stepsLoading">
+  <ng-container>
+    <div class="card" [ngClass]="classDependingOnStepStatus(step)">
+      <p-accordion [multiple]="true">
+        <p-accordionTab header={{step.command}}>
+          <b translate>steps.step.start</b>{{ step.stepStart |  date: 'medium' }}
+          <br/>
+          <br/>
+          <b translate>steps.step.endAt</b>{{ step.stepEnd |  date: 'medium' }}
+          <br/>
+          <br/>
+          <span style="white-space: pre">{{ step.commandResult }}</span>
+        </p-accordionTab>
+        <br/>
+      </p-accordion>
+    </div>
+  </ng-container>
+</ng-template>

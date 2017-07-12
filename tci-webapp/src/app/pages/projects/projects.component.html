@@ -1,13 +1,16 @@
 <div class="row">
   <div class="col-lg-12">
     <div class="card">
-      <div class="card-header">
-        <i class="fa fa-align-justify"></i> Projects List
+
+      <div class="card-header" translate>
+        <i class="fa fa-align-justify"></i> projects.title
       </div>
+
       <div class="card-block">
+
         <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
           <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-          <input #filter type="text" pInputText size="20" placeholder="Filtre">
+          <input #filter type="text" pInputText size="20" placeholder="{{ 'projects.filter' | translate }}">
         </div>
 
         <p-dataTable [value]="projects"
@@ -19,16 +22,17 @@
                      scrollable="true"
                      scrollHeight="500px">
 
-          <p-column field="id" header="Status" [sortable]="true" [style]="{'width': '80px'}"></p-column>
-          <p-column field="name" header="Project Name" [sortable]="true"></p-column>
+          <p-column field="id" header="{{ 'projects.headers.status' | translate }}" [sortable]="true" [style]="{'width': '80px'}"></p-column>
 
-          <p-column  header="Last Start">
+          <p-column field="name" header="{{ 'projects.headers.name' | translate }}" [sortable]="true"></p-column>
+
+          <p-column  header="{{ 'projects.headers.lastStart' | translate }}">
             <ng-template let-project="rowData" pTemplate="body">
               {{ project.lastStart | date:'medium' }}
             </ng-template>
           </p-column>
 
-          <p-column header="Actions" [style]="{'width': '145px'}">
+          <p-column header="{{ 'projects.headers.actions' | translate }}" [style]="{'width': '145px'}">
             <ng-template let-col let-project="rowData" pTemplate="body">
               <button class="btn btn-secondary btn-sm" type="button" (click)="redirectToBuildsPage(project)"><i class="fa fa-info-circle"></i></button>
               <button class="btn btn-success btn-sm" type="button" *ngIf="project.enable" (click)="showStartDialog(project)"><i class="fa fa-play"></i></button>
@@ -36,6 +40,7 @@
               <button class="btn btn-danger btn-sm" type="button" (click)="showDeleteProjectDialog(project)"><i class="fa fa-trash"></i></button>
             </ng-template>
           </p-column>
+
         </p-dataTable>
       </div>
     </div>
@@ -43,30 +48,45 @@
 </div>
 
 
-<p-dialog appendTo="body" header="Select Branch" [(visible)]="dialogBranchesVisible" modal="modal" width="300" [draggable]=false (onHide)="hideStartDialog()">
+<p-dialog appendTo="body"
+          modal="modal"
+          width="300"
+          header="{{ 'projects.dialog.branch.header' | translate }}"
+          [(visible)]="dialogBranchesVisible"
+          [draggable]=false
+          (onHide)="hideStartDialog()">
 
   <div class="form-group row">
-    <label class="col-md-3 form-control-label">Branch</label>
+    <label class="col-md-3 form-control-label" translate>projects.dialog.branch.body</label>
     <div class="col-md-9">
-      <p-dropdown placeholder="Choose a Branch" [style]="{'width':'100%'}" [options]="dialogBranches" [(ngModel)]="selectedBranch"></p-dropdown>
+      <p-dropdown placeholder="{{ 'projects.dialog.branch.placeholder' | translate }}"
+                  [style]="{'width':'100%'}"
+                  [options]="dialogBranches"
+                  [(ngModel)]="selectedBranch"></p-dropdown>
     </div>
   </div>
+
   <div class="col-xs-12" style="height:50px;"></div>
   <p-footer>
-    <button type="button" class="btn btn-success" (click)="startManualBuild()" [disabled]="!selectedBranch"><i class="fa fa-cogs"></i> Start Build</button>
-    <button type="button" class="btn btn-danger" (click)="hideStartDialog()"><i class="fa fa-ban"></i> Cancel</button>
+    <button type="button" class="btn btn-success" (click)="startManualBuild()" [disabled]="!selectedBranch" translate><i class="fa fa-cogs"></i> projects.dialog.branch.ok</button>
+    <button type="button" class="btn btn-danger" (click)="hideStartDialog()" translate><i class="fa fa-ban"></i> projects.dialog.branch.cancel</button>
   </p-footer>
 </p-dialog>
 
-<p-dialog appendTo="body" header="Delete Project" [(visible)]="dialogDeleteProjectVisible" modal="modal" width="300" [draggable]=false (onHide)="hideDeleteProjectDialog()">
+<p-dialog appendTo="body"
+          modal="modal"
+          width="300"
+          header="{{ 'projects.dialog.delete.header' | translate }}"
+          [(visible)]="dialogDeleteProjectVisible"
+          [draggable]=false
+          (onHide)="hideDeleteProjectDialog()">
 
-  Are you sure to delete project "{{ confirmDeleteProject.name }}" ?
+  {{ 'projects.dialog.delete.body' | translate }} "{{ confirmDeleteProject.name }}" ?
   <div class="col-xs-12" style="height:50px;"></div>
   <p-footer>
-    <button type="button" class="btn btn-success" (click)="deleteProject()"><i class="fa fa-check"></i> Yes</button>
-    <button type="button" class="btn btn-danger" (click)="hideDeleteProjectDialog()"><i class="fa fa-ban"></i> No</button>
+    <button type="button" class="btn btn-success" (click)="deleteProject()" translate><i class="fa fa-check"></i> projects.dialog.delete.yes</button>
+    <button type="button" class="btn btn-danger" (click)="hideDeleteProjectDialog()" translate><i class="fa fa-ban"></i> projects.dialog.delete.no</button>
   </p-footer>
 </p-dialog>
-
 
 <toaster-container [toasterconfig]="toasterConfig"></toaster-container>
