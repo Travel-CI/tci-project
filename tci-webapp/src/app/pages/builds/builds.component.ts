@@ -35,6 +35,10 @@ export class BuildsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.retrieveBuildsForProject();
+  }
+
+  retrieveBuildsForProject() {
     this.route.params.subscribe(params => {
 
       if (params['id'] == undefined) {

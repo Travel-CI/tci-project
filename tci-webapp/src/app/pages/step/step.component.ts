@@ -21,6 +21,10 @@ export class StepComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.retrieveStepsForBuild();
+  }
+
+  retrieveStepsForBuild() {
     this.route.params.subscribe(params => {
 
       if (params['id'] == undefined) {
