@@ -74,7 +74,7 @@ export class ProjectService {
     return Promise.reject(err.message || err);
   }
 
-  stringToHexa(tmp: string): string {
+  private stringToHexa(tmp: string): string {
     var str = '';
 
     for(let i = 0; i < tmp.length; i++) {

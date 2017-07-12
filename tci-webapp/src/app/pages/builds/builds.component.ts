@@ -54,6 +54,9 @@ export class BuildsComponent implements OnInit {
           this.buildsLoading = this.loggerService.getAllBuildsForProject(params['id'])
             .then((res: Build[]) => {
               this.builds = res;
+            })
+            .catch((err: any) => {
+              this.toasterService.pop('error', 'Unable to retrieve Builds List', err);
             });
         })
         .catch((err: any) => {
