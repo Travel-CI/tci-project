@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <i class="fa fa-cogs"></i>{{ build.name }}
+        <i class="fa fa-cogs"></i>Build #{{ build.id }}
       </div>
       <div class="card-block">
         <div class="col-md-9">
@@ -37,15 +37,21 @@
   </div>
 </div>
 
-<p-accordion [multiple]="true">
-  <p-accordionTab header="Header 1">
-    Content 1
-  </p-accordionTab>
-  <br/>
-  <p-accordionTab header="Header 2">
-    Content 2
-  </p-accordionTab>
-  <p-accordionTab header="Header 3">
-    Content 3
-  </p-accordionTab>
-</p-accordion>
+<ng-template ngFor let-step [ngForOf]="buildSteps">
+  <ng-container>
+    <div class="card" [ngClass]="classDependingOnStepStatus(step)">
+      <p-accordion [multiple]="true">
+        <p-accordionTab header={{step.command}}>
+          <b>Start at : </b>{{ step.stepStart |  date: 'medium' }}
+          <br/>
+          <br/>
+          <b>End at : </b>{{ step.stepEnd |  date: 'medium' }}
+          <br/>
+          <br/>
+          {{ step.commandResult }}
+        </p-accordionTab>
+        <br/>
+      </p-accordion>
+    </div>
+  </ng-container>
+</ng-template>

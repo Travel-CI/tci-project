@@ -41,4 +41,17 @@ export class StepComponent implements OnInit {
     });
   }
 
+  classDependingOnStepStatus(step: Step) {
+    switch(step.status) {
+      case 'SUCCESS':
+        return 'badge-success';
+
+      case 'ERROR':
+        return 'badge-danger';
+
+      case 'IN_PROGRESS':
+        return 'badge-primary';
+    }
+  }
+
 }

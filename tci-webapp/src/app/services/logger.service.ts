@@ -35,6 +35,13 @@ export class LoggerService {
       .catch((err: Error) => this.handleError(err));
   }
 
+  /*getBuildById(id: number) : Promise<Build> {
+    return this.http.get('/api/builds/' + id)
+      .toPromise()
+      .then((res: Response) => res.json() as Build)
+      .catch((err: Error) => this.handleError(err));
+  }*/
+
   getAllStepsForBuild(id : number) : Promise<Step[]> {
     return this.http.get('/api/steps/' + id)
       .toPromise()
