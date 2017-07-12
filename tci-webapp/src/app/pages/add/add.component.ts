@@ -12,7 +12,9 @@ import {CommandService} from "../../services/command.service";
 export class AddComponent implements OnInit {
 
   private project: any = {};
+
   private commands: any = [];
+  private loading: Boolean = false;
 
   private isEdited: Boolean = false;
 
@@ -51,10 +53,10 @@ export class AddComponent implements OnInit {
         this.project = res;
 
         if (this.commands.length > 0) {
+
           // Store projectId in commands object
-          for (let i = 0; i < this.commands.length; i++) {
+          for (let i = 0; i < this.commands.length; i++)
             this.commands[i].projectId = res.id;
-          }
 
           this.commandService.addNewCommands(this.commands)
             .then((res: Command[]) => {
@@ -63,18 +65,14 @@ export class AddComponent implements OnInit {
                 this.clearFields();
               }
             })
-            .catch((res: any) => {
-              this.toasterService.pop('error', 'Commands Creation Failed', res);
-            });
+            .catch((res: any) => this.toasterService.pop('error', 'Commands Creation Failed', res));
         }
         else {
           this.toasterService.pop('success', 'Project Successfully Created', 'Your Project has been created.');
           this.clearFields();
         }
       })
-      .catch((res: any) => {
-        this.toasterService.pop('error', 'Creation Failed', res);
-      });
+      .catch((res: any) => this.toasterService.pop('error', 'Creation Failed', res));
   }
 
   updateProject() {
@@ -90,19 +88,14 @@ export class AddComponent implements OnInit {
       .then((res: Project) => {
 
         // Store project Id in command object
-        for (let i = 0; i < this.commands.length; i++) {
+        for (let i = 0; i < this.commands.length; i++)
           this.commands[i].projectId = res.id;
-        }
 
         // Send updated commands
         this.commandService.updateCommandsByProjectId(res.id, this.commands)
-          .then((res: Command[]) => {
-            this.toasterService.pop('success', 'Project Successfully Updated', 'Your Project has been updated.');
-          })
-          .catch((err: any) => {
-            this.toasterService.pop('error', 'Update Failed', err);
-          });
-
+          .then((res: Command[]) => this.toasterService
+            .pop('success', 'Project Successfully Updated', 'Your Project has been updated.'))
+          .catch((err: any) => this.toasterService.pop('error', 'Update Failed', err));
       })
       .catch((err: any) => {
         this.toasterService.pop('error', 'Update Failed', err);
@@ -120,6 +113,7 @@ export class AddComponent implements OnInit {
 
       // In case of edit page
       this.isEdited = true;
+      this.loading = true;
 
       this.projectService.getProjectById(params['id'])
         .then((res: Project) => {
@@ -136,6 +130,7 @@ export class AddComponent implements OnInit {
 
               this.commands = commands;
               this.commandsCounter = res.length + 1;
+              this.loading = false;
             })
             .catch((err: any) => {
               this.toasterService.pop('error', 'Get Commands Failed', err);
@@ -143,7 +138,7 @@ export class AddComponent implements OnInit {
 
         })
         .catch((err: any) => {
-          this.router.navigate(['/projects']);
+          this.router.navigate(['projects']);
         });
     });
   }
@@ -174,12 +169,11 @@ export class AddComponent implements OnInit {
     this.commandsCounter--;
   }
 
-  validateCommands(): Boolean {
+  private validateCommands(): Boolean {
 
-    for (let i = 0; i < this.commands.length; i++) {
+    for (let i = 0; i < this.commands.length; i++)
       if (this.commands[i].command == "")
         return false;
-    }
 
     return true;
   }
@@ -187,7 +181,7 @@ export class AddComponent implements OnInit {
   clearFields() {
 
     if (this.isEdited)
-      this.router.navigate(['/projects']);
+      this.router.navigate(['projects']);
 
     this.project = { enable: true };
     this.commands = [];

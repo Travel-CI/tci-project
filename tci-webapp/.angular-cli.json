@@ -19,6 +19,7 @@
         "../node_modules/primeng/resources/primeng.min.css",
         "../node_modules/primeng/resources/themes/omega/theme.scss",
         "../node_modules/font-awesome/css/font-awesome.css",
+        "../node_modules/angular2-busy/build/style/busy.css",
         "style.scss"
       ],
       "scripts": [

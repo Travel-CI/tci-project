@@ -1,39 +1,41 @@
 <div class="row">
   <div class="col-md-6">
     <div class="card">
-      <div class="card-header" *ngIf="!isEdited">
-        <i class="fa fa-plus"></i> New Project
+
+      <div class="card-header" *ngIf="!isEdited" translate>
+        <i class="fa fa-plus"></i> add.headers.add
       </div>
-      <div class="card-header" *ngIf="isEdited">
-        <i class="fa fa-pencil"></i> Edit Project
+      <div class="card-header" *ngIf="isEdited" translate>
+        <i class="fa fa-pencil"></i> add.headers.edit
       </div>
 
       <div class="card-block">
 
         <form #f="ngForm">
+
           <div class="form-group row">
-            <label class="col-md-3 form-control-label" for="name">Name</label>
+            <label class="col-md-3 form-control-label" for="name" translate>add.forms.name.label</label>
             <div class="col-md-9">
               <input type="text" id="name" name="name" class="form-control"
                      required
-                     placeholder="Project Name"
+                     placeholder="{{ 'add.forms.name.placeholder' | translate }}"
                      [(ngModel)]="project.name" />
             </div>
           </div>
 
           <div class="form-group row">
-            <label class="col-md-3 form-control-label" for="description">Description</label>
+            <label class="col-md-3 form-control-label" for="description" translate>add.forms.description.label</label>
             <div class="col-md-9">
               <textarea type="text" id="description" class="form-control" name="description"
                         required
-                        placeholder="Description"
+                        placeholder="{{ 'add.forms.description.placeholder' | translate }}"
                         [(ngModel)]="project.description">
               </textarea>
             </div>
           </div>
 
           <div class="form-group row">
-            <label class="col-md-3 form-control-label">Enable</label>
+            <label class="col-md-3 form-control-label" translate>add.forms.enable.label</label>
             <div class="col-md-9">
               <label class="switch switch-text switch-success">
                 <input class="switch-input" type="checkbox" name="enable" [(ngModel)]="project.enable" checked="(project.enable)?'':null">
@@ -44,32 +46,33 @@
           </div>
 
           <div class="form-group row">
-            <label class="col-md-3 form-control-label" for="repositoryUrl">Repository URL</label>
+            <label class="col-md-3 form-control-label" for="repositoryUrl" translate>add.forms.repository.label</label>
             <div class="col-md-9">
               <input type="text" id="repositoryUrl" class="form-control" name="repositoryUrl"
                      required
                      pattern="((git|ssh|http(s)?)|(git@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(\.git)?(/)?"
-                     placeholder="ex: https://github.com/Travel-CI/tci-project"
+                     placeholder="{{ 'add.forms.repository.placeholder' | translate }}"
                      [(ngModel)]="project.repositoryUrl" />
             </div>
           </div>
 
           <div class="form-group row">
-            <label class="col-md-3 form-control-label" for="branches">Branches</label>
+            <label class="col-md-3 form-control-label" for="branches" translate>add.forms.branches.label</label>
             <div class="col-md-9">
               <input type="text" id="branches" class="form-control" name="branches"
                      required
                      pattern="[a-zA-Z0-9 ,-\/]*"
-                     placeholder="ex: master, dev, another_branch_to_build"
+                     placeholder="{{ 'add.forms.branches.placeholder' | translate }}"
                      [(ngModel)]="project.branches" />
             </div>
           </div>
+
           <div class="form-group row">
-            <label class="col-md-3 form-control-label" for="dockerfile">Dockerfile Location</label>
+            <label class="col-md-3 form-control-label" for="dockerfile" translate>add.forms.dockerfile.label</label>
             <div class="col-md-9">
               <input type="text" id="dockerfile" class="form-control" name="dockerfile"
                      pattern="[a-zA-Z0-9 -\/]*"
-                     placeholder="Empty if root folder"
+                     placeholder="{{ 'add.forms.dockerfile.placeholder' | translate }}"
                      [(ngModel)]="project.dockerfileLocation" />
             </div>
           </div>
@@ -77,32 +80,36 @@
       </div>
 
       <div class="card-footer">
-        <button type="submit" class="btn btn-primary" *ngIf="isEdited" (click)="updateProject()" [disabled]="!f.form.valid"><i class="fa fa-dot-circle-o"></i> Edit Project</button>
-        <button type="submit" class="btn btn-primary" *ngIf="!isEdited" (click)="createProject()" [disabled]="!f.form.valid"><i class="fa fa-plus"></i> Add Project</button>
-        <button type="reset" (click)="clearFields()" class="btn btn-danger"><i class="fa fa-ban"></i> Cancel</button>
+        <button type="submit" class="btn btn-primary" *ngIf="isEdited" (click)="updateProject()" [disabled]="!f.form.valid" translate><i class="fa fa-dot-circle-o"></i> add.forms.buttons.edit</button>
+        <button type="submit" class="btn btn-primary" *ngIf="!isEdited" (click)="createProject()" [disabled]="!f.form.valid" translate><i class="fa fa-plus"></i> add.forms.buttons.save</button>
+        <button type="reset" (click)="clearFields()" class="btn btn-danger" translate><i class="fa fa-ban"></i> add.forms.buttons.cancel</button>
       </div>
     </div>
   </div>
 
   <div class="col-md-6" style="height: 100%;width: 100%;">
     <div class="card">
-      <div class="card-header">
-        <i class="fa fa-cog"></i> Commands
+
+      <div class="card-header" translate>
+        <i class="fa fa-cog"></i> add.commands.label
       </div>
+
       <div class="card-block">
         <p-dataTable [value]="commands"
                      [responsive]="true"
+                     [loading]="loading"
                      scrollable="true"
                      scrollHeight="350px">
-          <p-column field="commandOrder" header="Order" [sortable]="true">
-          </p-column>
-          <p-column field="command" header="Command">
+
+          <p-column field="commandOrder" header="{{ 'add.commands.headers.order' | translate }}" [sortable]="true"></p-column>
+
+          <p-column field="command" header="{{ 'add.commands.headers.command' | translate }}">
             <ng-template pTemplate="edit" let-col let-data="rowData">
-              <input type="text" class="form-control" placeholder="Command" [(ngModel)]="data[col.field]"/>
+              <input type="text" class="form-control" placeholder="{{ 'add.commands.headers.command' | translate }}" [(ngModel)]="data[col.field]"/>
             </ng-template>
           </p-column>
 
-          <p-column field="enabled" header="Enable">
+          <p-column field="enabled" header="{{ 'add.commands.headers.enable' | translate }}">
             <ng-template pTemplate="body" let-col let-data="rowData">
               <div class="text-center">
                 <label class="switch switch-text switch-success">
@@ -114,7 +121,7 @@
             </ng-template>
           </p-column>
 
-          <p-column field="enableLogs" header="Logs">
+          <p-column field="enableLogs" header="{{ 'add.commands.headers.enableLogs' | translate }}">
             <ng-template pTemplate="body" let-col let-data="rowData">
               <div class="text-center">
                 <label class="switch switch-text switch-success">
@@ -126,7 +133,7 @@
             </ng-template>
           </p-column>
 
-          <p-column header="Action" [style]="{'width': '60px'}">
+          <p-column header="{{ 'add.commands.headers.action' | translate }}" [style]="{'width': '60px'}">
             <ng-template let-command="rowData" pTemplate="body">
               <div class="text-center">
                 <button class="btn btn-danger btn-sm" type="button" (click)="deleteCommand(command)"><i class="fa fa-trash"></i></button>

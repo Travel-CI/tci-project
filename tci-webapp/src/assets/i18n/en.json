@@ -1,0 +1,111 @@
+{
+  "projects": {
+    "title": "Projects List",
+    "filter": "Filter",
+    "headers": {
+      "status": "Status",
+      "name": "Project Name",
+      "lastStart": "Last Start",
+      "actions": "Actions"
+    },
+    "dialog": {
+      "branch": {
+        "header": "Select Branch",
+        "body": "Branch",
+        "placeholder": "Choose a Branch",
+        "ok": "Start Build",
+        "cancel": "Cancel"
+      },
+      "delete": {
+        "header": "Delete project",
+        "body": "Are you sure to delete project",
+        "yes": "Yes",
+        "no": "No"
+      }
+    }
+  },
+
+  "add": {
+    "headers": {
+      "add": "New Project",
+      "edit": "Edit Project"
+    },
+    "forms": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Project Name"
+      },
+      "description": {
+        "label": "Description",
+        "placeholder": "Description"
+      },
+      "enable": {
+        "label": "Enable"
+      },
+      "repository": {
+        "label": "Repository Url",
+        "placeholder": "ex: https://github.com/Travel-CI/tci-project"
+      },
+      "branches": {
+        "label": "Branches",
+        "placeholder": "ex: master, dev, another_branch_to_build"
+      },
+      "dockerfile": {
+        "label": "Dockerfile Location",
+        "placeholder": "Empty if root folder"
+      },
+      "buttons": {
+        "save": "Add Project",
+        "edit": "Edit Project",
+        "cancel": "Cancel"
+      }
+    },
+    "commands" : {
+      "label": "Commands",
+      "headers": {
+        "order": "Order",
+        "command": "Command",
+        "enable": "Enable",
+        "enableLogs": "Logs",
+        "action": "Action"
+      }
+    }
+  },
+  "builds": {
+    "back": "Back",
+    "project": {
+      "repository": "Repository URL : ",
+      "branches": "Branches : ",
+      "lastStart": "Last Start : "
+    },
+    "build": {
+      "id": "Build Number : ",
+      "branch": "Branch Name : ",
+      "start": "Started by : ",
+      "startedAt": "Started At : ",
+      "endAt": "Ended At : "
+    },
+    "dialog": {
+      "header": "Delete Build",
+      "body": "Are you sure to delete build ",
+      "yes": "Yes",
+      "no": "No"
+    }
+  },
+  "steps": {
+    "back": "Back",
+    "build": {
+      "label": "Build #",
+      "start": "Started by : ",
+      "commitMessage": "Commit Message : ",
+      "commitHash": "Commit Hash : ",
+      "startedAt": "Started At : ",
+      "endAt": "Ended At : ",
+      "time": "Time : "
+    },
+    "step": {
+      "start": "Started At : ",
+      "endAt": "Ended At : "
+    }
+  }
+}
