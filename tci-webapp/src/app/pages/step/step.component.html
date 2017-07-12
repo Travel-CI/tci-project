@@ -34,6 +34,8 @@
                   : (build.buildEnd | amDifference: build.buildStart : 'minutes') + " minute(s)"
               }}
             </li>
+            <br/>
+            <li *ngIf="build.error"><b translate>steps.build.error</b>{{ build.error }}</li>
           </ul>
         </div>
       </div>
