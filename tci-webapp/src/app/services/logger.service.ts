@@ -4,6 +4,7 @@ import 'rxjs/add/operator/toPromise';
 import {Build} from "../models/build";
 import {environment} from "environments/environment";
 import {Step} from "app/models/step";
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class LoggerService {
@@ -35,18 +36,9 @@ export class LoggerService {
       .catch((err: Error) => this.handleError(err));
   }
 
-  /*getBuildById(id: number) : Promise<Build> {
-    return this.http.get('/api/builds/' + id)
-      .toPromise()
-      .then((res: Response) => res.json() as Build)
-      .catch((err: Error) => this.handleError(err));
-  }*/
-
-  getAllStepsForBuild(id : number) : Promise<Step[]> {
+  getAllStepsForBuild(id : number) : Observable<Step[]> {
     return this.http.get('/api/steps/' + id)
-      .toPromise()
-      .then((res: Response) => res.json() as Step[])
-      .catch((err: Error) => this.handleError(err));
+      .map((res: Response) => res.json());
   }
 
   handleError(err: Error): Promise<Build[]> {
