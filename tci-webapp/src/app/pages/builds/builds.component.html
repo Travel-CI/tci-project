@@ -3,31 +3,26 @@
     <button class="btn btn-secondary btn-sm btn-block" type="button" (click)="redirectToProjectPage()"><i class="fa fa-arrow-left"></i> Back</button>
   </div>
 </div>
+
 <br/>
 <div class="row">
   <div class="col-md-12">
     <div class="card">
+
       <div class="card-header">
         <i class="fa fa-cogs"></i>{{ project.name }}
       </div>
+
       <div class="card-block">
         <div class="col-md-9">
           <ul>
-            <li>
-              {{ project.description }}
-            </li>
+            <li>{{ project.description }}</li>
             <br/>
-            <li>
-              <b>Repository URL :</b> {{ project.repositoryUrl }}
-            </li>
+            <li><b>Repository URL :</b> {{ project.repositoryUrl }}</li>
             <br/>
-            <li>
-              <b>Branches :</b> {{ project.branches }}
-            </li>
+            <li><b>Branches :</b> {{ project.branches }}</li>
             <br/>
-            <li>
-              <b>Last Start :</b> {{ (!project.lastStart)? 'Project Never Built.' : project.lastStart | date: 'medium' }}
-            </li>
+            <li><b>Last Start :</b> {{ (!project.lastStart)? 'Project Never Built.' : project.lastStart | date: 'medium' }}</li>
           </ul>
         </div>
       </div>
@@ -40,11 +35,13 @@
     <div class="row" [ngClass]="build.hidden ? 'remove-build': ''">
       <div class="col-md-12">
         <div class="card text-center" [ngClass]="classDependingOnStatus(build, false)">
+
           <div class="card-header">
             <span class="badge float-left" [ngClass]="classDependingOnStatus(build, true)">{{ build.status }}</span>
             Build Number : <u>#{{ build.id }}</u> / Branch Name : <u>{{ build.branch }}</u>
             <i class="fa fa-times float-right" *ngIf="build.status != 'IN_PROGRESS'" (click)="showDeleteBuildDialog(build)"></i>
           </div>
+
           <div class="card-block" (click)="redirectToStepPage(build)">
 
             <table align="center" width="100%" style="text-align: left;">
@@ -52,15 +49,24 @@
                 <td width="25%"><b>Start by : </b>{{ build.startBy }}</td>
                 <td style="text-align: center;">{{ build.commitMessage }}</td>
                 <td width="25%" style="text-align: right;">{{ build.commitHash }}</td>
-              </tr>
-              <br/>
+              </tr><br/>
+
               <tr>
                 <td width="25%"><b>StartAt : </b>{{ build.buildStart | date: 'medium' }}</td>
                 <td style="text-align: center;"><b>EndAt : </b>{{ build.buildEnd | date: 'medium' }}</td>
-                <td width="25%" style="text-align: right;"><b>Time : </b> time_to_add</td>
+                <td width="25%" style="text-align: right;">
+                  <b>Time : </b> {{
+                    (!build.buildEnd)
+                      ? ((today | amDifference: build.buildStart  : 'minutes') == 0)
+                          ? (today | amDifference: build.buildStart  : 'seconds') + " seconde(s)"
+                          : (today | amDifference: build.buildStart  : 'minutes') + " minute(s)"
+                      : ((build.buildEnd | amDifference: build.buildStart : 'minutes') == 0)
+                          ? (build.buildEnd | amDifference: build.buildStart : 'seconds')  + " seconde(s)"
+                          : (build.buildEnd | amDifference: build.buildStart : 'minutes') + " minute(s)"
+                  }}
+                </td>
               </tr>
             </table>
-
           </div>
         </div>
       </div>

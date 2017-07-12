@@ -31,6 +31,7 @@ import {ToasterModule} from 'angular2-toaster';
 import { StepComponent } from './pages/step/step.component';
 import {AccordionModule} from 'primeng/primeng';
 import {BusyModule} from 'angular2-busy';
+import {MomentModule} from 'angular2-moment';
 
 const NGA_SERVICES = [
   BaImageLoaderService,
@@ -83,7 +84,8 @@ const APP_PROVIDERS = [
 
     ToasterModule,
     BusyModule,
-    
+    MomentModule,
+
     AppRoutingModule,
     AppTranslationModule
   ],

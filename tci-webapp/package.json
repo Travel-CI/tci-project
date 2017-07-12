@@ -28,6 +28,7 @@
     "@ngx-translate/http-loader": "0.0.3",
     "@types/node": "^6.0.78",
     "angular2-busy": "^2.0.4",
+    "angular2-moment": "^1.4.0",
     "angular2-toaster": "^4.0.0",
     "bootstrap": "^4.0.0-alpha.6",
     "classlist.js": "^1.1.20150312",
