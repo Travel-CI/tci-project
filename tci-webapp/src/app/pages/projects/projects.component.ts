@@ -1,18 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '../../models/project';
 import {ProjectService} from '../../services/project.service';
 import {Router} from "@angular/router";
 import {ToasterConfig, ToasterService} from 'angular2-toaster';
 import {Build} from "../../models/build";
+import {AnonymousSubscription, Subscription} from "rxjs/Subscription";
+import {IntervalObservable} from "rxjs/observable/IntervalObservable";
 
 @Component({
   templateUrl: './projects.component.html'
 })
 
-export class ProjectsComponent implements OnInit {
+export class ProjectsComponent implements OnInit, OnDestroy {
 
   private projects: any;
   private loading: Boolean = false;
+
+  private timerSubscription: AnonymousSubscription;
+  private projectsSubscription: AnonymousSubscription;
 
   private dialogBranchesVisible: Boolean = false;
   private dialogBranches: any = [];
@@ -39,27 +44,21 @@ export class ProjectsComponent implements OnInit {
     this.getAllProjectsForList();
   }
 
+  ngOnDestroy() {
+    if (this.timerSubscription)
+      this.timerSubscription.unsubscribe();
+
+    if (this.projectsSubscription)
+      this.projectsSubscription.unsubscribe();
+  }
+
   private getAllProjectsForList() {
     this.loading = true;
 
-    this.projectService.getAllProjects()
-      .then((res: Project[]) => {
-        this.projects = res;
-        this.loading = false;
-        for(let i = 0; i < res.length; i++)
-          this.getLastBuildStatus(res[i], i);
-      })
-      .catch((err: any) => {
-        this.toasterService.pop('error', 'Projects List', 'Unable to retrieve Projects List');
-    });
+    this.refreshProjects();
+    this.subscribeToProjects();
   }
 
-  getLastBuildStatus(project: Project, index: number){
-    this.projectService.getLastBuildForProject(project.id)
-      .then((res: Build) => {
-        this.projects[index].build = res;
-      });
-  }
 
   badgeDependingBuildStatus(build: Build) : string {
     switch(build.status) {
@@ -132,5 +131,31 @@ export class ProjectsComponent implements OnInit {
       .catch((err: any) => this.toasterService.pop('error', 'Delete failed', err));
 
     this.hideDeleteProjectDialog();
+  }
+
+  getLastBuildStatus(projects: any){
+    for(let i = 0; i< projects.length; i++){
+      this.projectService.getLastBuildForProject(projects[i].id)
+        .then((res: Build) => {
+          projects[i].build = res;
+          if(i == projects.length - 1)
+            this.projects = projects;
+        });
+    }
+  }
+
+  private refreshProjects(): Subscription {
+
+    return this.projectService.getAllProjects()
+      .subscribe((res: Project[]) => {
+        this.loading = false;
+        this.getLastBuildStatus(res);
+      });
+  }
+
+  private subscribeToProjects(): void {
+    this.timerSubscription = IntervalObservable.create(5000).subscribe(
+      () => this.projectsSubscription = this.refreshProjects()
+    );
   }
 }

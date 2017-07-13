@@ -4,6 +4,7 @@ import {Http, Headers, RequestOptions, Response} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {environment} from "../../environments/environment";
 import {Build} from "../models/build";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class ProjectService {
@@ -27,11 +28,9 @@ export class ProjectService {
       .catch((err: Error) => this.handleError(err));
   }
 
-  getAllProjects(): Promise<Project[]> {
+  getAllProjects(): Observable<Project[]> {
     return this.http.get(this.PROJECT_PROXY_URL)
-      .toPromise()
-      .then((res: Response) => res.json() as Project[])
-      .catch((err: Error) => this.handleError(err));
+      .map((res: Response) => res.json() as Project[]);
   }
 
   getProjectById(id: string): Promise<Project> {
