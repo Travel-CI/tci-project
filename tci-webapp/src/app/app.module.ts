@@ -20,7 +20,7 @@ import {AppTranslationModule} from "./shared/translation/app.translation.module"
 import {FormsModule} from "@angular/forms";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ProjectsComponent } from './pages/projects/projects.component';
-import {DataTableModule, DialogModule, DropdownModule} from 'primeng/primeng';
+import {DataTableModule, DialogModule, DropdownModule, SharedModule} from 'primeng/primeng';
 import {AddComponent} from './pages/add/add.component';
 import {BuildsComponent} from './pages/builds/builds.component';
 import {ProjectService} from "app/services/project.service";
@@ -77,6 +77,7 @@ const APP_PROVIDERS = [
     DropdownModule,
     SelectModule,
     AccordionModule,
+    SharedModule,
 
     // Bootstrap
     BsDropdownModule.forRoot(),

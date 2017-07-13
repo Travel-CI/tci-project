@@ -4,7 +4,8 @@
   </div>
 </div>
 
-<br/>
+<div class="col-xs-12 field-space"></div>
+
 <div class="row">
   <div class="col-md-12">
     <div class="card">
@@ -15,15 +16,15 @@
         <div class="col-md-9">
           <ul>
             <li><b translate>steps.build.start</b>{{ build.startBy }}</li>
-            <br/>
+            <div class="col-xs-12 field-space"></div>
             <li><b translate>steps.build.commitMessage</b> {{ build.commitMessage }}</li>
-            <br/>
+            <div class="col-xs-12 field-space"></div>
             <li><b translate>steps.build.commitHash</b> {{ build.commitHash }}</li>
-            <br/>
+            <div class="col-xs-12 field-space"></div>
             <li><b translate>steps.build.startedAt</b>{{ build.buildStart | date: 'medium' }}</li>
-            <br/>
+            <div class="col-xs-12 field-space"></div>
             <li><b translate>steps.build.endAt</b>{{ build.buildEnd | date: 'medium' }}</li>
-            <br/>
+            <div class="col-xs-12 field-space"></div>
             <li><b translate>steps.build.time</b>{{
               (!build.buildEnd)
               ? ((today | amDifference: build.buildStart  : 'minutes') == 0)
@@ -34,7 +35,7 @@
                   : (build.buildEnd | amDifference: build.buildStart : 'minutes') + " minute(s)"
               }}
             </li>
-            <br/>
+            <div class="col-xs-12 field-space"></div>
             <li *ngIf="build.error"><b translate>steps.build.error</b>{{ build.error }}</li>
           </ul>
         </div>
@@ -43,21 +44,20 @@
   </div>
 </div>
 
-<ng-template ngFor let-step [ngForOf]="steps" [ngBusy]="stepsLoading">
-  <ng-container>
-    <div class="card" [ngClass]="classDependingOnStepStatus(step)">
-      <p-accordion [multiple]="true">
-        <p-accordionTab header={{step.command}}>
-          <b translate>steps.step.start</b>{{ step.stepStart |  date: 'medium' }}
-          <br/>
-          <br/>
-          <b translate>steps.step.endAt</b>{{ step.stepEnd |  date: 'medium' }}
-          <br/>
-          <br/>
-          <span style="white-space: pre">{{ step.commandResult }}</span>
-        </p-accordionTab>
-        <br/>
-      </p-accordion>
+<p-accordion [multiple]="true" [lazy]="true" (onOpen)="onTabOpen($event)" (onClose)="onTabClose($event)">
+  <ng-template ngFor let-i="index" let-step [ngForOf]="steps" [ngBusy]="stepsLoading">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card" [ngClass]="classDependingOnStepStatus(step)">
+            <p-accordionTab [header]="displayAccordionTabHeader(step)" [selected]="isAccordionSelected(i)">
+              <b translate>steps.step.start</b>{{ step.stepStart |  date: 'medium' }}
+              <div class="col-xs-12 field-space"></div>
+              <b translate>steps.step.endAt</b>{{ step.stepEnd |  date: 'medium' }}
+              <div class="col-xs-12 field-space"></div>
+              <span style="white-space: pre">{{ step.commandResult }}</span>
+            </p-accordionTab>
+        </div>
+      </div>
     </div>
-  </ng-container>
-</ng-template>
+  </ng-template>
+</p-accordion>

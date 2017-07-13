@@ -132,4 +132,6 @@ export class BuildsComponent implements OnInit, OnDestroy {
       () => this.buildsSubscription = this.refreshBuilds(id)
     );
   }
+  
+  
 }

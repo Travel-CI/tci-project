@@ -5,16 +5,18 @@ import {Build} from "../../models/build";
 import {Step} from "../../models/step";
 import {AnonymousSubscription, Subscription} from "rxjs/Subscription";
 import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   templateUrl: './step.component.html'
 })
 export class StepComponent implements OnInit, OnDestroy {
 
-  private build : any = {};
+  private build: any = {};
 
-  private steps : any = [];
+  private steps: any = [];
   private stepsLoading: AnonymousSubscription;
+  private accordionIndexes: number[] = [];
 
   private timerSubscription: AnonymousSubscription;
   private stepsSubscription: AnonymousSubscription;
@@ -22,7 +24,8 @@ export class StepComponent implements OnInit, OnDestroy {
   constructor(
     private loggerService : LoggerService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -61,19 +64,6 @@ export class StepComponent implements OnInit, OnDestroy {
     });
   }
 
-  classDependingOnStepStatus(step: Step) {
-    switch (step.status) {
-      case 'SUCCESS':
-        return 'badge-success';
-
-      case 'ERROR':
-        return 'badge-danger';
-
-      case 'IN_PROGRESS':
-        return 'badge-primary';
-    }
-  }
-
   redirectToBuildPage(build: Build) {
     this.router.navigate(['projects', 'builds', build.projectId]);
   }
@@ -97,5 +87,38 @@ export class StepComponent implements OnInit, OnDestroy {
     this.timerSubscription = IntervalObservable.create(5000).subscribe(
       () => this.stepsSubscription = this.refreshSteps(id)
     );
+  }
+
+  // Accordion Setup
+  classDependingOnStepStatus(step: Step): string {
+    switch (step.status) {
+      case 'SUCCESS':
+        return 'badge-success';
+
+      case 'ERROR':
+        return 'badge-danger';
+
+      case 'IN_PROGRESS':
+        return 'badge-primary';
+    }
+  }
+
+  onTabOpen(e: any) {
+    this.accordionIndexes.push(e.index);
+  }
+
+  onTabClose(e: any) {
+    this.accordionIndexes.splice(this.accordionIndexes.indexOf(e.index), 1);
+  }
+
+  isAccordionSelected(i: number): Boolean {
+    if (this.accordionIndexes.indexOf(i) < 0)
+      return false;
+    return true;
+  }
+
+  displayAccordionTabHeader(step: Step): string {
+    return step.command +
+      "<span class=\"badge float-right " + this.classDependingOnStepStatus(step) + "\">" + step.status + "</span>";
   }
 }

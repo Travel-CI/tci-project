@@ -4,7 +4,8 @@
   </div>
 </div>
 
-<br/>
+<div class="col-xs-12 field-space"></div>
+
 <div class="row">
   <div class="col-md-12">
     <div class="card">
@@ -17,11 +18,11 @@
         <div class="col-md-9">
           <ul>
             <li>{{ project.description }}</li>
-            <br/>
+            <div class="col-xs-12 field-space"></div>
             <li><b translate>builds.project.repository</b> {{ project.repositoryUrl }}</li>
-            <br/>
+            <div class="col-xs-12 field-space"></div>
             <li><b translate>builds.project.branches</b> {{ project.branches }}</li>
-            <br/>
+            <div class="col-xs-12 field-space"></div>
             <li><b translate>builds.project.lastStart</b> {{ (!project.lastStart)? 'Project Never Built.' : project.lastStart | date: 'medium' }}</li>
           </ul>
         </div>
@@ -49,12 +50,12 @@
                 <td width="25%"><b translate>builds.build.start</b>{{ build.startBy }}</td>
                 <td style="text-align: center;">{{ build.commitMessage }}</td>
                 <td width="25%" style="text-align: right;">{{ build.commitHash }}</td>
-              </tr><br/>
-
+              </tr>
+              <div class="col-xs-12 field-space"></div>
               <tr>
                 <td width="25%"><b translate>builds.build.startedAt</b>{{ build.buildStart | date: 'medium' }}</td>
                 <td style="text-align: center;"><b translate>builds.build.endAt</b>{{ build.buildEnd | date: 'medium' }}</td>
-                <td width="25%" style="text-align: right;">
+                <td width="25%" style="text-align: right;"openSteps>
                   <b>Time : </b> {{
                     (!build.buildEnd)
                       ? ((today | amDifference: build.buildStart  : 'minutes') == 0)
