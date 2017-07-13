@@ -63,6 +63,7 @@ export class AddComponent implements OnInit {
               if (res.length == this.commands.length) {
                 this.toasterService.pop('success', 'Project Successfully Created', 'Your Project has been created.');
                 this.clearFields();
+                this.router.navigate(['projects']);
               }
             })
             .catch((res: any) => this.toasterService.pop('error', 'Commands Creation Failed', res));
@@ -70,6 +71,7 @@ export class AddComponent implements OnInit {
         else {
           this.toasterService.pop('success', 'Project Successfully Created', 'Your Project has been created.');
           this.clearFields();
+          this.router.navigate(['projects']);
         }
       })
       .catch((res: any) => this.toasterService.pop('error', 'Creation Failed', res));
