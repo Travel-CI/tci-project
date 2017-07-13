@@ -49,7 +49,11 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card" [ngClass]="classDependingOnStepStatus(step)">
-            <p-accordionTab [header]="displayAccordionTabHeader(step)" [selected]="isAccordionSelected(i)">
+            <p-accordionTab [selected]="isAccordionSelected(i)">
+              <p-header>
+                {{ step.command }}
+                <span class="badge float-right " [ngClass]="classDependingOnStepStatus(step)">{{step.status}}</span>
+              </p-header>
               <b translate>steps.step.start</b>{{ step.stepStart |  date: 'medium' }}
               <div class="col-xs-12 field-space"></div>
               <b translate>steps.step.endAt</b>{{ step.stepEnd |  date: 'medium' }}

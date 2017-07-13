@@ -5,7 +5,6 @@ import {Build} from "../../models/build";
 import {Step} from "../../models/step";
 import {AnonymousSubscription, Subscription} from "rxjs/Subscription";
 import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
-import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   templateUrl: './step.component.html'
@@ -24,8 +23,7 @@ export class StepComponent implements OnInit, OnDestroy {
   constructor(
     private loggerService : LoggerService,
     private route: ActivatedRoute,
-    private router: Router,
-    private sanitizer: DomSanitizer
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -115,10 +113,5 @@ export class StepComponent implements OnInit, OnDestroy {
     if (this.accordionIndexes.indexOf(i) < 0)
       return false;
     return true;
-  }
-
-  displayAccordionTabHeader(step: Step): string {
-    return step.command +
-      "<span class=\"badge float-right " + this.classDependingOnStepStatus(step) + "\">" + step.status + "</span>";
   }
 }
