@@ -1,16 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '../../models/project';
 import {ProjectService} from '../../services/project.service';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 import {ToasterConfig, ToasterService} from 'angular2-toaster';
-import {Build} from "../../models/build";
-import {AnonymousSubscription, Subscription} from "rxjs/Subscription";
-import {IntervalObservable} from "rxjs/observable/IntervalObservable";
+import {Build} from '../../models/build';
+import {AnonymousSubscription, Subscription} from 'rxjs/Subscription';
+import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 
 @Component({
   templateUrl: './projects.component.html'
 })
-
 export class ProjectsComponent implements OnInit, OnDestroy {
 
   private projects: any;
@@ -84,7 +83,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   showStartDialog(project: Project) {
     this.dialogBranchesVisible = true;
 
-    for (let i = 0; i < project.branches.length; i++)
+    for (let i = 0; i < project.branches.length; i++) {
       this.dialogBranches.push({
         label: project.branches[i],
         value: {
@@ -92,6 +91,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
           project: project
         }
       });
+    }
   }
 
   hideStartDialog() {
@@ -122,7 +122,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
     this.projectService.deleteProjectById(this.confirmDeleteProject.id)
       .then((res: number) => {
-        if(res == 1) {
+        if (res === 1) {
           let projects = [...this.projects];
           projects.splice(this.projects.indexOf(this.confirmDeleteProject), 1);
           this.projects = projects;
@@ -133,12 +133,13 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.hideDeleteProjectDialog();
   }
 
-  getLastBuildStatus(projects: any){
-    for(let i = 0; i< projects.length; i++){
+  getLastBuildStatus(projects: any) {
+
+    for (let i = 0; i < projects.length; i++) {
       this.projectService.getLastBuildForProject(projects[i].id)
         .then((res: Build) => {
           projects[i].build = res;
-          if(i == projects.length - 1)
+          if (i === projects.length - 1)
             this.projects = projects;
         });
     }

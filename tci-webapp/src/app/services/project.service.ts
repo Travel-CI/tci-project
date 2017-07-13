@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import {Project} from '../models/project';
 import {Http, Headers, RequestOptions, Response} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {environment} from "../../environments/environment";
-import {Build} from "../models/build";
-import {Observable} from "rxjs/Observable";
+import {environment} from '../../environments/environment';
+import {Build} from '../models/build';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class ProjectService {
@@ -47,7 +47,7 @@ export class ProjectService {
       .catch((err: Error) => this.handleError(err));
   }
 
-  getLastBuildForProject(projectId: number) : Promise<Build> {
+  getLastBuildForProject(projectId: number): Promise<Build> {
     return this.http.get(this.BUILD_PROXY_URL + '/last/' + projectId)
       .toPromise()
       .then((res: Response) => res.json() as Build)

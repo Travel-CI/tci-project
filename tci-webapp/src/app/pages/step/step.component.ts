@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {LoggerService} from "../../services/logger.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Build} from "../../models/build";
-import {Step} from "../../models/step";
-import {AnonymousSubscription, Subscription} from "rxjs/Subscription";
+import {LoggerService} from '../../services/logger.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Build} from '../../models/build';
+import {Step} from '../../models/step';
+import {AnonymousSubscription, Subscription} from 'rxjs/Subscription';
 import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 
 @Component({
@@ -21,7 +21,7 @@ export class StepComponent implements OnInit, OnDestroy {
   private stepsSubscription: AnonymousSubscription;
 
   constructor(
-    private loggerService : LoggerService,
+    private loggerService: LoggerService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -45,7 +45,7 @@ export class StepComponent implements OnInit, OnDestroy {
 
     this.route.params.subscribe(params => {
 
-      if (params['id'] == undefined) {
+      if (params['id'] === undefined) {
         this.router.navigate(['projects', 'builds']);
         return;
       }
@@ -56,7 +56,7 @@ export class StepComponent implements OnInit, OnDestroy {
         this.stepsLoading = this.refreshSteps(res.id);
 
         // Update steps only if build is not finished
-        if (res.status == 'IN_PROGRESS')
+        if (res.status === 'IN_PROGRESS')
           this.subscribeToSteps(res.id);
       });
     });
@@ -76,7 +76,7 @@ export class StepComponent implements OnInit, OnDestroy {
     return this.loggerService.getAllStepsForBuild(id).subscribe((res: Step[]) => {
       this.steps = res;
 
-      if (this.steps.length != 0 && this.steps[this.steps.length - 1].status != 'IN_PROGRESS')
+      if (this.steps.length !== 0 && this.steps[this.steps.length - 1].status !== 'IN_PROGRESS')
         this.refreshBuild(id, (res: Build) => this.build = res);
     });
   }
