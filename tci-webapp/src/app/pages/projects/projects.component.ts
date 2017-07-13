@@ -58,6 +58,36 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.subscribeToProjects();
   }
 
+  private getLastBuildStatus(projects: any) {
+    for (let i = 0; i < projects.length; i++) {
+      this.projectService.getLastBuildForProject(projects[i].id)
+        .then((res: Build) => {
+          projects[i].build = res;
+          this.projectsAffection(i, projects);
+        })
+        .catch((err: any) => this.projectsAffection(i, projects));
+    }
+  }
+
+  private projectsAffection(i: number, projects: Project[]) {
+    if (i === projects.length - 1)
+      this.projects = projects;
+  }
+
+  private refreshProjects(): Subscription {
+    return this.projectService.getAllProjects()
+      .subscribe((res: Project[]) => {
+        this.loading = false;
+        this.getLastBuildStatus(res);
+      });
+  }
+
+  private subscribeToProjects(): void {
+    this.timerSubscription = IntervalObservable.create(5000).subscribe(
+      () => this.projectsSubscription = this.refreshProjects()
+    );
+  }
+
 
   badgeDependingBuildStatus(build: Build) : string {
     switch(build.status) {
@@ -119,7 +149,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   deleteProject() {
-
     this.projectService.deleteProjectById(this.confirmDeleteProject.id)
       .then((res: number) => {
         if (res === 1) {
@@ -131,32 +160,5 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       .catch((err: any) => this.toasterService.pop('error', 'Delete failed', err));
 
     this.hideDeleteProjectDialog();
-  }
-
-  getLastBuildStatus(projects: any) {
-
-    for (let i = 0; i < projects.length; i++) {
-      this.projectService.getLastBuildForProject(projects[i].id)
-        .then((res: Build) => {
-          projects[i].build = res;
-          if (i === projects.length - 1)
-            this.projects = projects;
-        });
-    }
-  }
-
-  private refreshProjects(): Subscription {
-
-    return this.projectService.getAllProjects()
-      .subscribe((res: Project[]) => {
-        this.loading = false;
-        this.getLastBuildStatus(res);
-      });
-  }
-
-  private subscribeToProjects(): void {
-    this.timerSubscription = IntervalObservable.create(5000).subscribe(
-      () => this.projectsSubscription = this.refreshProjects()
-    );
   }
 }
