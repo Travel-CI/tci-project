@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-1">
-    <button class="btn btn-secondary btn-sm btn-block" type="button" (click)="redirectToProjectPage()" translate><i class="fa fa-arrow-left"></i> builds.back</button>
+    <button class="btn btn-secondary btn-sm btn-block mouse-pointer" type="button" (click)="redirectToProjectPage()" translate><i class="fa fa-arrow-left"></i> builds.back</button>
   </div>
 </div>
 
@@ -40,10 +40,10 @@
           <div class="card-header">
             <span class="badge float-left" [ngClass]="classDependingOnStatus(build, true)">{{ build.status }}</span>
             {{ 'builds.build.id' | translate }}<u>#{{ build.id }}</u> / {{ 'builds.build.branch' | translate }}<u>{{ build.branch }}</u>
-            <i class="fa fa-times float-right" *ngIf="build.status != 'IN_PROGRESS'" (click)="showDeleteBuildDialog(build)"></i>
+            <i class="fa fa-times float-right mouse-pointer" *ngIf="build.status != 'IN_PROGRESS'" (click)="showDeleteBuildDialog(build)"></i>
           </div>
 
-          <div class="card-block" (click)="redirectToStepPage(build)">
+          <div class="card-block mouse-pointer" (click)="redirectToStepPage(build)">
 
             <table align="center" width="100%" style="text-align: left;">
               <tr>
@@ -80,8 +80,8 @@
   {{ 'builds.dialog.body' | translate }} #{{ confirmDeleteBuild.id }} ?
   <div class="col-xs-12" style="height:50px;"></div>
   <p-footer>
-    <button type="button" class="btn btn-success" (click)="deleteBuild()" translate><i class="fa fa-check"></i> builds.dialog.yes</button>
-    <button type="button" class="btn btn-danger" (click)="hideDeleteBuildDialog()" translate><i class="fa fa-ban"></i> builds.dialog.no</button>
+    <button type="button" class="btn btn-success mouse-pointer" (click)="deleteBuild()" translate><i class="fa fa-check"></i> builds.dialog.yes</button>
+    <button type="button" class="btn btn-danger mouse-pointer" (click)="hideDeleteBuildDialog()" translate><i class="fa fa-ban"></i> builds.dialog.no</button>
   </p-footer>
 </p-dialog>
 
