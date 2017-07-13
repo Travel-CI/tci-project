@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers, RequestOptions, Response} from "@angular/http";
+import {Http, Headers, RequestOptions, Response} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {Build} from "../models/build";
-import {environment} from "environments/environment";
-import {Step} from "app/models/step";
+import {Build} from '../models/build';
+import {environment} from 'environments/environment';
+import {Step} from 'app/models/step';
 import {Observable} from 'rxjs/Observable';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class LoggerService {
 
   constructor(private http: Http) { }
 
-  getAllBuildsForProject(id: number) : Observable<Build[]> {
+  getAllBuildsForProject(id: number): Observable<Build[]> {
     return this.http.get(this.BUILD_PROXY_URL + '/' + id)
       .map((res: Response) => res.json() as Build[]);
   }
@@ -30,21 +30,21 @@ export class LoggerService {
       .catch((err: Error) => this.handleError(err));
   }
 
-  getBuildById(id: number) : Promise<Build> {
+  getBuildById(id: number): Promise<Build> {
     return this.http.get(this.BUILD_PROXY_URL + '/id/' + id)
       .toPromise()
       .then((res: Response) => res.json() as Build)
       .catch((err: Error) => this.handleError(err));
   }
 
-  getAllStepsForBuild(id : number) : Observable<Step[]> {
+  getAllStepsForBuild(id: number): Observable<Step[]> {
     return this.http.get(this.STEP_PROXY_URL + '/' + id)
       .map((res: Response) => res.json() as Step[]);
   }
 
   handleError(err: Error): Promise<Build[]> {
 
-    if(environment.enableDebug)
+    if (environment.enableDebug)
       console.error(err);
 
     return Promise.reject(err.message || err);

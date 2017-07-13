@@ -1,17 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Project} from '../../models/project';
 import {ProjectService} from '../../services/project.service';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 import {ToasterConfig, ToasterService} from 'angular2-toaster';
+import {Build} from '../../models/build';
+import {AnonymousSubscription, Subscription} from 'rxjs/Subscription';
+import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 
 @Component({
   templateUrl: './projects.component.html'
 })
+export class ProjectsComponent implements OnInit, OnDestroy {
 
-export class ProjectsComponent implements OnInit {
-
-  private projects: Project[];
+  private projects: any;
   private loading: Boolean = false;
+
+  private timerSubscription: AnonymousSubscription;
+  private projectsSubscription: AnonymousSubscription;
 
   private dialogBranchesVisible: Boolean = false;
   private dialogBranches: any = [];
@@ -38,17 +43,63 @@ export class ProjectsComponent implements OnInit {
     this.getAllProjectsForList();
   }
 
+  ngOnDestroy() {
+    if (this.timerSubscription)
+      this.timerSubscription.unsubscribe();
+
+    if (this.projectsSubscription)
+      this.projectsSubscription.unsubscribe();
+  }
+
   private getAllProjectsForList() {
     this.loading = true;
 
-    this.projectService.getAllProjects()
-      .then((res: Project[]) => {
-        this.projects = res;
+    this.refreshProjects();
+    this.subscribeToProjects();
+  }
+
+  private getLastBuildStatus(projects: any) {
+    for (let i = 0; i < projects.length; i++) {
+      this.projectService.getLastBuildForProject(projects[i].id)
+        .then((res: Build) => {
+          projects[i].build = res;
+          this.projectsAffection(i, projects);
+        })
+        .catch((err: any) => this.projectsAffection(i, projects));
+    }
+  }
+
+  private projectsAffection(i: number, projects: Project[]) {
+    if (i === projects.length - 1)
+      this.projects = projects;
+  }
+
+  private refreshProjects(): Subscription {
+    return this.projectService.getAllProjects()
+      .subscribe((res: Project[]) => {
         this.loading = false;
-      })
-      .catch((err: any) => {
-        this.toasterService.pop('error', 'Projects List', 'Unable to load Projects List.');
-    });
+        this.getLastBuildStatus(res);
+      });
+  }
+
+  private subscribeToProjects(): void {
+    this.timerSubscription = IntervalObservable.create(5000).subscribe(
+      () => this.projectsSubscription = this.refreshProjects()
+    );
+  }
+
+
+  badgeDependingBuildStatus(build: Build) : string {
+    switch(build.status) {
+      case 'SUCCESS':
+        return 'status-success';
+
+      case 'ERROR':
+        return 'status-danger';
+
+      case 'IN_PROGRESS':
+        return 'status-primary';
+    }
   }
 
   redirectToEditPage(project: Project) {
@@ -62,7 +113,7 @@ export class ProjectsComponent implements OnInit {
   showStartDialog(project: Project) {
     this.dialogBranchesVisible = true;
 
-    for (let i = 0; i < project.branches.length; i++)
+    for (let i = 0; i < project.branches.length; i++) {
       this.dialogBranches.push({
         label: project.branches[i],
         value: {
@@ -70,6 +121,7 @@ export class ProjectsComponent implements OnInit {
           project: project
         }
       });
+    }
   }
 
   hideStartDialog() {
@@ -97,10 +149,9 @@ export class ProjectsComponent implements OnInit {
   }
 
   deleteProject() {
-
     this.projectService.deleteProjectById(this.confirmDeleteProject.id)
       .then((res: number) => {
-        if(res == 1) {
+        if (res === 1) {
           let projects = [...this.projects];
           projects.splice(this.projects.indexOf(this.confirmDeleteProject), 1);
           this.projects = projects;

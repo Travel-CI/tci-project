@@ -53,7 +53,7 @@ public class LoggerServiceImpl implements LoggerService {
 
             return response.getBody();
         } catch (final RestClientException e) {
-            log.error(e.getLocalizedMessage(), e.getCause());
+            log.error(e.getMessage(), e.getCause());
             throw new LoggerException("Error while step creation");
         }
     }
@@ -103,7 +103,7 @@ public class LoggerServiceImpl implements LoggerService {
 
             return response.getBody();
         } catch (final RestClientException e) {
-            log.error(e.getLocalizedMessage(), e.getCause());
+            log.error(e.getMessage(), e.getCause());
             throw new LoggerException(errorMessage);
         }
     }
@@ -123,7 +123,7 @@ public class LoggerServiceImpl implements LoggerService {
 
             return response.getBody();
         } catch (final RestClientException e) {
-            log.error(e.getLocalizedMessage(), e.getCause());
+            log.error(e.getMessage(), e.getCause());
             throw new LoggerException(errorMessage);
         }
     }
