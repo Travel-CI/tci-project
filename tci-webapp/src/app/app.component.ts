@@ -1,7 +1,7 @@
-import {Component} from "@angular/core";
+import {Component} from '@angular/core';
 import { GlobalState } from './global.state';
 import { BaImageLoaderService, BaThemePreloader, BaThemeSpinner } from './shared/services';
-import {TranslateService} from "@ngx-translate/core";
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app',
@@ -9,7 +9,7 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class AppComponent {
 
-  isMenuCollapsed: boolean = false;
+  isMenuCollapsed = false;
 
   constructor(private _state: GlobalState,
               private translate: TranslateService,

@@ -75,7 +75,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
             stopContainer(containerId);
         } catch (final DockerRunnerException e) {
             log.error("Error while executing Docker Engine", e);
-            loggerService.endBuildByError(project.getCurrentBuild(), e.getLocalizedMessage());
+            loggerService.endBuildByError(project.getCurrentBuild(), e.getMessage());
             throw e;
         }
     }
@@ -168,7 +168,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
 
                 commandResults.put(command.getCommand(), stdoutStderrOutput);
             } catch (final DockerException | InterruptedException e) {
-                loggerService.endStepByError(step, e.getLocalizedMessage());
+                loggerService.endStepByError(step, e.getMessage());
                 throw new DockerExecuteCommandException(e.getMessage(), e.getCause());
             }
         }

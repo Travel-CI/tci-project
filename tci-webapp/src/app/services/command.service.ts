@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers, RequestOptions, Response} from "@angular/http";
-import {Command} from "../models/command";
+import {Http, Headers, RequestOptions, Response} from '@angular/http';
+import {Command} from '../models/command';
 import 'rxjs/add/operator/toPromise';
-import {environment} from "../../environments/environment";
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class CommandService {
@@ -39,7 +39,7 @@ export class CommandService {
 
   private handleError(err: Error): Promise<Command[]> {
 
-    if(environment.enableDebug)
+    if (environment.enableDebug)
       console.error(err);
 
     return Promise.reject(err.message || err);

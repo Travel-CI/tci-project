@@ -16,7 +16,7 @@ ALTER TABLE command ADD CONSTRAINT project_id_fk FOREIGN KEY (project_id) REFERE
 ALTER TABLE command OWNER TO tcicommands;
 
 DROP TABLE IF EXISTS build CASCADE;
-CREATE TABLE build (id  bigserial NOT NULL, branch varchar(255), build_end timestamp, build_start timestamp, commit_hash varchar(255), commit_message varchar(255), error varchar(255), project_id int8, start_by varchar(255), status varchar(255), primary key (id));
+CREATE TABLE build (id  bigserial NOT NULL, branch varchar(255), build_end timestamp, build_start timestamp, commit_hash varchar(255), commit_message varchar(255), error text, project_id int8, start_by varchar(255), status varchar(255), primary key (id));
 ALTER TABLE build ADD CONSTRAINT build_project_id_fk FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE;
 ALTER TABLE build OWNER TO tcilogger;
 
