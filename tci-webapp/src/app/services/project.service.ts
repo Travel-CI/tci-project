@@ -3,11 +3,13 @@ import {Project} from '../models/project';
 import {Http, Headers, RequestOptions, Response} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {environment} from "../../environments/environment";
+import {Build} from "../models/build";
 
 @Injectable()
 export class ProjectService {
 
   private readonly PROJECT_PROXY_URL = '/api/projects';
+  private readonly BUILD_PROXY_URL = '/api/builds';
 
   constructor(private http: Http) {}
 
@@ -43,6 +45,13 @@ export class ProjectService {
     return this.http.delete(this.PROJECT_PROXY_URL + '/' + projectId, this.getOptions())
       .toPromise()
       .then((res: Response) => res.json() as number)
+      .catch((err: Error) => this.handleError(err));
+  }
+
+  getLastBuildForProject(projectId: number) : Promise<Build> {
+    return this.http.get(this.BUILD_PROXY_URL + '/last/' + projectId)
+      .toPromise()
+      .then((res: Response) => res.json() as Build)
       .catch((err: Error) => this.handleError(err));
   }
 

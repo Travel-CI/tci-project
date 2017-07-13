@@ -22,7 +22,11 @@
                      scrollable="true"
                      scrollHeight="500px">
 
-          <p-column field="id" header="{{ 'projects.headers.status' | translate }}" [sortable]="true" [style]="{'width': '80px'}"></p-column>
+          <p-column header="{{ 'projects.headers.status' | translate }}" [style]="{'width': '60px'}">
+            <ng-template let-project="rowData" pTemplate="body" >
+              <div class="circle col-centered" [ngClass]="(project.build) ? badgeDependingBuildStatus(project.build) : 'status-unknown' "></div>
+            </ng-template>
+          </p-column>
 
           <p-column field="name" header="{{ 'projects.headers.name' | translate }}" [sortable]="true"></p-column>
 

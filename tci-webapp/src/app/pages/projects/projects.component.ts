@@ -3,6 +3,7 @@ import {Project} from '../../models/project';
 import {ProjectService} from '../../services/project.service';
 import {Router} from "@angular/router";
 import {ToasterConfig, ToasterService} from 'angular2-toaster';
+import {Build} from "../../models/build";
 
 @Component({
   templateUrl: './projects.component.html'
@@ -10,7 +11,7 @@ import {ToasterConfig, ToasterService} from 'angular2-toaster';
 
 export class ProjectsComponent implements OnInit {
 
-  private projects: Project[];
+  private projects: any;
   private loading: Boolean = false;
 
   private dialogBranchesVisible: Boolean = false;
@@ -45,10 +46,32 @@ export class ProjectsComponent implements OnInit {
       .then((res: Project[]) => {
         this.projects = res;
         this.loading = false;
+        for(let i = 0; i < res.length; i++)
+          this.getLastBuildStatus(res[i], i);
       })
       .catch((err: any) => {
-        this.toasterService.pop('error', 'Projects List', 'Unable to load Projects List.');
+        this.toasterService.pop('error', 'Projects List', 'Unable to retrieve Projects List');
     });
+  }
+
+  getLastBuildStatus(project: Project, index: number){
+    this.projectService.getLastBuildForProject(project.id)
+      .then((res: Build) => {
+        this.projects[index].build = res;
+      });
+  }
+
+  badgeDependingBuildStatus(build: Build) : string {
+    switch(build.status) {
+      case 'SUCCESS':
+        return 'status-success';
+
+      case 'ERROR':
+        return 'status-danger';
+
+      case 'IN_PROGRESS':
+        return 'status-primary';
+    }
   }
 
   redirectToEditPage(project: Project) {
