@@ -1,5 +1,6 @@
 package com.travelci.notifications.email;
 
+import com.travelci.notifications.email.entities.Email;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
@@ -9,9 +10,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-/**
- * Created by Julien on 16/07/2017.
- */
 @Service
 public class EmailServiceImpl implements EmailService{
 
@@ -21,21 +19,21 @@ public class EmailServiceImpl implements EmailService{
         this.session = session;
     }
 
-
     @Override
-    public void sendSuccessEmail() {
+    public void sendSuccessEmail(final Email email) {
+        sendEmail(email.getSendTo(), email.getSubject(), email.getMessage());
     }
 
     @Override
-    public void sendErrorEmail() {
-
+    public void sendErrorEmail(final Email email) {
+        sendEmail(email.getSendTo(), email.getSubject(), email.getMessage());
     }
 
     @Override
     public void sendEmail(final String sendTo,final String subject,final String msg){
         try {
 
-            Message message = new MimeMessage(session);
+            final Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("travelci4al@gmail.com"));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(sendTo));

@@ -1,11 +1,15 @@
 package com.travelci.notifications.email;
 
+import com.travelci.notifications.email.entities.Email;
+import com.travelci.notifications.email.exceptions.InvalidEmailException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Created by Julien on 16/07/2017.
- */
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/email")
 public class EmailController {
@@ -15,11 +19,23 @@ public class EmailController {
         this.emailService = emailService;
     }
 
-    public void sendSuccessEmail(){
-        emailService.sendSuccessEmail();
+    @PostMapping("/success")
+    public void sendSuccessEmail(@Valid @RequestBody final Email email,
+                                 final BindingResult bindingResult){
+
+        if(bindingResult.hasErrors())
+            throw new InvalidEmailException();
+
+        emailService.sendSuccessEmail(email);
     }
 
-    public void sendErrorEmail(){
-        emailService.sendErrorEmail();
+    @PostMapping("/error")
+    public void sendErrorEmail(@Valid @RequestBody final Email email,
+                               final BindingResult bindingResult){
+
+        if(bindingResult.hasErrors())
+            throw new InvalidEmailException();
+
+        emailService.sendErrorEmail(email);
     }
 }

@@ -44,7 +44,7 @@ public class NotificationsServiceImpl implements NotificationsService {
             .message(template)
             .build();
 
-        sendNotification(email);
+        sendNotification(email, "/success");
     }
 
     @Override
@@ -67,16 +67,16 @@ public class NotificationsServiceImpl implements NotificationsService {
                 .message(template)
                 .build();
 
-        sendNotification(email);
+        sendNotification(email, "/error");
     }
 
     @Override
-    public void sendNotification(final Email email){
+    public void sendNotification(final Email email, final String url){
         try{
             final ResponseEntity<Void> response = restTemplate.postForEntity(
-                    notificationsServiceUrl + "/email",email,Void.class);
+                    notificationsServiceUrl + "/email" + url, email, Void.class);
         } catch (final RestClientException e) {
-            log.error(e.getMessage(),e.getCause());
+            log.error(e.getMessage(), e.getCause());
         }
     }
 }
