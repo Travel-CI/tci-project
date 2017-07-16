@@ -90,9 +90,9 @@
       </div>
 
       <div class="card-footer">
-        <button type="submit" class="btn btn-primary" *ngIf="isEdited" (click)="updateProject()" [disabled]="!f.form.valid" translate><i class="fa fa-dot-circle-o"></i> add.forms.buttons.edit</button>
-        <button type="submit" class="btn btn-primary" *ngIf="!isEdited" (click)="createProject()" [disabled]="!f.form.valid" translate><i class="fa fa-plus"></i> add.forms.buttons.save</button>
-        <button type="reset" (click)="clearFields()" class="btn btn-danger" translate><i class="fa fa-ban"></i> add.forms.buttons.cancel</button>
+        <button type="submit" class="btn btn-primary mouse-pointer" *ngIf="isEdited" (click)="updateProject()" [disabled]="!f.form.valid" translate><i class="fa fa-dot-circle-o"></i> add.forms.buttons.edit</button>
+        <button type="submit" class="btn btn-primary mouse-pointer" *ngIf="!isEdited" (click)="createProject()" [disabled]="!f.form.valid" translate><i class="fa fa-plus"></i> add.forms.buttons.save</button>
+        <button type="reset" (click)="clearFields()" class="btn btn-danger mouse-pointer" translate><i class="fa fa-ban"></i> add.forms.buttons.cancel</button>
       </div>
     </div>
   </div>
@@ -146,14 +146,14 @@
           <p-column header="{{ 'add.commands.headers.action' | translate }}" [style]="{'width': '60px'}">
             <ng-template let-command="rowData" pTemplate="body">
               <div class="text-center">
-                <button class="btn btn-danger btn-sm" type="button" (click)="deleteCommand(command)"><i class="fa fa-trash"></i></button>
+                <button class="btn btn-danger btn-sm mouse-pointer" type="button" (click)="deleteCommand(command)"><i class="fa fa-trash"></i></button>
               </div>
             </ng-template>
           </p-column>
 
           <p-footer>
             <div class="ui-helper-clearfix">
-              <button type="button" class="btn btn-primary" (click)="addNewCommand()" style="float: left;"><i class="fa fa-plus"></i> Add</button>
+              <button type="button" class="btn btn-primary mouse-pointer" (click)="addNewCommand()" style="float: left;"><i class="fa fa-plus"></i> Add</button>
             </div>
           </p-footer>
         </p-dataTable>

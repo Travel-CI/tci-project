@@ -83,7 +83,6 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
             project.setCurrentBuild(
                     loggerService.endBuildByError(project.getCurrentBuild(), e.getLocalizedMessage()));
             notificationsService.sendErrorNotification(project);
-
             throw e;
         }
     }
@@ -176,7 +175,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
 
                 commandResults.put(command.getCommand(), stdoutStderrOutput);
             } catch (final DockerException | InterruptedException e) {
-                loggerService.endStepByError(step, e.getLocalizedMessage());
+                loggerService.endStepByError(step, e.getMessage());
                 throw new DockerExecuteCommandException(e.getMessage(), e.getCause());
             }
         }

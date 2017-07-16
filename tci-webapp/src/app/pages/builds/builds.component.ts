@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ProjectService} from "../../services/project.service";
-import {Project} from "../../models/project";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Build} from "../../models/build";
-import {LoggerService} from "../../services/logger.service";
+import {ProjectService} from '../../services/project.service';
+import {Project} from '../../models/project';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Build} from '../../models/build';
+import {LoggerService} from '../../services/logger.service';
 import {ToasterConfig, ToasterService} from 'angular2-toaster';
 import {AnonymousSubscription, Subscription} from 'rxjs/Subscription';
 import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
@@ -13,9 +13,9 @@ import {IntervalObservable} from 'rxjs/observable/IntervalObservable';
 })
 export class BuildsComponent implements OnInit, OnDestroy {
 
-  private project : any = {};
+  private project: any = {};
 
-  private builds : any;
+  private builds: any;
   private buildsLoading: AnonymousSubscription;
 
   private timerSubscription: AnonymousSubscription;
@@ -57,7 +57,7 @@ export class BuildsComponent implements OnInit, OnDestroy {
   private retrieveBuildsForProject() {
     this.route.params.subscribe(params => {
 
-      if (params['id'] == undefined) {
+      if (params['id'] === undefined) {
         this.router.navigate(['projects']);
         return;
       }
@@ -101,7 +101,7 @@ export class BuildsComponent implements OnInit, OnDestroy {
   deleteBuild() {
     this.loggerService.deleteBuildForProject(this.project.id, this.confirmDeleteBuild.id)
       .then((res: number) => {
-        if (res == 1) {
+        if (res === 1) {
           let index = this.builds.indexOf(this.confirmDeleteBuild);
           this.builds[index].hidden = true;
           this.hideDeleteBuildDialog();

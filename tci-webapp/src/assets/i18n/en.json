@@ -105,7 +105,8 @@
       "commitHash": "Commit Hash : ",
       "startedAt": "Started At : ",
       "endAt": "Ended At : ",
-      "time": "Time : "
+      "time": "Time : ",
+      "error": "Error : "
     },
     "step": {
       "start": "Started At : ",

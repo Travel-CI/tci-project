@@ -1,6 +1,7 @@
 package com.travelci.notifications.email;
 
-import com.travelci.notifications.email.entities.Email;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
@@ -11,6 +12,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 @Service
+@RefreshScope
+@Slf4j
 public class EmailServiceImpl implements EmailService{
 
     private final Session session;
@@ -20,19 +23,9 @@ public class EmailServiceImpl implements EmailService{
     }
 
     @Override
-    public void sendSuccessEmail(final Email email) {
-        sendEmail(email.getSendTo(), email.getSubject(), email.getMessage());
-    }
-
-    @Override
-    public void sendErrorEmail(final Email email) {
-        sendEmail(email.getSendTo(), email.getSubject(), email.getMessage());
-    }
-
-    @Override
     public void sendEmail(final String sendTo,final String subject,final String msg){
-        try {
 
+        try {
             final Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("travelci4al@gmail.com"));
             message.setRecipients(Message.RecipientType.TO,
@@ -42,10 +35,8 @@ public class EmailServiceImpl implements EmailService{
 
             Transport.send(message);
 
-            System.out.println("Done");
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
+        } catch (final MessagingException e) {
+            log.error(e.getMessage(), e.getCause());
         }
     }
 }

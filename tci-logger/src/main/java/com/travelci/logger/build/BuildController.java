@@ -62,7 +62,7 @@ public class BuildController {
     }
 
     @GetMapping("id/{buildId}")
-    public BuildDto getBuildById(@PathVariable("buildId") final Long buildId){
+    public BuildDto getBuildById(@PathVariable("buildId") final Long buildId) {
         return buildService.getBuildById(buildId);
     }
 

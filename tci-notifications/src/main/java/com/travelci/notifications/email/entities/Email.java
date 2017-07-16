@@ -14,8 +14,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class Email {
 
-    @NotNull
-    @NotEmpty
+    @NotNull @NotEmpty
     private String sendTo;
 
     @NotNull @NotEmpty

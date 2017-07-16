@@ -54,7 +54,7 @@ public class LoggerServiceImpl implements LoggerService {
     @Override
     public BuildDto endBuildByError(final BuildDto build, final Exception exception) {
 
-        build.setError(exception.getLocalizedMessage());
+        build.setError(exception.getMessage());
         build.setBuildEnd(new Timestamp(System.currentTimeMillis()));
         return sendBuildToLogger(build, "/builds/error", OK, true, "Error while sending build error");
     }
@@ -82,7 +82,7 @@ public class LoggerServiceImpl implements LoggerService {
 
             return response.getBody();
         } catch (final RestClientException e) {
-            log.error(e.getLocalizedMessage(), e.getCause());
+            log.error(e.getMessage(), e.getCause());
             throw new LoggerException(errorMessage);
         }
     }

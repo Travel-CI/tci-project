@@ -13,6 +13,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/email")
 public class EmailController {
+
     private final EmailService emailService;
 
     public EmailController(final EmailService emailService) {
@@ -26,7 +27,7 @@ public class EmailController {
         if(bindingResult.hasErrors())
             throw new InvalidEmailException();
 
-        emailService.sendSuccessEmail(email);
+        emailService.sendEmail(email.getSendTo(), email.getSubject(), email.getMessage());
     }
 
     @PostMapping("/error")
@@ -36,6 +37,6 @@ public class EmailController {
         if(bindingResult.hasErrors())
             throw new InvalidEmailException();
 
-        emailService.sendErrorEmail(email);
+        emailService.sendEmail(email.getSendTo(), email.getSubject(), email.getMessage());
     }
 }

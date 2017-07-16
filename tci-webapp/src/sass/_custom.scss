@@ -90,3 +90,44 @@ $sidebar-header-height: 200px;
   visibility: hidden;
   display: none;
 }
+
+.field-space {
+  height: 20px;
+}
+
+.mouse-pointer {
+  cursor: pointer;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}
+
+.circle {
+  border-radius: 50%;
+}
+
+.status-success {
+  width: 20px;
+  height: 20px;
+  background: #4dbd74;
+}
+
+.status-danger {
+  width: 20px;
+  height: 20px;
+  background: #f76c6b;
+}
+
+.status-primary {
+  width: 20px;
+  height: 20px;
+  background: #20a8d8;
+}
+
+.status-unknown {
+  width: 20px;
+  height: 20px;
+  background: #9b9d9b;
+}

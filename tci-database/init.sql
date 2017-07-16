@@ -7,7 +7,7 @@ GRANT ALL PRIVILEGES ON DATABASE travelci to tciprojects;
 GRANT ALL PRIVILEGES ON DATABASE travelci to tcilogger;
 
 DROP TABLE IF EXISTS project CASCADE;
-CREATE TABLE project (id bigserial NOT NULL, branches varchar(255), created timestamp, description text, dockerfile_location varchar(255), enable boolean, last_start timestamp, name varchar(255), repository_token varchar(255), repository_url varchar(255), updated timestamp, user_name varchar(255), user_password varchar(255), PRIMARY KEY (id));
+CREATE TABLE project (id bigserial NOT NULL, branches varchar(255), created timestamp, description text, dockerfile_location varchar(255), emails varchar(255), enable boolean, last_start timestamp, name varchar(255), repository_token varchar(255), repository_url varchar(255), updated timestamp, user_name varchar(255), user_password varchar(255), PRIMARY KEY (id));
 ALTER TABLE project OWNER TO tciprojects;
 
 DROP TABLE IF EXISTS command CASCADE;
@@ -16,7 +16,7 @@ ALTER TABLE command ADD CONSTRAINT project_id_fk FOREIGN KEY (project_id) REFERE
 ALTER TABLE command OWNER TO tcicommands;
 
 DROP TABLE IF EXISTS build CASCADE;
-CREATE TABLE build (id  bigserial NOT NULL, branch varchar(255), build_end timestamp, build_start timestamp, commit_hash varchar(255), commit_message varchar(255), error varchar(255), project_id int8, start_by varchar(255), status varchar(255), primary key (id));
+CREATE TABLE build (id  bigserial NOT NULL, branch varchar(255), build_end timestamp, build_start timestamp, commit_hash varchar(255), commit_message varchar(255), error text, project_id int8, start_by varchar(255), status varchar(255), primary key (id));
 ALTER TABLE build ADD CONSTRAINT build_project_id_fk FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE;
 ALTER TABLE build OWNER TO tcilogger;
 

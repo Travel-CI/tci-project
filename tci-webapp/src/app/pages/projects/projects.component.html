@@ -22,7 +22,11 @@
                      scrollable="true"
                      scrollHeight="500px">
 
-          <p-column field="id" header="{{ 'projects.headers.status' | translate }}" [sortable]="true" [style]="{'width': '80px'}"></p-column>
+          <p-column header="{{ 'projects.headers.status' | translate }}" [style]="{'width': '60px'}">
+            <ng-template let-project="rowData" pTemplate="body" >
+              <div class="circle col-centered" [ngClass]="(project.build) ? badgeDependingBuildStatus(project.build) : 'status-unknown' "></div>
+            </ng-template>
+          </p-column>
 
           <p-column field="name" header="{{ 'projects.headers.name' | translate }}" [sortable]="true"></p-column>
 
@@ -34,10 +38,10 @@
 
           <p-column header="{{ 'projects.headers.actions' | translate }}" [style]="{'width': '145px'}">
             <ng-template let-col let-project="rowData" pTemplate="body">
-              <button class="btn btn-secondary btn-sm" type="button" (click)="redirectToBuildsPage(project)"><i class="fa fa-info-circle"></i></button>
-              <button class="btn btn-success btn-sm" type="button" *ngIf="project.enable" (click)="showStartDialog(project)"><i class="fa fa-play"></i></button>
-              <button class="btn btn-primary btn-sm" type="button" (click)="redirectToEditPage(project)"><i class="fa fa-pencil"></i></button>
-              <button class="btn btn-danger btn-sm" type="button" (click)="showDeleteProjectDialog(project)"><i class="fa fa-trash"></i></button>
+              <button class="btn btn-secondary btn-sm mouse-pointer" type="button" (click)="redirectToBuildsPage(project)"><i class="fa fa-info-circle"></i></button>
+              <button class="btn btn-success btn-sm mouse-pointer" type="button" *ngIf="project.enable" (click)="showStartDialog(project)"><i class="fa fa-play"></i></button>
+              <button class="btn btn-primary btn-sm mouse-pointer" type="button" (click)="redirectToEditPage(project)"><i class="fa fa-pencil"></i></button>
+              <button class="btn btn-danger btn-sm mouse-pointer" type="button" (click)="showDeleteProjectDialog(project)"><i class="fa fa-trash"></i></button>
             </ng-template>
           </p-column>
 
@@ -84,8 +88,8 @@
   {{ 'projects.dialog.delete.body' | translate }} "{{ confirmDeleteProject.name }}" ?
   <div class="col-xs-12" style="height:50px;"></div>
   <p-footer>
-    <button type="button" class="btn btn-success" (click)="deleteProject()" translate><i class="fa fa-check"></i> projects.dialog.delete.yes</button>
-    <button type="button" class="btn btn-danger" (click)="hideDeleteProjectDialog()" translate><i class="fa fa-ban"></i> projects.dialog.delete.no</button>
+    <button type="button" class="btn btn-success mouse-pointer" (click)="deleteProject()" translate><i class="fa fa-check"></i> projects.dialog.delete.yes</button>
+    <button type="button" class="btn btn-danger mouse-pointer" (click)="hideDeleteProjectDialog()" translate><i class="fa fa-ban"></i> projects.dialog.delete.no</button>
   </p-footer>
 </p-dialog>
 

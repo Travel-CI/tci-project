@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {ProjectService} from '../../services/project.service';
-import {ToasterConfig, ToasterService} from "angular2-toaster";
-import {Project} from "../../models/project";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Command} from "app/models/command";
-import {CommandService} from "../../services/command.service";
+import {ToasterConfig, ToasterService} from 'angular2-toaster';
+import {Project} from '../../models/project';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Command} from 'app/models/command';
+import {CommandService} from '../../services/command.service';
 
 @Component({
   templateUrl: './add.component.html'
@@ -18,7 +18,7 @@ export class AddComponent implements OnInit {
 
   private isEdited: Boolean = false;
 
-  private commandsCounter: number = 1;
+  private commandsCounter = 1;
 
   public toasterConfig: ToasterConfig = new ToasterConfig({
     tapToDismiss: true,
@@ -41,12 +41,12 @@ export class AddComponent implements OnInit {
 
   createProject() {
 
-    if (this.validateCommands() == false) {
+    if (this.validateCommands() === false) {
       this.toasterService.pop('error', 'Creation Failed', 'Invalid Commands Fields');
       return;
     }
 
-    this.project.branches = this.project.branches.toString().replace(" ", "").split(",");
+    this.project.branches = this.project.branches.toString().replace(' ', '').split(',');
 
     this.projectService.create(this.project)
       .then((res: Project) => {
@@ -60,16 +60,17 @@ export class AddComponent implements OnInit {
 
           this.commandService.addNewCommands(this.commands)
             .then((res: Command[]) => {
-              if (res.length == this.commands.length) {
+              if (res.length === this.commands.length) {
                 this.toasterService.pop('success', 'Project Successfully Created', 'Your Project has been created.');
                 this.clearFields();
+                this.router.navigate(['projects']);
               }
             })
-            .catch((res: any) => this.toasterService.pop('error', 'Commands Creation Failed', res));
-        }
-        else {
+            .catch((err: any) => this.toasterService.pop('error', 'Commands Creation Failed', err));
+        } else {
           this.toasterService.pop('success', 'Project Successfully Created', 'Your Project has been created.');
           this.clearFields();
+          this.router.navigate(['projects']);
         }
       })
       .catch((res: any) => this.toasterService.pop('error', 'Creation Failed', res));
@@ -77,7 +78,7 @@ export class AddComponent implements OnInit {
 
   updateProject() {
 
-    if (this.validateCommands() == false) {
+    if (this.validateCommands() === false) {
       this.toasterService.pop('error', 'Creation Failed', 'Invalid Commands Fields');
       return;
     }
@@ -99,14 +100,14 @@ export class AddComponent implements OnInit {
       })
       .catch((err: any) => {
         this.toasterService.pop('error', 'Update Failed', err);
-      })
+      });
   }
 
   fillFieldsForEdit() {
     this.route.params.subscribe(params => {
 
       // In case of Add page
-      if(params['id'] == undefined) {
+      if(params['id'] === undefined) {
         this.project.enable = true;
         return;
       }
@@ -118,14 +119,14 @@ export class AddComponent implements OnInit {
       this.projectService.getProjectById(params['id'])
         .then((res: Project) => {
           let project: any = res;
-          project.branches = res.branches.join(", ");
+          project.branches = res.branches.join(', ');
           this.project = project;
 
           this.commandService.getCommandsByProjectId(res.id)
             .then((res: Command[]) => {
               let commands = [...this.commands];
 
-              for(let i = 0; i < res.length; i++)
+              for (let i = 0; i < res.length; i++)
                 commands.push(res[i]);
 
               this.commands = commands;
@@ -135,7 +136,6 @@ export class AddComponent implements OnInit {
             .catch((err: any) => {
               this.toasterService.pop('error', 'Get Commands Failed', err);
             });
-
         })
         .catch((err: any) => {
           this.router.navigate(['projects']);
@@ -146,7 +146,7 @@ export class AddComponent implements OnInit {
   addNewCommand() {
     let commands = [...this.commands];
     commands.push({
-      command: "",
+      command: '',
       commandOrder: this.commandsCounter++,
       enabled: true,
       enableLogs: true
@@ -172,7 +172,7 @@ export class AddComponent implements OnInit {
   private validateCommands(): Boolean {
 
     for (let i = 0; i < this.commands.length; i++)
-      if (this.commands[i].command == "")
+      if (this.commands[i].command === '')
         return false;
 
     return true;

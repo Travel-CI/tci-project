@@ -4,16 +4,3 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
-    mail:
-      host: smtp.gmail.com
-      port: 587
-      username: travelci4al
-      password: 4altravelci
-      properties:
-        mail:
-          smtp:
-            auth: true
-            starttls:
-              enable: true
-server:
-  port: 8081

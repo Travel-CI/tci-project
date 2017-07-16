@@ -4,7 +4,7 @@ import { LayoutComponent } from './pages/layout/layout.component';
 import {ProjectsComponent} from './pages/projects/projects.component';
 import {AddComponent} from './pages/add/add.component';
 import {BuildsComponent} from './pages/builds/builds.component';
-import {StepComponent} from "./pages/step/step.component";
+import {StepComponent} from './pages/step/step.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'projects', pathMatch: 'full' },
