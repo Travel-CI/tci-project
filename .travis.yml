@@ -67,6 +67,9 @@ after_success:
     docker build -t travelci/tci-logger:latest ./tci-logger;
     docker push travelci/tci-logger;
 
+    docker build -t travelci/tci-notifications:latest ./tci-notifications;
+    docker push travelci/tci-notifications;
+
     docker build -t travelci/tci-webapp:latest ./tci-webapp;
     docker push travelci/tci-webapp;
     fi

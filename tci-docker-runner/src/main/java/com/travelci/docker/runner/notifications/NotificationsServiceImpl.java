@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import static org.springframework.http.HttpStatus.OK;
+
 @Service
 @Slf4j
 public class NotificationsServiceImpl implements NotificationsService {
@@ -19,14 +21,14 @@ public class NotificationsServiceImpl implements NotificationsService {
     public NotificationsServiceImpl(final RestTemplate restTemplate,
                                     @Value("${info.services.notifications}")
                                     final String notificationsServiceUrl) {
-
         this.restTemplate = restTemplate;
         this.notificationsServiceUrl = notificationsServiceUrl;
     }
 
     @Override
     public void sendSuccessNotification(final ProjectDto project) {
-        if(project.getEmails() == null || project.getEmails().isEmpty())
+
+        if (project.getEmails() == null || project.getEmails().isEmpty())
             return;
 
         final String template = new StringBuilder()
@@ -49,7 +51,8 @@ public class NotificationsServiceImpl implements NotificationsService {
 
     @Override
     public void sendErrorNotification(final ProjectDto project) {
-        if(project.getEmails() == null || project.getEmails().isEmpty())
+
+        if (project.getEmails() == null || project.getEmails().isEmpty())
             return;
 
         final String template = new StringBuilder()
@@ -71,10 +74,14 @@ public class NotificationsServiceImpl implements NotificationsService {
     }
 
     @Override
-    public void sendNotification(final Email email, final String url){
-        try{
+    public void sendNotification(final Email email, final String url) {
+        try {
             final ResponseEntity<Void> response = restTemplate.postForEntity(
                     notificationsServiceUrl + "/email" + url, email, Void.class);
+
+            if (!OK.equals(response.getStatusCode()))
+                throw new RestClientException(
+                    "Response Status Code is wrong. Expected : OK, Given : " + response.getStatusCode());
         } catch (final RestClientException e) {
             log.error(e.getMessage(), e.getCause());
         }
