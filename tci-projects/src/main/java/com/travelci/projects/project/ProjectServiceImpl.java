@@ -172,6 +172,7 @@ class ProjectServiceImpl implements ProjectService {
                 )
                 .currentBuild(build)
                 .dockerfileLocation(searchProject.getDockerfileLocation())
+                .emails(searchProject.getEmails())
                 .build();
 
             final ResponseEntity<Void> response = restTemplate.postForEntity(
