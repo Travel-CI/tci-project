@@ -12,7 +12,9 @@ import com.travelci.docker.runner.docker.exceptions.*;
 import com.travelci.docker.runner.logger.LoggerService;
 import com.travelci.docker.runner.logger.entities.BuildDto;
 import com.travelci.docker.runner.logger.entities.StepDto;
+import com.travelci.docker.runner.notifications.NotificationsService;
 import com.travelci.docker.runner.project.entities.ProjectDto;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -33,15 +35,18 @@ import static com.spotify.docker.client.DockerClient.ExecCreateParam.attachStdou
 class DockerRunnerServiceImpl implements DockerRunnerService {
 
     private final LoggerService loggerService;
+    private final NotificationsService notificationsService;
     private final DockerClient docker;
 
     private final String projectFolderInContainer;
 
     DockerRunnerServiceImpl(final LoggerService loggerService,
+                            final NotificationsService notificationsService,
                             final DockerClient docker,
                             @Value("${info.docker.projectFolderInContainer}")
                             final String projectFolderInContainer) {
         this.loggerService = loggerService;
+        this.notificationsService = notificationsService;
         this.docker = docker;
         this.projectFolderInContainer = projectFolderInContainer;
     }
@@ -71,11 +76,13 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
         try {
             final String imageId = buildImageFromDockerFile(imageName, dockerFileFolder);
             final String containerId = startContainer(imageId, projectLocation);
-            executeCommandsInContainer(containerId, commands, project.getCurrentBuild());
+            executeCommandsInContainer(containerId, commands, project);
             stopContainer(containerId);
         } catch (final DockerRunnerException e) {
             log.error("Error while executing Docker Engine", e);
-            loggerService.endBuildByError(project.getCurrentBuild(), e.getMessage());
+            project.setCurrentBuild(
+                    loggerService.endBuildByError(project.getCurrentBuild(), e.getLocalizedMessage()));
+            notificationsService.sendErrorNotification(project);
             throw e;
         }
     }
@@ -125,10 +132,10 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
     @Override
     public Map<String, String> executeCommandsInContainer(final String containerId,
                                                           final List<CommandDto> commands,
-                                                          final BuildDto currentBuild) {
+                                                          final ProjectDto project) {
 
         final Map<String, String> commandResults = new LinkedHashMap<>();
-
+        final BuildDto currentBuild = project.getCurrentBuild();
         final String[] stdoutStderrCommand = new String[] {
             "sh", "-c", "cat ~/dockerOutput"
         };
@@ -173,7 +180,8 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
             }
         }
 
-        loggerService.endBuildBySuccess(currentBuild);
+        project.setCurrentBuild(loggerService.endBuildBySuccess(currentBuild));
+        notificationsService.sendSuccessNotification(project);
 
         return commandResults;
     }

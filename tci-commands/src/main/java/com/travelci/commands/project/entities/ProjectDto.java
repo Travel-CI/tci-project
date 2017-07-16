@@ -23,6 +23,8 @@ public class ProjectDto {
 
     private String dockerfileLocation;
 
+    private String emails;
+
     @NotNull
     private BuildDto currentBuild;
 }

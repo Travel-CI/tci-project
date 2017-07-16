@@ -54,6 +54,10 @@
         "label": "Dockerfile Location",
         "placeholder": "Empty if root folder"
       },
+      "emails": {
+        "label": "Emails",
+        "placeholder": "Empty or comma separated emails"
+      },
       "buttons": {
         "save": "Add Project",
         "edit": "Edit Project",

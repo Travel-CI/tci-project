@@ -10,6 +10,7 @@ export interface Project {
   repositoryToken?: string;
   dockerfileLocation?: string;
   lastStart?: number;
+  emails?: string;
   created: number;
   updated: number;
 }

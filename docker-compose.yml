@@ -77,6 +77,11 @@ services:
       - spring-cloud-network
       - bdd-network
 
+  travelci-notifications:
+    image: travelci/tci-logger:latest
+    networks:
+      - spring-cloud-network
+
   travelci-webapp:
     image: travelci/tci-webapp:latest
     ports:

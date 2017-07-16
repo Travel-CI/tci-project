@@ -5,6 +5,7 @@ eureka:
 info:
   services:
     logger: http://localhost:8003
+    notifications: http://localhost:8004
   docker:
     uri: http://localhost:2375
     projectFolderInContainer: /app

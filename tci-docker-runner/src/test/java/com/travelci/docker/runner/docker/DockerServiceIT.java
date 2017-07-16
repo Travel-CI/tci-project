@@ -10,6 +10,8 @@ import com.travelci.docker.runner.command.entities.CommandDto;
 import com.travelci.docker.runner.logger.LoggerService;
 import com.travelci.docker.runner.logger.entities.BuildDto;
 import com.travelci.docker.runner.logger.entities.StepDto;
+import com.travelci.docker.runner.notifications.NotificationsService;
+import com.travelci.docker.runner.project.entities.ProjectDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +36,7 @@ public class DockerServiceIT {
     private DockerRunnerService dockerRunnerService;
     private DefaultDockerClient dockerClient;
     @Mock private LoggerService loggerService;
+    @Mock private NotificationsService notificationsService;
 
     private static final String BUSYBOX_TEST_IMAGE = "busybox:1";
 
@@ -43,7 +46,8 @@ public class DockerServiceIT {
         final String dockerSocket = "http://localhost:2375";
 
         dockerClient = new DefaultDockerClient(dockerSocket);
-        dockerRunnerService = new DockerRunnerServiceImpl(loggerService, dockerClient, "");
+        dockerRunnerService = new DockerRunnerServiceImpl(loggerService, notificationsService,
+            dockerClient, "");
     }
 
     @Test
@@ -120,7 +124,8 @@ public class DockerServiceIT {
         final String projectFolderInContainer = "/";
 
         // Create Service with projectsRootFolder = docker-runner test resources folder
-        dockerRunnerService = new DockerRunnerServiceImpl(loggerService, dockerClient, projectFolderInContainer);
+        dockerRunnerService = new DockerRunnerServiceImpl(loggerService, notificationsService,
+            dockerClient, projectFolderInContainer);
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
         // Start Container and Copy test resources files (Dockerfile && application.yml)
@@ -160,7 +165,9 @@ public class DockerServiceIT {
         final List<CommandDto> commandList = new ArrayList<>();
         commandList.add(CommandDto.builder().command("pwd").enableLogs(true).build());
 
-        final Map<String, String> results = dockerRunnerService.executeCommandsInContainer(containerId, commandList, null);
+        final ProjectDto project = ProjectDto.builder().build();
+
+        final Map<String, String> results = dockerRunnerService.executeCommandsInContainer(containerId, commandList, project);
         assertThat(results.isEmpty()).isFalse();
         assertThat(results.size()).isEqualTo(1);
         assertThat(results.get("pwd")).isEqualTo("/\n");
