@@ -51,12 +51,12 @@ services:
       - tci-projects-volume:/usr/app/travel-ci
 
   travelci-projects2:
-      image: travelci/tci-projects:latest
-      networks:
-        - spring-cloud-network
-        - bdd-network
-      volumes:
-        - tci-projects-volume:/usr/app/travel-ci
+    image: travelci/tci-projects:latest
+    networks:
+      - spring-cloud-network
+      - bdd-network
+    volumes:
+      - tci-projects-volume:/usr/app/travel-ci
 
   travelci-commands:
     image: travelci/tci-commands:latest
@@ -78,7 +78,7 @@ services:
       - bdd-network
 
   travelci-notifications:
-    image: travelci/tci-logger:latest
+    image: travelci/tci-notifications:latest
     networks:
       - spring-cloud-network
 
