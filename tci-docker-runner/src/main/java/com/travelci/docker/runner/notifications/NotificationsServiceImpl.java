@@ -32,7 +32,7 @@ public class NotificationsServiceImpl implements NotificationsService {
             return;
 
         final String template = new StringBuilder()
-            .append(project.getName() + "\n")
+            .append(project.getName() + "\n\n")
             .append("Build Successful\n")
             .append("Build Started at : " + project.getCurrentBuild().getBuildStart() + "\n")
             .append("Build ended at : " + project.getCurrentBuild().getBuildEnd() + "\n")
@@ -56,7 +56,7 @@ public class NotificationsServiceImpl implements NotificationsService {
             return;
 
         final String template = new StringBuilder()
-                .append(project.getName() + "\n")
+                .append(project.getName() + "\n\n")
                 .append("Build Error\n")
                 .append("Build Started at : " + project.getCurrentBuild().getBuildStart() + "\n")
                 .append("Build ended at : " + project.getCurrentBuild().getBuildEnd() + "\n")
