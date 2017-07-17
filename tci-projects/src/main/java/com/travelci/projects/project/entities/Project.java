@@ -52,6 +52,9 @@ public class Project {
     private String dockerfileLocation;
 
     @Column
+    private String emails;
+
+    @Column
     private Timestamp lastStart;
 
     @Column

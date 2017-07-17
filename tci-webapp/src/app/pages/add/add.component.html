@@ -76,6 +76,16 @@
                      [(ngModel)]="project.dockerfileLocation" />
             </div>
           </div>
+
+          <div class="form-group row">
+            <label class="col-md-3 form-control-label" for="emails" translate>add.forms.emails.label</label>
+            <div class="col-md-9">
+              <input type="text" id="emails" class="form-control" name="emails"
+                     pattern="(\s*,?\s*[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})+\s*"
+                     placeholder="{{ 'add.forms.emails.placeholder' | translate }}"
+                     [(ngModel)]="project.emails" />
+            </div>
+          </div>
         </form>
       </div>
 
