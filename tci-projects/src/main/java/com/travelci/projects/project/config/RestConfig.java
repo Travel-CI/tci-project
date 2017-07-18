@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @Profile({"default", "prod"})
-public class RestConfig {
+class RestConfig {
 
     @Bean
     @LoadBalanced

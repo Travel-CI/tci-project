@@ -153,7 +153,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       .then((res: number) => {
         if (res === 1) {
           let projects = [...this.projects];
-          projects.splice(this.projects.indexOf(this.confirmDeleteProject), 1);
+          projects.splice(projects.indexOf(this.confirmDeleteProject), 1);
           this.projects = projects;
         }
       })
