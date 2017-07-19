@@ -136,7 +136,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
         final Map<String, String> commandResults = new LinkedHashMap<>();
         final BuildDto currentBuild = project.getCurrentBuild();
         final String[] returnCodeCommand = new String[] {
-            "sh", "-c", "cat status"
+            "sh", "-c", "cat ~/status"
         };
 
         for (final CommandDto command : commands) {
@@ -146,7 +146,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
             try {
 
                 final String[] realCommand = new String[] {
-                    "sh", "-c", "echo 0 > status; " + command.getCommand() + " || echo $? > status"
+                    "sh", "-c", "echo 0 > ~/status; " + command.getCommand() + " || echo $? > ~/status"
                 };
 
                 // Execute command, return stdout and stderr
