@@ -39,9 +39,16 @@ $ docker-compose up -d
 
 ## Microservices Architecture
 
+Context :
 <p align="center">
   <img src="https://github.com/Travel-CI/tci-project/blob/dev/travelci/C1-diagram.jpg"/>
+</p>
+Travel CI Front-End & Back-End :
+<p align="center">
   <img src="https://github.com/Travel-CI/tci-project/blob/dev/travelci/C2-diagram.jpg"/>
+</p>
+Spring Cloud Architecture :
+<p align="center">
   <img src="https://github.com/Travel-CI/tci-project/blob/dev/travelci/C2-engine-diagram.jpg"/>
 </p>
 
