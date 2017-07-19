@@ -149,10 +149,10 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
                     "sh", "-c", "echo 0 > status; " + command.getCommand() + " || echo $? > status"
                 };
 
-                // Execute command, return stderr (if stderr string is not empty, there is a mistake with the command)
+                // Execute command, return stdout and stderr
                 String stdoutStderrOutput = executeCommandInContainer(containerId, realCommand);
 
-                // Execute command to get the stdout / stderr of the previous command
+                // Execute command to get the status code of the previous command
                 final String returnCodeOutput = executeCommandInContainer(containerId, returnCodeCommand);
 
                 final String formattedReturnCode = returnCodeOutput.replace("\n", "").replace("\r", "");
