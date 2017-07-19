@@ -7,7 +7,7 @@ include 'tci-config'
 
 // Microservices
 
-// Entrypoints
+// Entrypoint
 include 'tci-webhook'
 
 // Engine
