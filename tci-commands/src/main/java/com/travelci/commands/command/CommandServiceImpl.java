@@ -61,7 +61,7 @@ class CommandServiceImpl implements CommandService {
             .map(commandAdapter::toCommand)
             .collect(Collectors.toList());
 
-        for (Command command : commandList)
+        for (final Command command : commandList)
             if (commandRepository.findByProjectIdAndCommandOrder(
                 command.getProjectId(), command.getCommandOrder()).isPresent())
                 throw new InvalidCommandException("CommandOrder already exist for this project");
@@ -92,7 +92,7 @@ class CommandServiceImpl implements CommandService {
                 }
             }
 
-            if(!found)
+            if (!found)
                 commandRepository.delete(existingCommand);
         }
 

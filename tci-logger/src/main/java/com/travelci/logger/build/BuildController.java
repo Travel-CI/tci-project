@@ -68,7 +68,7 @@ public class BuildController {
 
     @DeleteMapping("{projectId}/{buildId}")
     public Long deleteBuildForProject(@PathVariable("projectId") final Long projectId,
-                                       @PathVariable("buildId") final Long buildId) {
+                                      @PathVariable("buildId") final Long buildId) {
         return buildService.deleteBuildByProjectId(projectId, buildId);
     }
 }

@@ -93,6 +93,7 @@ class GitServiceImpl implements GitService {
             repository = Git.open(repositoryFolder);
             repository.reset().setMode(HARD).call();
             repository.pull().call();
+
             return repository;
         } catch (final IOException e) {
             throw new GitException("Fail to open " + repositoryFolder, e);

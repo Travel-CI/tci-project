@@ -7,10 +7,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @ResponseStatus(NOT_FOUND)
 public class NotFoundCommandException extends RuntimeException {
 
-    public NotFoundCommandException() {
-        super();
-    }
-
     public NotFoundCommandException(final String message) {
         super(message);
     }

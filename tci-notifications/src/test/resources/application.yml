@@ -1,0 +1,13 @@
+eureka:
+  client:
+    enabled: false
+
+info:
+  email:
+    host: "smtp.gmail.com"
+    port: "465"
+    socketFactory: "javax.net.ssl.SSLSocketFactory"
+    auth: "true"
+    tls: "true"
+    username: "test@gmail.com"
+    password: "test"

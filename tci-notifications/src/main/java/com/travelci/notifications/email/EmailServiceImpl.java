@@ -15,15 +15,15 @@ import javax.mail.internet.MimeMessage;
 @Service
 @RefreshScope
 @Slf4j
-public class EmailServiceImpl implements EmailService {
+class EmailServiceImpl implements EmailService {
 
     private final Session session;
 
     private final String emailSender;
 
-    public EmailServiceImpl(final Session session,
-                            @Value("${info.email.username}")
-                            final String emailSender) {
+    EmailServiceImpl(final Session session,
+                     @Value("${info.email.username}")
+                     final String emailSender) {
         this.session = session;
         this.emailSender = emailSender;
     }

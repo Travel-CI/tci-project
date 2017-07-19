@@ -14,7 +14,6 @@ import com.travelci.docker.runner.logger.entities.BuildDto;
 import com.travelci.docker.runner.logger.entities.StepDto;
 import com.travelci.docker.runner.notifications.NotificationsService;
 import com.travelci.docker.runner.project.entities.ProjectDto;
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -81,7 +80,7 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
         } catch (final DockerRunnerException e) {
             log.error("Error while executing Docker Engine", e);
             project.setCurrentBuild(
-                    loggerService.endBuildByError(project.getCurrentBuild(), e.getLocalizedMessage()));
+                    loggerService.endBuildByError(project.getCurrentBuild(), e.getMessage()));
             notificationsService.sendErrorNotification(project);
             throw e;
         }
@@ -166,7 +165,10 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
                         + currentBuild.getId() + " in project " + currentBuild.getProjectId());
 
                     loggerService.endStepByError(step, stdoutStderrOutput);
-                    loggerService.endBuildByError(currentBuild, "step failed : " + command.getCommand());
+                    project.setCurrentBuild(
+                        loggerService.endBuildByError(currentBuild, "step failed : " + command.getCommand())
+                    );
+                    notificationsService.sendErrorNotification(project);
 
                     return commandResults;
                 }

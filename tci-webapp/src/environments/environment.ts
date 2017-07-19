@@ -5,6 +5,5 @@
 
 export const environment = {
   production: false,
-  enableDebug: true,
-  apiBaseUrl: 'http://localhost:8001/'
+  enableDebug: true
 };

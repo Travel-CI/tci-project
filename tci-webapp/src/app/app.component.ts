@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import { GlobalState } from './global.state';
 import { BaImageLoaderService, BaThemePreloader, BaThemeSpinner } from './shared/services';
 import {TranslateService} from '@ngx-translate/core';
@@ -7,7 +7,7 @@ import {TranslateService} from '@ngx-translate/core';
   selector: 'app',
   template: '<router-outlet></router-outlet>'
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
 
   isMenuCollapsed = false;
 

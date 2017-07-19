@@ -46,10 +46,6 @@ public class ProjectDto {
 
     private String dockerfileLocation;
 
-    @Pattern(
-        regexp = "(\\s*,?\\s*[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})+\\s*",
-        message = "Emails has wrong format"
-    )
     private String emails;
 
     private Timestamp lastStart;

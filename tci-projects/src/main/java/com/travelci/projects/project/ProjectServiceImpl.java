@@ -168,8 +168,7 @@ class ProjectServiceImpl implements ProjectService {
                 .id(searchProject.getId())
                 .name(gitService.formatRepositoryFolderName(
                         searchProject.getName(),
-                        webHookPayLoad.getBranchName())
-                )
+                        webHookPayLoad.getBranchName()))
                 .currentBuild(build)
                 .dockerfileLocation(searchProject.getDockerfileLocation())
                 .emails(searchProject.getEmails())
