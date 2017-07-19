@@ -135,8 +135,8 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
 
         final Map<String, String> commandResults = new LinkedHashMap<>();
         final BuildDto currentBuild = project.getCurrentBuild();
-        final String[] stdoutStderrCommand = new String[] {
-            "sh", "-c", "cat ~/dockerOutput"
+        final String[] returnCodeCommand = new String[] {
+            "sh", "-c", "cat status"
         };
 
         for (final CommandDto command : commands) {
@@ -146,16 +146,17 @@ class DockerRunnerServiceImpl implements DockerRunnerService {
             try {
 
                 final String[] realCommand = new String[] {
-                    "sh", "-c", command.getCommand() + " 2>&1 1>~/dockerOutput | tee -a ~/dockerOutput"
+                    "sh", "-c", "echo 0 > status; " + command.getCommand() + " || echo $? > status"
                 };
 
                 // Execute command, return stderr (if stderr string is not empty, there is a mistake with the command)
-                final String stderrOutput = executeCommandInContainer(containerId, realCommand);
+                String stdoutStderrOutput = executeCommandInContainer(containerId, realCommand);
 
                 // Execute command to get the stdout / stderr of the previous command
-                String stdoutStderrOutput = executeCommandInContainer(containerId, stdoutStderrCommand);
+                final String returnCodeOutput = executeCommandInContainer(containerId, returnCodeCommand);
 
-                final Boolean commandSuccess = stderrOutput.isEmpty();
+                final String formattedReturnCode = returnCodeOutput.replace("\n", "").replace("\r", "");
+                final Boolean commandSuccess = "0".equals(formattedReturnCode);
 
                 if (!command.getEnableLogs())
                     stdoutStderrOutput = (commandSuccess) ? "Command successfully executed." : "Command failed.";
