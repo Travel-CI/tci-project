@@ -7,6 +7,7 @@
 
 Travel CI is a microservices solution for continuous integration.
 With Travel CI, you can easily build any project whatever the language used.
+You can find the full documentation [here](https://github.com/Travel-CI/tci-project/blob/dev/travelci/Documentation.pdf)
 
 ## Installation
 
@@ -23,7 +24,7 @@ $ Update line : ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375 -H uni
 
 ```bash
 $ ./gradlew clean build
-$ java -jar tci-**/build/lib/tci-**.jar (start each microservice)
+$ java -jar tci-**/build/libs/tci-**.jar (start each microservice)
 $ cd tci-webapp
 $ npm install
 $ npm start
