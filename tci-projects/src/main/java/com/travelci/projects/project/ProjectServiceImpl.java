@@ -120,8 +120,8 @@ class ProjectServiceImpl implements ProjectService {
         final PayLoad payLoad = PayLoad.builder()
             .repositoryUrl(project.getRepositoryUrl())
             .branchName(branchName)
-            .commitAuthor("Travel-CI")
-            .commitMessage("Started by Travel-CI website")
+            .commitAuthor("Travel CI")
+            .commitMessage("Started by Travel CI website")
             .commitHash("manual build")
             .build();
 
