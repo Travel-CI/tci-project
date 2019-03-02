@@ -1,29 +1,29 @@
 package com.travelci.projects.project;
 
-import com.travelci.projects.webhook.entities.PayLoad;
 import com.travelci.projects.project.entities.Project;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.travelci.projects.webhook.entities.PayLoad;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.jdbc.EmbeddedDatabaseConnection.H2;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@AutoConfigureTestDatabase(connection = H2)
 @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:project-teardown.sql")
-public class ProjectRepositoryIT {
+class ProjectRepositoryIT {
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -31,8 +31,8 @@ public class ProjectRepositoryIT {
     private Project project;
     private List<String> branchList;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
 
         branchList = Arrays.asList("master", "dev", "features/TCI-1");
 
@@ -47,7 +47,7 @@ public class ProjectRepositoryIT {
 
     @Test
     @DirtiesContext
-    public void shouldSaveProjectWithBranchListInsideStringColumn() {
+    void shouldSaveProjectWithBranchListInsideStringColumn() {
 
         final Project savedProject = projectRepository.save(project);
 
@@ -57,7 +57,7 @@ public class ProjectRepositoryIT {
 
     @Test
     @DirtiesContext
-    public void shouldReturnProjectWhenExecuteFromPayLoadQuery() {
+    void shouldReturnProjectWhenExecuteFromPayLoadQuery() {
 
         final PayLoad payLoad = PayLoad.builder()
             .repositoryUrl("https://github.com/Popoll/popoll-project.git")

@@ -13,9 +13,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Properties;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.ACCEPTED;
@@ -32,10 +31,10 @@ public class IntegrationTestsConfig {
 
         final RestTemplate restTemplate = mock(RestTemplate.class);
 
-        when(restTemplate.postForEntity(any(String.class), any(ProjectDto.class), anyObject()))
+        when(restTemplate.postForEntity(any(String.class), any(ProjectDto.class), any()))
             .thenReturn(new ResponseEntity<>(ACCEPTED));
 
-        when(restTemplate.postForEntity(eq("http://localhost:8083/builds"), any(BuildDto.class), anyObject()))
+        when(restTemplate.postForEntity(eq("http://localhost:8083/builds"), any(BuildDto.class), any()))
             .thenReturn(new ResponseEntity<>(BuildDto.builder().id(1L).build(), CREATED));
 
         return restTemplate;

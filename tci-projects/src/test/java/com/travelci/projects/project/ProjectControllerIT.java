@@ -1,53 +1,53 @@
 package com.travelci.projects.project;
 
-import com.jayway.restassured.RestAssured;
 import com.travelci.projects.project.config.IntegrationTestsConfig;
-import com.travelci.projects.webhook.entities.PayLoad;
 import com.travelci.projects.project.entities.ProjectDto;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.context.embedded.LocalServerPort;
+import com.travelci.projects.webhook.entities.PayLoad;
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileSystemUtils;
 
 import java.io.File;
 import java.util.Arrays;
 
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
-import static com.jayway.restassured.http.ContentType.JSON;
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
+import static io.restassured.http.ContentType.JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.springframework.boot.jdbc.EmbeddedDatabaseConnection.H2;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@AutoConfigureTestDatabase(connection = H2)
 @Sql(executionPhase = BEFORE_TEST_METHOD, scripts = "classpath:project-init.sql")
 @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:project-teardown.sql")
-public class ProjectControllerIT {
+class ProjectControllerIT {
 
     @LocalServerPort
     private int serverPort;
 
     private final String PROJECTS_ENDPOINT = "/projects";
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
         RestAssured.port = serverPort;
     }
 
     @Test
-    public void shouldReturnTwoProjectsWhenGetAllProjects() {
+    void shouldReturnTwoProjectsWhenGetAllProjects() {
 
         when()
             .get(PROJECTS_ENDPOINT)
@@ -58,7 +58,7 @@ public class ProjectControllerIT {
     }
 
     @Test
-    public void shouldReturnProjectOneWhenGetProjectById() {
+    void shouldReturnProjectOneWhenGetProjectById() {
 
         when()
             .get(PROJECTS_ENDPOINT + "/{projectId}", 1)
@@ -70,7 +70,7 @@ public class ProjectControllerIT {
     }
 
     @Test
-    public void shouldThrowExceptionWhenGetAnUnknownProjectId() {
+    void shouldThrowExceptionWhenGetAnUnknownProjectId() {
 
         when()
             .get(PROJECTS_ENDPOINT + "/{projectId}", 4)
@@ -80,7 +80,7 @@ public class ProjectControllerIT {
     }
 
     @Test
-    public void shouldThrowExceptionWhenProjectIdParamIsNotALongObject() {
+    void shouldThrowExceptionWhenProjectIdParamIsNotALongObject() {
 
         when()
             .get(PROJECTS_ENDPOINT + "/{projectId}", "test")
@@ -91,7 +91,7 @@ public class ProjectControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldGetThreeProjectsWhenAddNewProject() {
+    void shouldGetThreeProjectsWhenAddNewProject() {
 
         final ProjectDto newProject = ProjectDto.builder()
             .name("Project 3")
@@ -122,7 +122,7 @@ public class ProjectControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldThrowExceptionWhenAddNewProjectWithUnformattedRepositoryUrl() {
+    void shouldThrowExceptionWhenAddNewProjectWithUnformattedRepositoryUrl() {
 
         final ProjectDto unformatedProject = ProjectDto.builder()
             .name("Project 3")
@@ -155,7 +155,7 @@ public class ProjectControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldAddNewProjectsWhenRepositoryUrlHasGoodFormat() {
+    void shouldAddNewProjectsWhenRepositoryUrlHasGoodFormat() {
 
         final ProjectDto newProject = ProjectDto.builder()
             .name("Project")
@@ -214,7 +214,7 @@ public class ProjectControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldUpdateProjectIdOneWhenPutRequest() {
+    void shouldUpdateProjectIdOneWhenPutRequest() {
 
         final ProjectDto updatedProject = ProjectDto.builder()
             .id(1L)
@@ -246,7 +246,7 @@ public class ProjectControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldThrowExceptionWhenUpdateAnUnknownProject() {
+    void shouldThrowExceptionWhenUpdateAnUnknownProject() {
 
         final ProjectDto updatedProject = ProjectDto.builder()
             .id(3L)
@@ -268,7 +268,7 @@ public class ProjectControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldThrowExceptionWhenUpdateProjectWithUnFormatProject() {
+    void shouldThrowExceptionWhenUpdateProjectWithUnFormatProject() {
 
         ProjectDto updatedProject = ProjectDto.builder()
             .id(1L)
@@ -306,7 +306,7 @@ public class ProjectControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldGetOneProjectWhenDeleteProjectIdTwo() {
+    void shouldGetOneProjectWhenDeleteProjectIdTwo() {
 
         final ProjectDto deletedProject = ProjectDto.builder()
             .id(2L)
@@ -336,7 +336,7 @@ public class ProjectControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldThrowExceptionWhenDeleteAnUnformattedProject() {
+    void shouldThrowExceptionWhenDeleteAnUnformattedProject() {
 
         final ProjectDto deletedProject = ProjectDto.builder()
             .id(3L)
@@ -356,7 +356,7 @@ public class ProjectControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldThrowExceptionWhenDeleteAnUnknownProject() {
+    void shouldThrowExceptionWhenDeleteAnUnknownProject() {
 
         final ProjectDto deletedProject = ProjectDto.builder()
             .id(3L)
@@ -377,7 +377,7 @@ public class ProjectControllerIT {
     }
 
     @Test
-    public void shouldAcceptPayLoadCloneRepositoryAndSendToCommandsService() {
+    void shouldAcceptPayLoadCloneRepositoryAndSendToCommandsService() {
 
         final PayLoad payLoad = PayLoad.builder()
             .repositoryUrl("https://github.com/Popoll/popoll-project.git")
@@ -409,7 +409,7 @@ public class ProjectControllerIT {
     }
 
     @Test
-    public void shouldThrowExceptionWhenPayLoadHasUnknownRepositoryUrl() {
+    void shouldThrowExceptionWhenPayLoadHasUnknownRepositoryUrl() {
 
         final PayLoad wrongRepositoryPayLoad = PayLoad.builder()
             .repositoryUrl("https://fakeurl.com/fake.git")
@@ -430,7 +430,7 @@ public class ProjectControllerIT {
     }
 
     @Test
-    public void shouldThrowExceptionWhenPayLoadHasWrongFormat() {
+    void shouldThrowExceptionWhenPayLoadHasWrongFormat() {
 
         PayLoad wrongFormatPayLoad = PayLoad.builder()
             .branchName("master")

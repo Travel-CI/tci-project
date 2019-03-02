@@ -3,8 +3,8 @@ package com.travelci.projects.git;
 import com.travelci.projects.project.entities.ProjectDto;
 import com.travelci.projects.webhook.entities.PayLoad;
 import org.eclipse.jgit.api.Git;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GitServiceIT {
+class GitServiceIT {
 
     private GitService gitService;
 
@@ -26,8 +26,8 @@ public class GitServiceIT {
     private ProjectDto projectDto;
     private PayLoad payLoad;
 
-    @Before
-    public void setUp() throws IOException {
+    @BeforeEach
+    void setUp() throws IOException {
 
         ROOT_GIT_REPOSITORIES_LOCATION = Files.createTempDirectory("travel-ci").toString() + "/";
 
@@ -46,7 +46,7 @@ public class GitServiceIT {
     }
 
     @Test
-    public void shouldCreateRepository() throws IOException {
+    void shouldCreateRepository() {
 
         final Git repository = gitService.pullProjectRepository(projectDto, payLoad);
 
@@ -59,9 +59,8 @@ public class GitServiceIT {
         gitService.deleteRepository(repository, repositoryFolder);
     }
 
-    @SuppressWarnings("all")
     @Test
-    public void shouldPullRepositoryWhenRepositoryAlreadyExist() throws IOException {
+    void shouldPullRepositoryWhenRepositoryAlreadyExist() {
 
         // Clone Repository
         Git repository = gitService.pullProjectRepository(projectDto, payLoad);
