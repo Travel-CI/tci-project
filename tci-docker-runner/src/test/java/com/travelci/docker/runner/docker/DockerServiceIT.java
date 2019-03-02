@@ -1,7 +1,6 @@
 package com.travelci.docker.runner.docker;
 
 import com.spotify.docker.client.DefaultDockerClient;
-import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.Container;
 import com.spotify.docker.client.messages.ContainerChange;
@@ -12,14 +11,13 @@ import com.travelci.docker.runner.logger.entities.BuildDto;
 import com.travelci.docker.runner.logger.entities.StepDto;
 import com.travelci.docker.runner.notifications.NotificationsService;
 import com.travelci.docker.runner.project.entities.ProjectDto;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +26,11 @@ import java.util.Optional;
 import static com.spotify.docker.client.DockerClient.ListContainersParam.allContainers;
 import static com.spotify.docker.client.DockerClient.ListImagesParam.allImages;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DockerServiceIT {
+@ExtendWith(MockitoExtension.class)
+class DockerServiceIT {
 
     private DockerRunnerService dockerRunnerService;
     private DefaultDockerClient dockerClient;
@@ -41,8 +39,8 @@ public class DockerServiceIT {
 
     private static final String BUSYBOX_TEST_IMAGE = "busybox:1";
 
-    @Before
-    public void setUp() throws DockerCertificateException {
+    @BeforeEach
+    void setUp() {
 
         final String dockerSocket = "http://localhost:2375";
 
@@ -52,8 +50,8 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
-    public void shouldBuildDockerImageAndDeleteIt() throws IOException, DockerException, InterruptedException {
+    @Disabled
+    void shouldBuildDockerImageAndDeleteIt() throws DockerException, InterruptedException {
 
         final String imageName = "test-tci-image";
         final String replaceInImageName = "sha256:";
@@ -90,8 +88,8 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
-    public void shouldCreateBusyBoxContainerAndRunAndStopAndDeleteIt() throws DockerException, InterruptedException {
+    @Disabled
+    void shouldCreateBusyBoxContainerAndRunAndStopAndDeleteIt() throws DockerException, InterruptedException {
 
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
 
@@ -118,8 +116,8 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
-    public void shouldCreateBusyBoxContainerAndStartAndCopyFilesInContainerAndDeleteIt() throws DockerException, InterruptedException {
+    @Disabled
+    void shouldCreateBusyBoxContainerAndStartAndCopyFilesInContainerAndDeleteIt() throws DockerException, InterruptedException {
 
         final String projectFolder = getClass().getClassLoader()
             .getResource("Dockerfile").toString()
@@ -155,8 +153,8 @@ public class DockerServiceIT {
     }
 
     @Test
-    @Ignore
-    public void shouldExecutePwdCommandInBusyBoxContainer() throws DockerException, InterruptedException {
+    @Disabled
+    void shouldExecutePwdCommandInBusyBoxContainer() throws DockerException, InterruptedException {
 
         when(loggerService.startNewStep(any(CommandDto.class), any(BuildDto.class)))
             .thenReturn(StepDto.builder().build());
