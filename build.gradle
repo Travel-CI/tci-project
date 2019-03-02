@@ -8,15 +8,14 @@ buildscript {
 		sonarqubeUrl		= 'http://esgi.cloudapp.net:9092'
 		sonarqubeToken		= '246b5a19d27a8a6ff48752ffa0d2522fb3f49531'
 
-		springBootVersion 	= '1.5.2.RELEASE'
-		springCloudVersion 	= 'Dalston.SR1'
+		springCloudDependencyManagementVersion = '1.0.7.RELEASE'
+		springCloudVersion 	= 'Greenwich.RELEASE'
 
-		jgitVersion			= '4.8.0.201705170830-rc1'
-		dockerClientVersion = '8.7.2'
+		jgitVersion			= '5.2.1.201812262042-r'
+		dockerClientVersion = '8.15.1'
 
-		junitVersion 		= '4.12'
-		restAssuredVersion 	= '2.9.0'
-		jacksonYamlVersion	= '2.8.8'
+		junitJupiterVersion = '5.4.0'
+		restAssuredVersion 	= '3.3.0'
 		commonIOVersion		= '2.5'
 	}
 
@@ -25,7 +24,7 @@ buildscript {
 	}
 
 	dependencies {
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+		classpath "io.spring.gradle:dependency-management-plugin:${springCloudDependencyManagementVersion}"
 	}
 }
 
@@ -53,8 +52,12 @@ subprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
-	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
 	apply plugin: 'jacoco'
+
+	test {
+		useJUnitPlatform()
+	}
 
 	jacocoTestReport {
 		reports {
@@ -78,14 +81,14 @@ subprojects {
 	}
 
 	dependencies {
-		compile 'org.springframework.cloud:spring-cloud-starter-config'
-		compile 'org.springframework.cloud:spring-cloud-starter-eureka'
-		compile 'org.springframework.boot:spring-boot-starter-actuator'
+		implementation 'org.springframework.cloud:spring-cloud-starter-config'
+		implementation 'org.springframework.cloud:spring-cloud-starter-eureka'
+		implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 		compileOnly 'org.projectlombok:lombok'
 
-		testCompile "junit:junit:${junitVersion}"
-		testCompile "com.jayway.restassured:rest-assured:${restAssuredVersion}"
-		testCompile 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
+		testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	}
 }

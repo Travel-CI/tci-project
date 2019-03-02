@@ -5,5 +5,5 @@ configurations {
 }
 
 dependencies {
-    compile "com.spotify:docker-client:${dockerClientVersion}"
+    implementation "com.spotify:docker-client:${dockerClientVersion}"
 }

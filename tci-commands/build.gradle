@@ -1,6 +1,7 @@
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile 'org.postgresql:postgresql:42.0.0'
-    testCompile 'com.h2database:h2'
-    testCompile 'com.google.code.gson:gson:2.7'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.postgresql:postgresql:42.0.0'
+
+    testImplementation 'com.h2database:h2'
+    testImplementation 'com.google.code.gson:gson:2.7'
 }

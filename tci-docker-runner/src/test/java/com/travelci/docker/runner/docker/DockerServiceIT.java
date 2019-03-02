@@ -13,6 +13,7 @@ import com.travelci.docker.runner.logger.entities.StepDto;
 import com.travelci.docker.runner.notifications.NotificationsService;
 import com.travelci.docker.runner.project.entities.ProjectDto;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -51,6 +52,7 @@ public class DockerServiceIT {
     }
 
     @Test
+    @Ignore
     public void shouldBuildDockerImageAndDeleteIt() throws IOException, DockerException, InterruptedException {
 
         final String imageName = "test-tci-image";
@@ -88,6 +90,7 @@ public class DockerServiceIT {
     }
 
     @Test
+    @Ignore
     public void shouldCreateBusyBoxContainerAndRunAndStopAndDeleteIt() throws DockerException, InterruptedException {
 
         dockerClient.pull(BUSYBOX_TEST_IMAGE);
@@ -115,6 +118,7 @@ public class DockerServiceIT {
     }
 
     @Test
+    @Ignore
     public void shouldCreateBusyBoxContainerAndStartAndCopyFilesInContainerAndDeleteIt() throws DockerException, InterruptedException {
 
         final String projectFolder = getClass().getClassLoader()
@@ -151,6 +155,7 @@ public class DockerServiceIT {
     }
 
     @Test
+    @Ignore
     public void shouldExecutePwdCommandInBusyBoxContainer() throws DockerException, InterruptedException {
 
         when(loggerService.startNewStep(any(CommandDto.class), any(BuildDto.class)))
