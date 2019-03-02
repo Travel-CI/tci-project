@@ -7,19 +7,20 @@ import com.travelci.webhook.extractor.exceptions.ExtractorNotFoundException;
 import com.travelci.webhook.extractor.exceptions.ExtractorWrongFormatException;
 import com.travelci.webhook.payload.entities.PayLoad;
 import com.travelci.webhook.payload.exceptions.BadRequestException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class WebhookServiceTest {
+@ExtendWith(MockitoExtension.class)
+class WebhookServiceTest {
 
     @Mock private BitbucketExtractorImpl bitbucketExtractor;
     @Mock private GithubExtractorImpl githubExtractor;
@@ -27,14 +28,14 @@ public class WebhookServiceTest {
 
     private WebhookServiceImpl webhookService;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         webhookService = new WebhookServiceImpl(bitbucketExtractor, githubExtractor,
             restTemplate, "");
     }
 
     @Test
-    public void shouldReturnBitbucketExtractorWhenFindExtractorWithBitbucketFormat() {
+    void shouldReturnBitbucketExtractorWhenFindExtractorWithBitbucketFormat() {
 
         when(bitbucketExtractor.jsonHasGoodFormat(any(String.class)))
             .thenReturn(true);
@@ -46,7 +47,7 @@ public class WebhookServiceTest {
     }
 
     @Test
-    public void shouldReturnGithubExtractorWhenFindExtractorWithGithubFormat() {
+    void shouldReturnGithubExtractorWhenFindExtractorWithGithubFormat() {
 
         when(githubExtractor.jsonHasGoodFormat(any(String.class)))
             .thenReturn(true);
@@ -57,13 +58,15 @@ public class WebhookServiceTest {
         assertThat(resultExtractor).isInstanceOf(GithubExtractorImpl.class);
     }
 
-    @Test(expected = ExtractorNotFoundException.class)
-    public void shouldThrowExceptionWhenFindExtractorWithAnUnknownJsonFormat() {
-        webhookService.findExtractor("unknownJson");
+    @Test
+    void shouldThrowExceptionWhenFindExtractorWithAnUnknownJsonFormat() {
+        assertThrows(ExtractorNotFoundException.class,
+            () -> webhookService.findExtractor("unknownJson")
+        );
     }
 
     @Test
-    public void shouldReturnPayLoadGivenJsonGoodFormatWhenTransformJsonToPayLoad()
+    void shouldReturnPayLoadGivenJsonGoodFormatWhenTransformJsonToPayLoad()
         throws ExtractorWrongFormatException {
 
         when(bitbucketExtractor.transformJsonToPayload(any(String.class)))
@@ -75,14 +78,15 @@ public class WebhookServiceTest {
         assertThat(payLoad.getCommitMessage()).isEqualTo("test");
     }
 
-    @SuppressWarnings("unchecked")
-    @Test(expected = BadRequestException.class)
-    public void shouldThrowExceptionWhenTransformJsonToPayloadFailed()
+    @Test
+    void shouldThrowExceptionWhenTransformJsonToPayloadFailed()
         throws ExtractorWrongFormatException {
 
         when(bitbucketExtractor.transformJsonToPayload(any(String.class)))
             .thenThrow(ExtractorWrongFormatException.class);
 
-        webhookService.convertInPayLoad(bitbucketExtractor, "bitbucket");
+        assertThrows(BadRequestException.class,
+            () -> webhookService.convertInPayLoad(bitbucketExtractor, "bitbucket")
+        );
     }
 }

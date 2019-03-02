@@ -1,36 +1,37 @@
 package com.travelci.webhook.payload;
 
-import com.jayway.restassured.RestAssured;
+import io.restassured.RestAssured;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.context.embedded.LocalServerPort;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.http.ContentType.JSON;
+import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.JSON;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.OK;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class WebhookControllerIT {
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+class WebhookControllerIT {
 
     @LocalServerPort
     private int serverPort;
 
     private final String WEBHOOK_ENDPOINT = "/webhook";
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
         RestAssured.port = serverPort;
     }
 
     @Test
-    public void shouldAcceptBitbucketWebhookPayLoad() throws IOException {
+    void shouldAcceptBitbucketWebhookPayLoad() throws IOException {
 
         final String bitbucketJsonPayLoad = IOUtils.toString(
             getClass().getClassLoader().getResourceAsStream("bitbucket_good_payload.json"),
@@ -48,7 +49,7 @@ public class WebhookControllerIT {
     }
 
     @Test
-    public void shouldAcceptGithubWebhookPayLoad() throws IOException {
+    void shouldAcceptGithubWebhookPayLoad() throws IOException {
 
         final String githubJsonPayLoad = IOUtils.toString(
             getClass().getClassLoader().getResourceAsStream("github_good_payload.json"),

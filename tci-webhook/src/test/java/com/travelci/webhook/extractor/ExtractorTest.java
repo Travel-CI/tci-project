@@ -2,21 +2,22 @@ package com.travelci.webhook.extractor;
 
 import com.travelci.webhook.extractor.exceptions.ExtractorWrongFormatException;
 import com.travelci.webhook.payload.entities.PayLoad;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.validation.Validation;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ExtractorTest {
+class ExtractorTest {
 
     private BitbucketExtractorImpl bitbucketExtractor;
     private String goodJsonPayLoad;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
 
         bitbucketExtractor = new BitbucketExtractorImpl(
             Arrays.asList("{\"bitbucket\":{", "\"commit\":"),
@@ -39,14 +40,14 @@ public class ExtractorTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenJsonPayLoadMatchWithIdentifiers() {
+    void shouldReturnTrueWhenJsonPayLoadMatchWithIdentifiers() {
 
         final boolean hasGoodFormat = bitbucketExtractor.jsonHasGoodFormat(goodJsonPayLoad);
         assertThat(hasGoodFormat).isTrue();
     }
 
     @Test
-    public void shouldReturnFalseWhenJsonPayLoadNotMatchWithAllIdentifiers() {
+    void shouldReturnFalseWhenJsonPayLoadNotMatchWithAllIdentifiers() {
 
         final String jsonPayLoad = "{\"github\":" + // Bad Identifier
             "{\"repository\":{\"url\":\"https://github.com/travelci/test.git\"}," +
@@ -63,7 +64,7 @@ public class ExtractorTest {
     }
 
     @Test
-    public void shouldReturnFalseWhenJsonPayLoadMatchWithNoOneIdentifiers() {
+    void shouldReturnFalseWhenJsonPayLoadMatchWithNoOneIdentifiers() {
 
         final String jsonPayLoad = "{\"github\":" + // Bad Identifier
             "{\"repository\":{\"url\":\"https://github.com/travelci/test.git\"}," +
@@ -79,7 +80,7 @@ public class ExtractorTest {
     }
 
     @Test
-    public void shouldReturnPayLoadWhenTransformJsonToPayLoadWithGoodFormat()
+    void shouldReturnPayLoadWhenTransformJsonToPayLoadWithGoodFormat()
         throws ExtractorWrongFormatException {
 
         final PayLoad payLoad = bitbucketExtractor.transformJsonToPayload(goodJsonPayLoad);
@@ -92,9 +93,8 @@ public class ExtractorTest {
         assertThat(payLoad.getCommitMessage()).isEqualTo("first commit");
     }
 
-    @Test(expected = ExtractorWrongFormatException.class)
-    public void shouldThrowExceptionWhenConstraintsAreNotRespectedWhenTransformJsonToPayLoad()
-        throws ExtractorWrongFormatException {
+    @Test
+    void shouldThrowExceptionWhenConstraintsAreNotRespectedWhenTransformJsonToPayLoad() {
 
         final String jsonPayLoad = "{\"bitbucket\":" +
             "{\"repository\":{\"url\":\"https://github.com/travelci/test.git\"}," +
@@ -105,12 +105,13 @@ public class ExtractorTest {
                 "\"message\":\"first commit\"," +
                 "\"date\":\"\"}}}";
 
-        bitbucketExtractor.transformJsonToPayload(jsonPayLoad);
+        assertThrows(IllegalAccessError.class,
+            () -> bitbucketExtractor.transformJsonToPayload(jsonPayLoad)
+        );
     }
 
-    @Test(expected = ExtractorWrongFormatException.class)
-    public void shouldThrowExceptionWhenJsonHadUnknownFieldsWhenTransformJsonToPayLoad()
-        throws ExtractorWrongFormatException {
+    @Test
+    void shouldThrowExceptionWhenJsonHadUnknownFieldsWhenTransformJsonToPayLoad() {
 
         final String jsonPayLoad = "{\"bitbucket\":" +
             "{\"repository\":{\"url\":\"https://github.com/travelci/test.git\"}," +
@@ -121,6 +122,8 @@ public class ExtractorTest {
             "\"message\":\"first commit\"," +
             "\"date\":\"\"}}}";
 
-        bitbucketExtractor.transformJsonToPayload(jsonPayLoad);
+        assertThrows(ExtractorWrongFormatException.class,
+            () -> bitbucketExtractor.transformJsonToPayload(jsonPayLoad)
+        );
     }
 }
