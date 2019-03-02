@@ -22,8 +22,7 @@ class EmailServiceImpl implements EmailService {
     private final String emailSender;
 
     EmailServiceImpl(final Session session,
-                     @Value("${info.email.username}")
-                     final String emailSender) {
+                     @Value("${info.email.username}") final String emailSender) {
         this.session = session;
         this.emailSender = emailSender;
     }

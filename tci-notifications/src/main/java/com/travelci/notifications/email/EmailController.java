@@ -34,7 +34,7 @@ public class EmailController {
     public void sendErrorEmail(@Valid @RequestBody final Email email,
                                final BindingResult bindingResult){
 
-        if(bindingResult.hasErrors())
+        if (bindingResult.hasErrors())
             throw new InvalidEmailException();
 
         emailService.sendEmail(email.getSendTo(), email.getSubject(), email.getMessage());
