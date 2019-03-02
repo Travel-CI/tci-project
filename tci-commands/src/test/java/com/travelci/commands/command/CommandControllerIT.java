@@ -2,50 +2,50 @@ package com.travelci.commands.command;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jayway.restassured.RestAssured;
 import com.travelci.commands.command.entities.CommandDto;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.context.embedded.LocalServerPort;
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
-import static com.jayway.restassured.http.ContentType.JSON;
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
+import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
+import static org.springframework.boot.jdbc.EmbeddedDatabaseConnection.H2;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@AutoConfigureTestDatabase(connection = H2)
 @Sql(executionPhase = BEFORE_TEST_METHOD, scripts = "classpath:command-init.sql")
 @Sql(executionPhase = AFTER_TEST_METHOD, scripts = "classpath:command-teardown.sql")
-public class CommandControllerIT {
+class CommandControllerIT {
 
     @LocalServerPort
     private int serverPort;
 
     private final String COMMANDS_ENDPOINT = "/commands";
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
         RestAssured.port = serverPort;
     }
 
     @Test
-    public void shouldGetOrderedCommandListWhenGetWithProjectId() {
+    void shouldGetOrderedCommandListWhenGetWithProjectId() {
 
         when()
             .get(COMMANDS_ENDPOINT + "/{projectId}", 1)
@@ -60,7 +60,7 @@ public class CommandControllerIT {
     }
 
     @Test
-    public void shouldReturnEmptyListWhenGetCommandsFromAnUnknownProjectId() {
+    void shouldReturnEmptyListWhenGetCommandsFromAnUnknownProjectId() {
 
         when()
             .get(COMMANDS_ENDPOINT + "/{fakeProjectId}", 5)
@@ -70,7 +70,7 @@ public class CommandControllerIT {
     }
 
     @Test
-    public void shouldThrowExceptionWhenGetCommandsWithWrongFormatProjectId() {
+    void shouldThrowExceptionWhenGetCommandsWithWrongFormatProjectId() {
 
         when()
             .get(COMMANDS_ENDPOINT + "/{stringProjectId}", "test")
@@ -81,7 +81,7 @@ public class CommandControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldAddNewCommandWhenCommandDtoHasGoodFormat() {
+    void shouldAddNewCommandWhenCommandDtoHasGoodFormat() {
 
         final CommandDto newCommand = CommandDto.builder()
             .command("docker build -t test .")
@@ -116,7 +116,7 @@ public class CommandControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldThrowExceptionWhenAddCommandWithAlreadySavedCommandOrderIdForAProjectId() {
+    void shouldThrowExceptionWhenAddCommandWithAlreadySavedCommandOrderIdForAProjectId() {
 
         final CommandDto alreadyExistCommand = CommandDto.builder()
             .command("docker build -t test .")
@@ -141,7 +141,7 @@ public class CommandControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldThrowExceptionWhenAddUnformattedCommand() {
+    void shouldThrowExceptionWhenAddUnformattedCommand() {
 
         final List<CommandDto> commandsList = new ArrayList<>();
         final Gson gson = new GsonBuilder().create();
@@ -199,7 +199,7 @@ public class CommandControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldUpdateCommandWhenPutFormattedAndDeleteOtherCommands() {
+    void shouldUpdateCommandWhenPutFormattedAndDeleteOtherCommands() {
 
         final List<CommandDto> commands = new ArrayList<>();
 
@@ -233,7 +233,7 @@ public class CommandControllerIT {
 
     @Test
     @DirtiesContext
-    public void shouldThrowExceptionWhenUpdateAnUnformattedCommand() {
+    void shouldThrowExceptionWhenUpdateAnUnformattedCommand() {
 
         final List<CommandDto> commands = new ArrayList<>();
 
