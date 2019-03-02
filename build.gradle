@@ -2,13 +2,16 @@ buildscript {
 
 	ext {
 		projectGroupName 	= 'com.travelci'
-		projectVersion 		= '1.0.0-RELEASE'
+		projectVersion 		= '1.1.0-SNAPSHOT'
 		projectName			= 'Travel CI'
 
 		sonarqubeUrl		= 'http://esgi.cloudapp.net:9092'
 		sonarqubeToken		= '246b5a19d27a8a6ff48752ffa0d2522fb3f49531'
 
-		springBootVersion	= '2.1.2.RELEASE'
+		projectSourceCompatibility 	= JavaVersion.VERSION_1_8
+		projectTargetCompatibility 	= JavaVersion.VERSION_1_8
+
+		springBootVersion	= '2.1.3.RELEASE'
 		springCloudVersion 	= 'Greenwich.RELEASE'
 
 		gsonVersion			= '2.7'
@@ -27,20 +30,8 @@ buildscript {
 }
 
 plugins {
-	id "io.spring.dependency-management" version "1.0.7.RELEASE"
+	id "org.springframework.boot" version "2.1.3.RELEASE"
 	id "org.sonarqube" version "2.4"
-}
-
-dependencyManagement {
-	dependencies {
-		dependency "com.google.code.gson:gson:${gsonVersion}"
-		dependency "org.eclipse.jgit:org.eclipse.jgit:${jgitVersion}"
-		dependency "org.postgresql:postgresql:${postgresqlVersion}"
-		dependency "com.spotify:docker-client:${dockerClientVersion}"
-		dependency "commons-io:commons-io:${commonIOVersion}"
-		dependency "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
-		dependency "io.rest-assured:rest-assured:${restAssuredVersion}"
-	}
 }
 
 allprojects {
@@ -64,6 +55,11 @@ subprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
 	apply plugin: 'jacoco'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	sourceCompatibility = projectSourceCompatibility
+	targetCompatibility = projectTargetCompatibility
 
 	test {
 		useJUnitPlatform()
@@ -71,11 +67,10 @@ subprojects {
 
 	jacocoTestReport {
 		reports {
-			xml.enabled true
-			csv.enabled false
+			xml.enabled = true
+			csv.enabled = false
 		}
 	}
-
 	jacocoTestReport.dependsOn test
 
 	repositories {
@@ -84,17 +79,26 @@ subprojects {
 		}
 	}
 
-
+	dependencyManagement {
+		dependencies {
+			dependency "com.google.code.gson:gson:${gsonVersion}"
+			dependency "org.eclipse.jgit:org.eclipse.jgit:${jgitVersion}"
+			dependency "org.postgresql:postgresql:${postgresqlVersion}"
+			dependency "com.spotify:docker-client:${dockerClientVersion}"
+			dependency "commons-io:commons-io:${commonIOVersion}"
+			dependency "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
+			dependency "io.rest-assured:rest-assured:${restAssuredVersion}"
+		}
+	}
 	dependencies {
 		implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
 		implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
 
 		implementation 'org.springframework.cloud:spring-cloud-starter-config'
-		implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 		implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-		compileOnly 'org.projectlombok:lombok'
-		annotationProcessor 'org.projectlombok:lombok'
+		compileOnly 'org.projectlombok:lombok:1.18.6'
+		annotationProcessor 'org.projectlombok:lombok:1.18.6'
 
 		testImplementation 'org.junit.jupiter:junit-jupiter'
 		testImplementation 'io.rest-assured:rest-assured'

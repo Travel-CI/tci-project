@@ -55,6 +55,6 @@ Spring Cloud Architecture :
 
 ## Contributors
 
- - [Julien Bertault](https://github.com/juliiien)
+ - [Julien Bertauld](https://github.com/juliiien)
  - [Jérémy Boehm](https://github.com/jeremyboehm)
  - [Mathieu Boisnard](https://github.com/mboisnard)

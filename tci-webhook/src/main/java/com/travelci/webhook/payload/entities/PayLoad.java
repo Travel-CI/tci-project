@@ -2,7 +2,7 @@ package com.travelci.webhook.payload.entities;
 
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 

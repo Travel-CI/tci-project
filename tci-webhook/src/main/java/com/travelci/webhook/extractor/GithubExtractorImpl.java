@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.Validator;
 import java.util.List;
 
-
 @Service("githubExtractor")
 @RefreshScope
 public class GithubExtractorImpl extends AbstractExtractor {

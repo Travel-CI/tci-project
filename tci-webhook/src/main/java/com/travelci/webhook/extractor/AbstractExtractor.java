@@ -51,7 +51,7 @@ public abstract class AbstractExtractor {
             final ObjectMapper mapper = new ObjectMapper();
             final JsonNode reader = mapper.readTree(jsonPayLoad);
 
-            PayLoad payLoad =  PayLoad.builder()
+            PayLoad payLoad = PayLoad.builder()
                     .repositoryUrl(reader.at(repositoryUrlJsonTree).asText())
                     .branchName(reader.at(branchNameJsonTree).asText())
                     .commitAuthor(reader.at(commitAuthorJsonTree).asText())
