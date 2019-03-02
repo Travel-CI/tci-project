@@ -9,27 +9,28 @@ import com.travelci.webhook.payload.entities.PayLoad;
 import com.travelci.webhook.payload.exceptions.BadRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 class WebhookServiceTest {
 
-    @Mock private BitbucketExtractorImpl bitbucketExtractor;
-    @Mock private GithubExtractorImpl githubExtractor;
-    @Mock private RestTemplate restTemplate;
+    private BitbucketExtractorImpl bitbucketExtractor;
+    private GithubExtractorImpl githubExtractor;
+    private RestTemplate restTemplate;
 
     private WebhookServiceImpl webhookService;
 
     @BeforeEach
     void setUp() {
+        bitbucketExtractor = mock(BitbucketExtractorImpl.class);
+        githubExtractor = mock(GithubExtractorImpl.class);
+        restTemplate = mock(RestTemplate.class);
+
         webhookService = new WebhookServiceImpl(bitbucketExtractor, githubExtractor,
             restTemplate, "");
     }

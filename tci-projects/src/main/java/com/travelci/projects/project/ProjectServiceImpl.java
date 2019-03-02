@@ -85,7 +85,7 @@ class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDto update(final ProjectDto project) {
 
-        if (projectRepository.findOne(project.getId()) == null)
+        if (!projectRepository.findById(project.getId()).isPresent())
             throw new NotFoundProjectException();
 
         project.setUpdated(new Timestamp(System.currentTimeMillis()));
@@ -98,7 +98,7 @@ class ProjectServiceImpl implements ProjectService {
     @Override
     public void delete(final ProjectDto project) {
 
-        if (projectRepository.findOne(project.getId()) == null)
+        if (!projectRepository.findById(project.getId()).isPresent())
             throw new NotFoundProjectException();
 
         projectRepository.delete(projectAdapter.toProject(project));
@@ -131,7 +131,9 @@ class ProjectServiceImpl implements ProjectService {
     @Override
     public Long deleteProjectById(final Long projectId) {
         final ProjectDto projectDto = getProjectById(projectId);
-        return projectRepository.deleteById(projectDto.getId());
+        projectRepository.deleteById(projectDto.getId());
+
+        return projectId;
     }
 
     @Override

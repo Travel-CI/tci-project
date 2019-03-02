@@ -66,7 +66,7 @@ class CommandServiceImpl implements CommandService {
                 command.getProjectId(), command.getCommandOrder()).isPresent())
                 throw new InvalidCommandException("CommandOrder already exist for this project");
 
-        return commandRepository.save(commandList)
+        return commandRepository.saveAll(commandList)
             .stream()
             .map(commandAdapter::toCommandDto)
             .collect(Collectors.toList());
@@ -78,7 +78,7 @@ class CommandServiceImpl implements CommandService {
         final List<Command> existingCommands = commandRepository.findByProjectIdOrderByCommandOrderAsc(projectId);
 
         if (updatedCommands.isEmpty()) {
-            commandRepository.delete(existingCommands);
+            commandRepository.deleteAll(existingCommands);
             return new ArrayList<>();
         }
 
@@ -100,7 +100,7 @@ class CommandServiceImpl implements CommandService {
             .map(commandAdapter::toCommand)
             .collect(Collectors.toList());
 
-        return commandRepository.save(commands)
+        return commandRepository.saveAll(commands)
             .stream()
             .map(commandAdapter::toCommandDto)
             .collect(Collectors.toList());

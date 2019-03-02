@@ -105,7 +105,7 @@ class ExtractorTest {
                 "\"message\":\"first commit\"," +
                 "\"date\":\"\"}}}";
 
-        assertThrows(IllegalAccessError.class,
+        assertThrows(ExtractorWrongFormatException.class,
             () -> bitbucketExtractor.transformJsonToPayload(jsonPayLoad)
         );
     }
