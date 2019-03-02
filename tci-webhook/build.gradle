@@ -1,4 +1,4 @@
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation "commons-io:commons-io:${commonIOVersion}"
+	testImplementation 'commons-io:commons-io'
 }

@@ -8,9 +8,11 @@ buildscript {
 		sonarqubeUrl		= 'http://esgi.cloudapp.net:9092'
 		sonarqubeToken		= '246b5a19d27a8a6ff48752ffa0d2522fb3f49531'
 
-		springCloudDependencyManagementVersion = '1.0.7.RELEASE'
+		springBootVersion	= '2.1.2.RELEASE'
 		springCloudVersion 	= 'Greenwich.RELEASE'
 
+		gsonVersion			= '2.7'
+		postgresqlVersion 	= '42.0.0'
 		jgitVersion			= '5.2.1.201812262042-r'
 		dockerClientVersion = '8.15.1'
 
@@ -22,14 +24,23 @@ buildscript {
 	repositories {
 		mavenCentral()
 	}
-
-	dependencies {
-		classpath "io.spring.gradle:dependency-management-plugin:${springCloudDependencyManagementVersion}"
-	}
 }
 
 plugins {
+	id "io.spring.dependency-management" version "1.0.7.RELEASE"
 	id "org.sonarqube" version "2.4"
+}
+
+dependencyManagement {
+	dependencies {
+		dependency "com.google.code.gson:gson:${gsonVersion}"
+		dependency "org.eclipse.jgit:org.eclipse.jgit:${jgitVersion}"
+		dependency "org.postgresql:postgresql:${postgresqlVersion}"
+		dependency "com.spotify:docker-client:${dockerClientVersion}"
+		dependency "commons-io:commons-io:${commonIOVersion}"
+		dependency "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
+		dependency "io.rest-assured:rest-assured:${restAssuredVersion}"
+	}
 }
 
 allprojects {
@@ -52,7 +63,6 @@ subprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
-	apply plugin: 'io.spring.dependency-management'
 	apply plugin: 'jacoco'
 
 	test {
@@ -74,21 +84,20 @@ subprojects {
 		}
 	}
 
-	dependencyManagement {
-		imports {
-			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-		}
-	}
 
 	dependencies {
+		implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+		implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+
 		implementation 'org.springframework.cloud:spring-cloud-starter-config'
-		implementation 'org.springframework.cloud:spring-cloud-starter-eureka'
+		implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 		implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
 
-		testImplementation "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
-		testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+		testImplementation 'org.junit.jupiter:junit-jupiter'
+		testImplementation 'io.rest-assured:rest-assured'
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	}
 }
