@@ -2,6 +2,7 @@ rootProject.name = 'Travel-CI'
 
 // Spring Cloud
 include 'tci-eureka'
+include 'tci-gateway'
 //include 'tci-zuul'
 include 'tci-config'
 
@@ -18,3 +19,4 @@ include 'tci-docker-runner'
 // Notifiers
 include 'tci-logger'
 include 'tci-notifications'
+

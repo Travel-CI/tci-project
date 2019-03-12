@@ -1,12 +1,4 @@
-/tci-commands/build/
-/tci-config/build/
-/tci-docker-runner/build/
-/tci-eureka/build/
-/tci-logger/build/
-/tci-notifications/build/
-/tci-projects/build/
-/tci-webhook/build/
-/tci-zuul/build/
+**/build/
 **/log/
 **/.gradle/
 **/.idea/
