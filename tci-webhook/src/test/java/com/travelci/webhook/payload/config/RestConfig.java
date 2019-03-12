@@ -7,8 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.ACCEPTED;
@@ -22,7 +21,7 @@ class RestConfig {
 
         final RestTemplate restTemplate = mock(RestTemplate.class);
 
-        when(restTemplate.postForEntity(any(String.class), any(PayLoad.class), anyObject()))
+        when(restTemplate.postForEntity(any(String.class), any(PayLoad.class), any()))
             .thenReturn(new ResponseEntity<>(ACCEPTED));
 
         return restTemplate;

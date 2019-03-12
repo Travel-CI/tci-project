@@ -23,7 +23,6 @@ before_install:
 
 script:
   - ./gradlew jacocoTestReport --stacktrace
-  - ./gradlew sonarqube
   - cd tci-webapp && npm install
   - npm run build
   - cd ..
