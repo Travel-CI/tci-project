@@ -48,8 +48,8 @@ after_success:
     docker build -t travelci/tci-eureka:latest ./tci-eureka;
     docker push travelci/tci-eureka;
 
-    docker build -t travelci/tci-zuul:latest ./tci-zuul;
-    docker push travelci/tci-zuul;
+    docker build -t travelci/tci-gateway:latest ./tci-gateway;
+    docker push travelci/tci-gateway;
 
     docker build -t travelci/tci-webhook:latest ./tci-webhook;
     docker push travelci/tci-webhook;

@@ -1,6 +1,0 @@
-spring:
-  application:
-     name: tci-zuul
-  cloud:
-    config:
-      uri: http://travelci-config:8888

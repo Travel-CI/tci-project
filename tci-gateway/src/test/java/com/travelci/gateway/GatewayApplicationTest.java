@@ -1,5 +1,4 @@
-package com.travelci.zuul;
-
+package com.travelci.gateway;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,7 +7,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class ZuulApplicationTest {
+class GatewayApplicationTest {
 
     @Test
     void contextLoads() {}

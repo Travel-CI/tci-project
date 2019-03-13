@@ -19,11 +19,11 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.xml.bind.DatatypeConverter;
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.http.HttpStatus.ACCEPTED;
 
 @Service
@@ -107,14 +107,8 @@ class ProjectServiceImpl implements ProjectService {
     @Override
     public void manualStartProjectEngine(final Long projectId, final String branchHexaName) {
 
-        String branchName;
-
-        try {
-            final byte[] bytes = DatatypeConverter.parseHexBinary(branchHexaName);
-            branchName = new String(bytes, "UTF-8");
-        } catch (final UnsupportedEncodingException e) {
-            throw new InvalidProjectException();
-        }
+        final byte[] bytes = DatatypeConverter.parseHexBinary(branchHexaName);
+        String branchName = new String(bytes, UTF_8);
 
         final ProjectDto project = getProjectById(projectId);
         final PayLoad payLoad = PayLoad.builder()

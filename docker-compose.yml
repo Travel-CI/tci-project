@@ -30,8 +30,8 @@ services:
     ports:
       - "${TCI_EUREKA_PORT}:8000"
 
-  travelci-zuul:
-    image: travelci/tci-zuul:latest
+  travelci-gateway:
+    image: travelci/tci-gateway:latest
     networks:
       - spring-cloud-network
     ports:
